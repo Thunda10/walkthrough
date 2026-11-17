@@ -107,7 +107,8 @@
 
   .conflict { max-width: 46rem; margin: 0; font-size: 1.1rem; color: #3f454b; }
 
-  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  @media (max-width: 1000px) { .cards { grid-template-columns: 1fr 1fr; } }
   .card {
     background: #fff;
     border: 1px solid #e6e4df;
@@ -147,7 +148,7 @@
 <header>
   <div class="wrap bar">
     <span class="brand">Jared Pearlstein</span>
-    <span class="call"><a href="tel:+18143152469">Call or text (814) 315-2469</a></span>
+    <span class="call"><a href="sms:+18143152469">Text (814) 315-2469</a></span>
   </div>
 </header>
 
@@ -244,6 +245,12 @@
           <p>Everything in the Builder Package plus a walkthrough that opens in any browser, and the 3D model files.</p>
           <p class="delivery">Delivered in 10 days.</p>
         </article>
+        <article class="card">
+          <h3>Custom</h3>
+          <div class="price">Inquire</div>
+          <p>Need something different? Text me what you have in mind.</p>
+          <p class="delivery"><a href="sms:+18143152469">Text (814) 315-2469</a></p>
+        </article>
       </div>
       <p class="fine">Interiors are shown unfurnished with neutral finishes. Photoreal finishes like the kitchen above are available on request.</p>
     </div>
@@ -254,8 +261,7 @@
       <h2>Try it on your own plans.</h2>
       <p>Send me a plan set and I'll model one room and run the drawing check for free.</p>
       <div class="buttons">
-        <a class="btn" href="tel:+18143152469">Call or text (814) 315-2469</a>
-        <a class="btn alt" href="sms:+18143152469">Text me</a>
+        <a class="btn" href="sms:+18143152469">Text (814) 315-2469</a>
       </div>
     </div>
   </section>
