@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sample baseline table | Jared</title>
+<meta name="description" content="A sample baseline table: dimensions from the design drawings with sources, and the reading the model used.">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 17px; line-height: 1.6; color: #2d3136; background: #fbfaf8; overflow-wrap: break-word; }
+  img { display: block; width: 100%; height: auto; border-radius: 6px; }
+  a { color: #4a6f8a; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+  header .bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 4px 16px; padding-top: 12px; padding-bottom: 12px; border-bottom: 1px solid #e6e4df; }
+  .brand { font-weight: 600; font-size: 1.05rem; color: #2d3136; text-decoration: none; display: inline-block; min-height: 44px; line-height: 44px; }
+  .call a { display: inline-block; min-height: 44px; line-height: 44px; text-decoration: none; font-size: 0.95rem; }
+  .call a + a { margin-left: 20px; }
+  h1 { margin: 48px 0 16px; font-size: clamp(2rem, 4.6vw, 3.1rem); line-height: 1.15; font-weight: 600; letter-spacing: -0.01em; }
+  .lead { margin: 0; max-width: 46rem; font-size: 1.15rem; color: #4b5157; }
+  .intro { max-width: 46rem; margin: 32px 0 0; color: #3f454b; }
+  .buttons { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 24px; border-radius: 6px; border: 1px solid #4a6f8a; background: #4a6f8a; color: #fff; font: inherit; font-weight: 600; text-decoration: none; text-align: center; max-width: 100%; }
+  .btn.alt { background: transparent; color: #4a6f8a; }
+  .note { margin: 28px 0 0; font-size: 0.9rem; color: #6b7178; }
+  main section { padding: 36px 0 0; }
+  h2 { margin: 0 0 16px; font-size: 1.6rem; font-weight: 600; line-height: 1.25; }
+  h3 { margin: 40px 0 10px; font-size: 1.2rem; font-weight: 600; line-height: 1.3; }
+  p { margin: 0 0 14px; max-width: 46rem; }
+  .list { margin: 0; padding-left: 1.3em; max-width: 46rem; }
+  .list li { margin-bottom: 6px; }
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px; max-width: 46rem; }
+  .steps li { display: flex; gap: 18px; align-items: flex-start; }
+  .num { flex: none; width: 40px; height: 40px; border-radius: 50%; background: #4a6f8a; color: #fff; font-weight: 600; display: flex; align-items: center; justify-content: center; }
+  .steps div { padding-top: 6px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-bottom: 8px; }
+  figure { margin: 0; }
+  figcaption { margin-top: 10px; font-size: 0.95rem; color: #5d646b; }
+  .cap { color: #5d646b; font-size: 0.95rem; }
+  .map { margin: 32px 0 24px; max-width: 800px; }
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .card { background: #fff; border: 1px solid #e6e4df; border-radius: 8px; padding: 28px; display: flex; flex-direction: column; }
+  .card h3 { margin: 0 0 10px; font-size: 1.15rem; }
+  .card p { color: #4b5157; }
+  .more { margin-top: auto; display: inline-block; min-height: 44px; line-height: 44px; font-weight: 600; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .pc { margin: 18px 0 28px; max-width: 900px; }
+  .pc .row { display: grid; gap: 16px; grid-template-columns: 1fr; align-items: start; }
+  .pc.two .row { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+  .pc img { border: 1px solid #e6e4df; }
+  .tablebox { margin: 28px 0 0; border: 1px solid #e6e4df; border-radius: 8px; background: #fff; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+  th, td { text-align: left; vertical-align: top; padding: 10px 14px; border-bottom: 1px solid #e6e4df; }
+  th { background: #f1efeb; font-weight: 600; }
+  tbody tr:last-child td { border-bottom: 0; }
+  .contact { margin-top: 64px; padding: 40px 0 64px !important; border-top: 1px solid #e6e4df; }
+  footer { padding: 32px 0; border-top: 1px solid #e6e4df; font-size: 0.9rem; color: #6b7178; }
+  @media (max-width: 1000px) { .cards { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 760px) {
+    body { font-size: 16px; }
+    header .bar { padding-left: 20px; padding-right: 20px; }
+    h1 { margin-top: 32px; }
+    .grid, .cards { grid-template-columns: 1fr; }
+    .btn { width: 100%; }
+    table, thead, tbody, tr, td { display: block; }
+    thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    tr { padding: 10px 0; border-bottom: 1px solid #e6e4df; }
+    tbody tr:last-child { border-bottom: 0; }
+    td { border: 0; padding: 4px 14px; }
+    td::before { content: attr(data-label); display: block; font-size: 0.8rem; color: #6b7178; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <a class="brand" href="../index.html">Jared Pearlstein</a>
+    <span class="call"><a href="index.html">Services</a><a href="sms:+18143152469">Text (814) 315-2469</a></span>
+  </div>
+</header>
+
+<main>
+<div class="wrap">
+<h1>Sample baseline table</h1>
+<p class="lead">A three storey shore house. Dimensions from the design drawings, with sources.</p>
+<p class="intro">Each row is one element. Where two sheets disagree, both readings are shown with the one the model used. A full package lists every dimension in the model this way.</p>
+<div class="tablebox" role="region" aria-label="Baseline table" tabindex="0"><table><thead><tr><th>Element</th><th>One sheet says</th><th>Another sheet says</th><th>Model uses</th></tr></thead><tbody><tr><td data-label="Element">Ground to first floor stair headroom</td><td data-label="One sheet says">A-4.0 Section 2 note: 80 in clear</td><td data-label="Another sheet says">Drawn stair and floor framing: 72.7 in</td><td data-label="Model uses">72.7 in, as drawn</td></tr><tr><td data-label="Element">First to second floor stair risers</td><td data-label="One sheet says">A-4.0: 9 ft 11 3/4 in over 15 risers</td><td data-label="Another sheet says">Works out to 7.98 in per riser</td><td data-label="Model uses">15 risers of 7.98 in</td></tr><tr><td data-label="Element">Ground to first floor stair risers</td><td data-label="One sheet says">A-4.0 prints about 7.63 in each</td><td data-label="Another sheet says">8 ft 10 in over 14 risers is 7.57 in</td><td data-label="Model uses">7.57 in</td></tr><tr><td data-label="Element">Rear stair landing</td><td data-label="One sheet says">A-3.0 rear elevation: one riser below the door</td><td data-label="Another sheet says">A-3.1 left elevation: level with the door</td><td data-label="Model uses">Rear elevation</td></tr><tr><td data-label="Element">Pad at the foot of the rear stair</td><td data-label="One sheet says">A-8.0 detail: 16 in deep x 24 in wide</td><td data-label="Another sheet says">A-6.0 foundation plan: 24 in x 36 in</td><td data-label="Model uses">Not modeled, top level not given</td></tr><tr><td data-label="Element">First floor subfloor elevation</td><td data-label="One sheet says">A-6.0 foundation plan: +11.0</td><td data-label="Another sheet says">All elevations and sections: +16.50</td><td data-label="Model uses">+16.50</td></tr><tr><td data-label="Element">Ground floor subfloor</td><td data-label="One sheet says">Written chain: 106 in below the first floor subfloor</td><td data-label="Another sheet says">Drawn line: 98.66 in below</td><td data-label="Model uses">106 in</td></tr><tr><td data-label="Element">Half storey deck surface</td><td data-label="One sheet says">A-2.1: 1.26 in below the indoor subfloor</td><td data-label="Another sheet says">A-4.0 Section 1: level with it</td><td data-label="Model uses">1.26 in below</td></tr><tr><td data-label="Element">Dormer roof slope</td><td data-label="One sheet says">A-2.2 roof plan: 5 in 12</td><td data-label="Another sheet says">Elevations and Section 1: 4.18 in 12</td><td data-label="Model uses">4.18 in 12</td></tr><tr><td data-label="Element">First floor lift and slide door width</td><td data-label="One sheet says">A-2.0 plan: 282 in</td><td data-label="Another sheet says">A-3.0 front elevation: 276.48 in</td><td data-label="Model uses">282 in</td></tr><tr><td data-label="Element">Garage door</td><td data-label="One sheet says">Tag: 18 ft 6 in wide</td><td data-label="Another sheet says">Plan opening: 180.52 in; elevation: 174.76 in</td><td data-label="Model uses">180.52 in</td></tr><tr><td data-label="Element">Back doors</td><td data-label="One sheet says">Plans: inswing</td><td data-label="Another sheet says">Elevations: outswing</td><td data-label="Model uses">Elevations</td></tr><tr><td data-label="Element">Three first floor rear windows</td><td data-label="One sheet says">Plan tag: ACW 2840</td><td data-label="Another sheet says">Elevation tag: ACW 2848</td><td data-label="Model uses">Elevation</td></tr><tr><td data-label="Element">Flood vents</td><td data-label="One sheet says">A-6.0 note: 5 (4 required)</td><td data-label="Another sheet says">Foundation plan marks 15; ground floor plan draws 6</td><td data-label="Model uses">The 6 drawn in the block walls</td></tr><tr><td data-label="Element">Second floor door heads</td><td data-label="One sheet says">A-9.0 detail prints both 8 ft 0 in and 7 ft 0 in</td><td data-label="Another sheet says">Plan tags: 7 ft 0 in</td><td data-label="Model uses">7 ft 0 in</td></tr><tr><td data-label="Element">Engaged porch column</td><td data-label="One sheet says">Written: 6 in finished</td><td data-label="Another sheet says">Drawn: 8 in</td><td data-label="Model uses">6 in</td></tr></tbody></table></div>
+<div class="buttons"><a class="btn" href="../house1/">Walk the sample model</a><a class="btn alt" href="index.html">Back to services</a></div>
+<section class="contact">
+  <h2>Want to see it on your project?</h2>
+  <div class="buttons">
+    <a class="btn" href="sms:+18143152469">Text (814) 315-2469</a>
+  </div>
+</section>
+</div>
+</main>
+
+<footer>
+  <div class="wrap">&copy; 2026 Jared Pearlstein</div>
+</footer>
+
+</body>
+</html>

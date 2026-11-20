@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pre-construction model and plan check | Jared</title>
+<meta name="description" content="Before you price or frame, a 3D model built from the plan set and a list of every place the drawings disagree.">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 17px; line-height: 1.6; color: #2d3136; background: #fbfaf8; overflow-wrap: break-word; }
+  img { display: block; width: 100%; height: auto; border-radius: 6px; }
+  a { color: #4a6f8a; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+  header .bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 4px 16px; padding-top: 12px; padding-bottom: 12px; border-bottom: 1px solid #e6e4df; }
+  .brand { font-weight: 600; font-size: 1.05rem; color: #2d3136; text-decoration: none; display: inline-block; min-height: 44px; line-height: 44px; }
+  .call a { display: inline-block; min-height: 44px; line-height: 44px; text-decoration: none; font-size: 0.95rem; }
+  .call a + a { margin-left: 20px; }
+  h1 { margin: 48px 0 16px; font-size: clamp(2rem, 4.6vw, 3.1rem); line-height: 1.15; font-weight: 600; letter-spacing: -0.01em; }
+  .lead { margin: 0; max-width: 46rem; font-size: 1.15rem; color: #4b5157; }
+  .intro { max-width: 46rem; margin: 32px 0 0; color: #3f454b; }
+  .buttons { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 24px; border-radius: 6px; border: 1px solid #4a6f8a; background: #4a6f8a; color: #fff; font: inherit; font-weight: 600; text-decoration: none; text-align: center; max-width: 100%; }
+  .btn.alt { background: transparent; color: #4a6f8a; }
+  .note { margin: 28px 0 0; font-size: 0.9rem; color: #6b7178; }
+  main section { padding: 36px 0 0; }
+  h2 { margin: 0 0 16px; font-size: 1.6rem; font-weight: 600; line-height: 1.25; }
+  h3 { margin: 40px 0 10px; font-size: 1.2rem; font-weight: 600; line-height: 1.3; }
+  p { margin: 0 0 14px; max-width: 46rem; }
+  .list { margin: 0; padding-left: 1.3em; max-width: 46rem; }
+  .list li { margin-bottom: 6px; }
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px; max-width: 46rem; }
+  .steps li { display: flex; gap: 18px; align-items: flex-start; }
+  .num { flex: none; width: 40px; height: 40px; border-radius: 50%; background: #4a6f8a; color: #fff; font-weight: 600; display: flex; align-items: center; justify-content: center; }
+  .steps div { padding-top: 6px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-bottom: 8px; }
+  figure { margin: 0; }
+  figcaption { margin-top: 10px; font-size: 0.95rem; color: #5d646b; }
+  .cap { color: #5d646b; font-size: 0.95rem; }
+  .map { margin: 32px 0 24px; max-width: 800px; }
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .card { background: #fff; border: 1px solid #e6e4df; border-radius: 8px; padding: 28px; display: flex; flex-direction: column; }
+  .card h3 { margin: 0 0 10px; font-size: 1.15rem; }
+  .card p { color: #4b5157; }
+  .more { margin-top: auto; display: inline-block; min-height: 44px; line-height: 44px; font-weight: 600; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .pc { margin: 18px 0 28px; max-width: 900px; }
+  .pc .row { display: grid; gap: 16px; grid-template-columns: 1fr; align-items: start; }
+  .pc.two .row { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+  .pc img { border: 1px solid #e6e4df; }
+  .tablebox { margin: 28px 0 0; border: 1px solid #e6e4df; border-radius: 8px; background: #fff; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+  th, td { text-align: left; vertical-align: top; padding: 10px 14px; border-bottom: 1px solid #e6e4df; }
+  th { background: #f1efeb; font-weight: 600; }
+  tbody tr:last-child td { border-bottom: 0; }
+  .contact { margin-top: 64px; padding: 40px 0 64px !important; border-top: 1px solid #e6e4df; }
+  footer { padding: 32px 0; border-top: 1px solid #e6e4df; font-size: 0.9rem; color: #6b7178; }
+  @media (max-width: 1000px) { .cards { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 760px) {
+    body { font-size: 16px; }
+    header .bar { padding-left: 20px; padding-right: 20px; }
+    h1 { margin-top: 32px; }
+    .grid, .cards { grid-template-columns: 1fr; }
+    .btn { width: 100%; }
+    table, thead, tbody, tr, td { display: block; }
+    thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    tr { padding: 10px 0; border-bottom: 1px solid #e6e4df; }
+    tbody tr:last-child { border-bottom: 0; }
+    td { border: 0; padding: 4px 14px; }
+    td::before { content: attr(data-label); display: block; font-size: 0.8rem; color: #6b7178; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <a class="brand" href="../index.html">Jared Pearlstein</a>
+    <span class="call"><a href="index.html">Services</a><a href="sms:+18143152469">Text (814) 315-2469</a></span>
+  </div>
+</header>
+
+<main>
+<div class="wrap">
+<h1>Pre-construction model and plan check</h1>
+<p class="lead">For builders and remodelers. Find the drawing mistakes before you price or frame.</p>
+<section><h2>What it is</h2><p>Before you price or frame, I build the job in 3D from the plan set, to the inch, and check every sheet against the others. You get a list of every place the drawings disagree, with the sheets involved and what the model used, plus a walkthrough you can share with your client.</p></section>
+<section><h2>What you get</h2><ul class="list"><li>A numbered list of drawing conflicts, each with the sheets and the two readings</li><li>3D views of each problem spot</li><li>Elevations and sections cut from the model</li><li>A walkthrough link that opens on a computer or a phone</li><li>The 3D model files, if you want them</li></ul></section>
+<section><h2>How it works</h2><ol class="steps"><li><span class="num" aria-hidden="true">1</span><div>Send the PDF plan set.</div></li><li><span class="num" aria-hidden="true">2</span><div>I build the model from the written dimensions.</div></li><li><span class="num" aria-hidden="true">3</span><div>I check the plans, elevations, sections and details against each other and against the numbers printed on them.</div></li><li><span class="num" aria-hidden="true">4</span><div>You get the list and the walkthrough, ready to send to the architect before anything is ordered or cut.</div></li></ol></section>
+<section><h2>See a sample</h2><p>On a three storey shore house, the check found a stair with 72.7 in of headroom where the plans call for 80 in, a sliding door drawn 5 1/2 in narrower on the elevation than on the plan, and a floor level printed two different ways.</p><div class="buttons"><a class="btn" href="sample-plan-check.html">Read the sample plan check</a><a class="btn alt" href="../house1/">Walk the sample house</a></div></section>
+<p class="note">This is a coordination check of the drawings, not a code review or an engineering review.</p>
+<section class="contact">
+  <h2>Want to see it on your project?</h2>
+  <div class="buttons">
+    <a class="btn" href="sms:+18143152469">Text (814) 315-2469</a>
+  </div>
+</section>
+</div>
+</main>
+
+<footer>
+  <div class="wrap">&copy; 2026 Jared Pearlstein</div>
+</footer>
+
+</body>
+</html>
