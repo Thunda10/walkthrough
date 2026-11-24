@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>More samples | Jared Pearlstein</title>
+<meta name="description" content="Renders, finish options and floor plans made from plans, for builders, property managers and practices.">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 17px;
+    line-height: 1.6;
+    color: #2d3136;
+    background: #fbfaf8;
+    overflow-wrap: break-word;
+  }
+  img { display: block; width: 100%; height: auto; border-radius: 6px; }
+  a { color: #4a6f8a; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+  header .bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 4px 16px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e6e4df;
+  }
+  .brand { font-weight: 600; font-size: 1.05rem; color: #2d3136; text-decoration: none; display: inline-block; min-height: 44px; line-height: 44px; }
+  .call a {
+    display: inline-block;
+    min-height: 44px;
+    line-height: 44px;
+    text-decoration: none;
+    font-size: 0.95rem;
+  }
+
+  .hero { padding-top: 56px; }
+  h1 {
+    margin: 0 0 16px;
+    font-size: clamp(2rem, 4.6vw, 3.1rem);
+    line-height: 1.15;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .lead { margin: 0; max-width: 46rem; font-size: 1.15rem; color: #4b5157; }
+  .buttons { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 0 24px;
+    border-radius: 6px;
+    border: 1px solid #4a6f8a;
+    background: #4a6f8a;
+    color: #fff;
+    font: inherit;
+    font-weight: 600;
+    text-decoration: none;
+    text-align: center;
+    max-width: 100%;
+  }
+  .btn.alt { background: transparent; color: #4a6f8a; }
+  .note { margin: 14px 0 0; font-size: 0.9rem; color: #6b7178; }
+  .hero-img { margin: 40px 0 0; }
+
+  section { padding: 72px 0; }
+  h2 {
+    margin: 0 0 28px;
+    font-size: 1.6rem;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  figure { margin: 0; }
+  figcaption { margin-top: 10px; font-size: 0.95rem; color: #5d646b; }
+
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 24px; }
+  .steps li { display: flex; gap: 18px; align-items: flex-start; }
+  .num {
+    flex: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #4a6f8a;
+    color: #fff;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .steps strong { display: block; font-weight: 600; }
+  .steps p { margin: 4px 0 0; color: #4b5157; }
+
+  .conflict { max-width: 46rem; margin: 0; font-size: 1.1rem; color: #3f454b; }
+
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  @media (max-width: 1000px) { .cards { grid-template-columns: 1fr 1fr; } }
+  .card {
+    background: #fff;
+    border: 1px solid #e6e4df;
+    border-radius: 8px;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+  }
+  .card h3 { margin: 0; font-size: 1.15rem; font-weight: 600; }
+  .price { margin: 10px 0 14px; font-size: 2rem; font-weight: 600; color: #4a6f8a; }
+  .price .from { display: block; font-size: 0.85rem; font-weight: 400; color: #6b7178; margin-bottom: 2px; }
+  .card p { margin: 0 0 12px; color: #4b5157; }
+  .card .delivery { margin-top: auto; font-size: 0.95rem; color: #5d646b; }
+  .fine { margin: 24px 0 0; font-size: 0.9rem; color: #6b7178; }
+
+  .sample { background: #4a6f8a; color: #fff; }
+  .sample h2 { color: #fff; }
+  .sample p { margin: 0; max-width: 40rem; font-size: 1.1rem; }
+  .sample .buttons { margin-top: 28px; }
+  .sample .btn { background: #fff; color: #4a6f8a; border-color: #fff; min-height: 56px; padding: 0 28px; font-size: 1.1rem; }
+  .sample .btn.alt { background: transparent; color: #fff; border-color: #fff; }
+
+  footer { padding: 32px 0; border-top: 1px solid #e6e4df; font-size: 0.9rem; color: #6b7178; }
+
+  @media (max-width: 760px) {
+    body { font-size: 16px; }
+    .hero { padding-top: 40px; }
+    header .bar { padding-left: 20px; padding-right: 20px; }
+    section { padding: 56px 0; }
+    .grid, .cards { grid-template-columns: 1fr; }
+    .btn { width: 100%; }
+    .sample .btn { width: 100%; font-size: 1.05rem; }
+  }
+  .call a + a { margin-left: 20px; }
+  .conflict + .grid { margin-top: 28px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <a class="brand" href="../index.html">Jared Pearlstein</a>
+    <span class="call"><a href="../services/">Services</a><a href="sms:+18143152469">Text (814) 315-2469</a></span>
+  </div>
+</header>
+
+<main>
+
+  <div class="wrap hero">
+    <h1>More samples</h1>
+    <p class="lead">Renders, finish options and floor plans made from plans, for builders, property managers and practices.</p>
+  </div>
+
+  <section>
+    <div class="wrap">
+      <h2>Farmhouse exterior</h2>
+      <p class="conflict">Photoreal exterior views of a new build, made straight from the plan set.</p>
+      <div class="grid">
+        <figure>
+          <a href="../images/samples/farmhouse-front.jpg"><img src="../images/samples/farmhouse-front.jpg" width="1600" height="1067" alt="Farmhouse front, seen from a three quarter angle" loading="lazy"></a>
+          <figcaption>Front, three quarter view</figcaption>
+        </figure>
+        <figure>
+          <a href="../images/samples/farmhouse-front-straight.jpg"><img src="../images/samples/farmhouse-front-straight.jpg" width="1600" height="1067" alt="Farmhouse front, seen straight on" loading="lazy"></a>
+          <figcaption>Front, straight on</figcaption>
+        </figure>
+        <figure>
+          <a href="../images/samples/farmhouse-rear.jpg"><img src="../images/samples/farmhouse-rear.jpg" width="1600" height="1067" alt="Farmhouse rear, seen from a three quarter angle" loading="lazy"></a>
+          <figcaption>Rear, three quarter view</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+  <section>
+    <div class="wrap">
+      <h2>Kitchen in two finishes</h2>
+      <p class="conflict">The same kitchen shown in two cabinet and hardware options, so buyers can compare.</p>
+      <div class="grid">
+        <figure>
+          <a href="../images/samples/kitchen-option-a.jpg"><img src="../images/samples/kitchen-option-a.jpg" width="1600" height="1067" alt="Kitchen with the option A cabinets and hardware" loading="lazy"></a>
+          <figcaption>Option A</figcaption>
+        </figure>
+        <figure>
+          <a href="../images/samples/kitchen-option-b.jpg"><img src="../images/samples/kitchen-option-b.jpg" width="1600" height="1067" alt="The same kitchen with the option B cabinets and hardware" loading="lazy"></a>
+          <figcaption>Option B</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+  <section>
+    <div class="wrap">
+      <h2>Apartment, 2 bed 2 bath</h2>
+      <p class="conflict">Furnished leasing renders plus a 3D floor plan of the whole unit.</p>
+      <div class="grid">
+        <figure>
+          <a href="../images/samples/apartment-plan-top.jpg"><img src="../images/samples/apartment-plan-top.jpg" width="1600" height="1600" alt="3D floor plan of the 2 bed 2 bath apartment, seen from above" loading="lazy"></a>
+          <figcaption>3D floor plan, top view</figcaption>
+        </figure>
+        <figure>
+          <a href="../images/samples/apartment-plan-angled.jpg"><img src="../images/samples/apartment-plan-angled.jpg" width="1600" height="1067" alt="3D floor plan of the apartment, seen from an angle" loading="lazy"></a>
+          <figcaption>3D floor plan, angled view</figcaption>
+        </figure>
+        <figure>
+          <a href="../images/samples/apartment-living.jpg"><img src="../images/samples/apartment-living.jpg" width="1600" height="1067" alt="Furnished living room open to the kitchen" loading="lazy"></a>
+          <figcaption>Living room and kitchen</figcaption>
+        </figure>
+        <figure>
+          <a href="../images/samples/apartment-kitchen.jpg"><img src="../images/samples/apartment-kitchen.jpg" width="1600" height="1067" alt="Apartment kitchen with cabinets and counters" loading="lazy"></a>
+          <figcaption>Kitchen</figcaption>
+        </figure>
+        <figure>
+          <a href="../images/samples/apartment-dining.jpg"><img src="../images/samples/apartment-dining.jpg" width="1600" height="1067" alt="Dining area with table and chairs" loading="lazy"></a>
+          <figcaption>Dining</figcaption>
+        </figure>
+        <figure>
+          <a href="../images/samples/apartment-primary-bedroom.jpg"><img src="../images/samples/apartment-primary-bedroom.jpg" width="1600" height="1067" alt="Furnished primary bedroom" loading="lazy"></a>
+          <figcaption>Primary bedroom</figcaption>
+        </figure>
+        <figure>
+          <a href="../images/samples/apartment-bedroom-2.jpg"><img src="../images/samples/apartment-bedroom-2.jpg" width="1600" height="1067" alt="Furnished second bedroom" loading="lazy"></a>
+          <figcaption>Bedroom 2</figcaption>
+        </figure>
+        <figure>
+          <a href="../images/samples/apartment-primary-bath.jpg"><img src="../images/samples/apartment-primary-bath.jpg" width="1600" height="1067" alt="Primary bathroom with a long wood vanity and mirror" loading="lazy"></a>
+          <figcaption>Primary bath</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+  <section>
+    <div class="wrap">
+      <h2>Dental office</h2>
+      <p class="conflict">Exterior, waiting room, operatory and a 3D floor plan of a small dental practice.</p>
+      <div class="grid">
+        <figure>
+          <a href="../images/samples/dental-entry.jpg"><img src="../images/samples/dental-entry.jpg" width="1600" height="1067" alt="Dental office exterior at the front entry" loading="lazy"></a>
+          <figcaption>Front entry</figcaption>
+        </figure>
+        <figure>
+          <a href="../images/samples/dental-aerial.jpg"><img src="../images/samples/dental-aerial.jpg" width="1600" height="1067" alt="Dental office building seen from above" loading="lazy"></a>
+          <figcaption>Aerial view</figcaption>
+        </figure>
+        <figure>
+          <a href="../images/samples/dental-waiting-room.jpg"><img src="../images/samples/dental-waiting-room.jpg" width="1600" height="1067" alt="Dental office waiting room with seating and front desk" loading="lazy"></a>
+          <figcaption>Waiting room</figcaption>
+        </figure>
+        <figure>
+          <a href="../images/samples/dental-operatory.jpg"><img src="../images/samples/dental-operatory.jpg" width="1600" height="1067" alt="Dental operatory with patient chair and equipment" loading="lazy"></a>
+          <figcaption>Operatory</figcaption>
+        </figure>
+        <figure>
+          <a href="../images/samples/dental-floor-plan.jpg"><img src="../images/samples/dental-floor-plan.jpg" width="1600" height="1067" alt="3D floor plan of the dental office" loading="lazy"></a>
+          <figcaption>3D floor plan</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="sample">
+    <div class="wrap">
+      <h2>Try it on your own plans.</h2>
+      <p>Send me a plan set and I'll model one room and run the drawing check for free.</p>
+      <div class="buttons">
+        <a class="btn" href="sms:+18143152469">Text (814) 315-2469</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">&copy; 2026 Jared Pearlstein</div>
+</footer>
+
+</body>
+</html>
