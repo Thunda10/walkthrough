@@ -626,6 +626,16 @@ let texPrev = initTexture();
 let yaw = 0;
 let pitch = 0;
 let fov = 85;
+let zoom = 1;
+// Widest view: 100 deg horizontal, 90 deg vertical. Zoom (0.35 to 1) narrows it. fov is vertical degrees.
+function setFov() {
+  const a = window.innerWidth / window.innerHeight;
+  const vh = h => 2 * Math.atan(Math.tan(h * Math.PI / 360) / a) * 180 / Math.PI;
+  const vmax = Math.min(90, vh(100));
+  fov = 2 * Math.atan(Math.tan(vmax * Math.PI / 360) * zoom) * 180 / Math.PI;
+}
+const clampZoom = z => Math.max(0.35, Math.min(1, z));
+setFov();
 let active = 0;
 let drag = null;
 let blendVal = 1.0;
@@ -669,6 +679,7 @@ function resize() {
     canvas.height = h;
     gl.viewport(0, 0, w, h);
   }
+  setFov();
   draw();
 }
 
@@ -991,8 +1002,9 @@ canvas.addEventListener('pointermove', e => {
   drag.x = e.clientX;
   drag.y = e.clientY;
 
-  yaw -= (dx / window.innerWidth) * (fov * Math.PI / 180);
-  pitch = Math.max(-89 * Math.PI / 180, Math.min(89 * Math.PI / 180, pitch + (dy / window.innerHeight) * (fov * Math.PI / 180)));
+  const k = fov * Math.PI / 180 / window.innerHeight;
+  yaw -= dx * k;
+  pitch = Math.max(-89 * Math.PI / 180, Math.min(89 * Math.PI / 180, pitch + dy * k));
   draw();
 });
 
@@ -1008,8 +1020,8 @@ canvas.style.cursor = 'grab';
 
 canvas.addEventListener('wheel', e => {
   e.preventDefault();
-  const delta = Math.sign(e.deltaY) * 3;
-  fov = Math.max(35, Math.min(100, fov + delta));
+  zoom = clampZoom(zoom * (e.deltaY > 0 ? 1.06 : 1 / 1.06));
+  setFov();
   draw();
 }, { passive: false });
 
@@ -1031,8 +1043,8 @@ canvas.addEventListener('touchmove', e => {
       e.touches[0].clientY - e.touches[1].clientY
     );
     if (pinchDist > 0) {
-      const diff = curDist - pinchDist;
-      fov = Math.max(35, Math.min(100, fov - diff * 0.12));
+      if (curDist > 0) zoom = clampZoom(zoom * pinchDist / curDist);
+      setFov();
       draw();
     }
     pinchDist = curDist;
