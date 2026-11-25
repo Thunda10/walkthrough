@@ -44,7 +44,27 @@ body {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: linear-gradient(180deg, rgba(0,0,0,0.48) 0%, transparent 18%, transparent 75%, rgba(0,0,0,0.58) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.40) 0%,
+    rgba(0, 0, 0, 0.29) 2.5%,
+    rgba(0, 0, 0, 0.201) 5%,
+    rgba(0, 0, 0, 0.129) 7.5%,
+    rgba(0, 0, 0, 0.076) 10%,
+    rgba(0, 0, 0, 0.038) 12.5%,
+    rgba(0, 0, 0, 0.014) 15%,
+    rgba(0, 0, 0, 0.003) 17.5%,
+    rgba(0, 0, 0, 0) 20%,
+    rgba(0, 0, 0, 0) 70%,
+    rgba(0, 0, 0, 0.003) 73.75%,
+    rgba(0, 0, 0, 0.017) 77.5%,
+    rgba(0, 0, 0, 0.046) 81.25%,
+    rgba(0, 0, 0, 0.091) 85%,
+    rgba(0, 0, 0, 0.155) 88.75%,
+    rgba(0, 0, 0, 0.241) 92.5%,
+    rgba(0, 0, 0, 0.348) 96.25%,
+    rgba(0, 0, 0, 0.48) 100%
+  );
 }
 button {
   font: inherit;
@@ -470,6 +490,344 @@ h1.tour-title {
     max-height: 52vh;
   }
 }
+[hidden] {
+  display: none !important;
+}
+.home-pill {
+  position: fixed;
+  top: max(12px, env(safe-area-inset-top));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 35;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 6px 16px;
+  border-radius: 9999px;
+  background: #36475e;
+  color: #fff;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+  pointer-events: auto;
+  touch-action: manipulation;
+  transition: background 0.16s ease;
+}
+.home-pill:hover {
+  background: #2b3a4d;
+}
+.home-pill:focus-visible {
+  outline: 2px solid #4f6d8c;
+  outline-offset: 2px;
+}
+@media (max-width: 720px) {
+  .home-pill {
+    top: max(72px, calc(env(safe-area-inset-top) + 60px));
+  }
+  .menu-panel {
+    top: max(124px, calc(env(safe-area-inset-top) + 112px));
+  }
+}
+/* overlays: tutorials let clicks through, modal screens do not */
+.ov {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  pointer-events: none;
+}
+.ov.modal {
+  pointer-events: auto;
+  background: rgba(18, 19, 18, 0.96);
+  z-index: 70;
+}
+.ov .box {
+  pointer-events: auto;
+  background: rgba(22, 24, 23, 0.95);
+  border: 1px solid var(--panel-border);
+  backdrop-filter: blur(18px);
+  border-radius: 16px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.65);
+  padding: 18px;
+  max-width: min(100%, 660px);
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  text-align: center;
+  color: var(--text);
+}
+.ov .box p {
+  margin: 8px 0 0;
+  font-size: 15px;
+  color: var(--text);
+  line-height: 1.45;
+}
+.ov .box button.primary {
+  margin: 16px 0 0;
+  min-height: 44px;
+  min-width: 120px;
+  padding: 10px 22px;
+  border-radius: 22px;
+  background: var(--accent);
+  color: #121312;
+  font-size: 15px;
+  font-weight: 600;
+  transition: background 0.16s ease;
+}
+.ov .box button.primary:hover {
+  background: #efca80;
+}
+.ov .big {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text);
+}
+.ov .sub {
+  font-size: 16px;
+  color: var(--text-dim);
+  margin: 8px 0 0;
+}
+#intro .box {
+  background: none;
+  border: none;
+  backdrop-filter: none;
+  box-shadow: none;
+  max-width: min(100%, 420px);
+}
+#intro:not([data-phase="2"]) .p2,
+#intro[data-phase="2"] .p1 {
+  display: none;
+}
+.rot svg {
+  width: 120px;
+  height: 120px;
+  display: block;
+  margin: 16px auto 0;
+}
+.rot .ph {
+  transform-origin: 60px 60px;
+  animation: rot 3.2s ease-in-out infinite;
+}
+@keyframes rot {
+  0%, 15% { transform: rotate(0); }
+  55%, 100% { transform: rotate(-90deg); }
+}
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.tcard {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 14px 10px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+.tcard b {
+  display: block;
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--text);
+}
+#tutd .box {
+  width: min(92vw, 660px);
+}
+#tutd .note {
+  margin: 12px 0 0;
+  font-size: 14px;
+  color: var(--text-dim);
+}
+#tutm .box {
+  width: min(94vw, 440px);
+}
+.tgrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.tgrid .tcard {
+  padding: 10px 8px;
+}
+.tgrid .tcard b {
+  margin-top: 8px;
+  font-size: 13px;
+}
+.demo {
+  width: 100%;
+  height: 92px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.demo > svg {
+  width: 100%;
+  height: 100%;
+  max-height: 92px;
+  display: block;
+}
+.kbd {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 92px;
+}
+.keys {
+  display: grid;
+  grid-template-columns: repeat(3, 32px);
+  gap: 4px;
+}
+.key {
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid rgba(255, 255, 255, 0.32);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text);
+}
+.ku { grid-column: 2; grid-row: 1; animation: ku 4s infinite; }
+.kl { grid-column: 1; grid-row: 2; animation: kl 4s infinite; }
+.kd { grid-column: 2; grid-row: 2; animation: kd 4s infinite; }
+.kr { grid-column: 3; grid-row: 2; animation: kr 4s infinite; }
+@keyframes ku { 0%, 22% { background: var(--accent); color: #121312; border-color: var(--accent); } 25%, 100% { background: rgba(255, 255, 255, 0.08); color: var(--text); border-color: rgba(255, 255, 255, 0.32); } }
+@keyframes kl { 0%, 25% { background: rgba(255, 255, 255, 0.08); color: var(--text); border-color: rgba(255, 255, 255, 0.32); } 26%, 47% { background: var(--accent); color: #121312; border-color: var(--accent); } 50%, 100% { background: rgba(255, 255, 255, 0.08); color: var(--text); border-color: rgba(255, 255, 255, 0.32); } }
+@keyframes kd { 0%, 50% { background: rgba(255, 255, 255, 0.08); color: var(--text); border-color: rgba(255, 255, 255, 0.32); } 51%, 72% { background: var(--accent); color: #121312; border-color: var(--accent); } 75%, 100% { background: rgba(255, 255, 255, 0.08); color: var(--text); border-color: rgba(255, 255, 255, 0.32); } }
+@keyframes kr { 0%, 75% { background: rgba(255, 255, 255, 0.08); color: var(--text); border-color: rgba(255, 255, 255, 0.32); } 76%, 97% { background: var(--accent); color: #121312; border-color: var(--accent); } 100% { background: rgba(255, 255, 255, 0.08); color: var(--text); border-color: rgba(255, 255, 255, 0.32); } }
+.arrow {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.arrow svg {
+  width: 20px;
+  height: 20px;
+  fill: var(--accent);
+  animation: mv 4s infinite;
+}
+@keyframes mv {
+  0%, 22% { transform: translate(0, -4px) rotate(0); }
+  25%, 47% { transform: translate(-4px, 0) rotate(-90deg); }
+  50%, 72% { transform: translate(0, 4px) rotate(180deg); }
+  75%, 97% { transform: translate(4px, 0) rotate(90deg); }
+  100% { transform: translate(0, -4px) rotate(0); }
+}
+.mscene {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 92px;
+}
+.mouse {
+  animation: mm 3s ease-in-out infinite alternate;
+}
+.mouse svg {
+  width: 36px;
+  height: 56px;
+  display: block;
+}
+.mwheel {
+  animation: mw 1.6s ease-in-out infinite;
+}
+.cone svg {
+  width: 56px;
+  height: 56px;
+  display: block;
+  animation: cr 3s ease-in-out infinite alternate;
+}
+@keyframes mm { from { transform: translate(-10px, 3px); } to { transform: translate(10px, -3px); } }
+@keyframes mw { 0%, 100% { transform: translateY(-2px); } 50% { transform: translateY(3px); } }
+@keyframes cr { from { transform: rotate(-36deg); } to { transform: rotate(36deg); } }
+.fg {
+  fill: #f2c9a0;
+  stroke: #8a6a4a;
+  stroke-width: 1.5;
+}
+.tp {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.d-look { animation: dlook 3.2s ease-in-out infinite; }
+@keyframes dlook { 0%, 10% { transform: translate(-28px, 0); } 50% { transform: translate(28px, 0); } 90%, 100% { transform: translate(-28px, 0); } }
+.p-f1 { animation: pf1 3.2s ease-in-out infinite; }
+.p-f2 { animation: pf2 3.2s ease-in-out infinite; }
+.p-box { animation: pbox 3.2s ease-in-out infinite; }
+@keyframes pf1 { 0%, 15% { transform: translate(0, 0); } 50%, 65% { transform: translate(-16px, 12px); } 90%, 100% { transform: translate(0, 0); } }
+@keyframes pf2 { 0%, 15% { transform: translate(0, 0); } 50%, 65% { transform: translate(16px, -12px); } 90%, 100% { transform: translate(0, 0); } }
+@keyframes pbox { 0%, 15% { transform: scale(0.84); } 50%, 65% { transform: scale(1.12); } 90%, 100% { transform: scale(0.84); } }
+.s-pulse { animation: spulse 2.8s ease-out infinite; }
+.s-tap { animation: stap 2.8s ease-in-out infinite; }
+@keyframes spulse { 0%, 25% { opacity: 0; transform: scale(0.5); } 45% { opacity: 0.9; transform: scale(1.1); } 80%, 100% { opacity: 0; transform: scale(1.65); } }
+@keyframes stap { 0%, 15% { transform: translate(10px, -14px); opacity: 0.9; } 35%, 52% { transform: translate(0, 0) scale(0.92); opacity: 1; } 75%, 100% { transform: translate(10px, -14px); opacity: 0.9; } }
+.r-menu { animation: rmenu 3.4s ease-in-out infinite; }
+.r-hi { animation: rhi 3.4s ease-in-out infinite; }
+.r-tap { animation: rtap 3.4s ease-in-out infinite; }
+@keyframes rmenu { 0%, 22% { opacity: 0; transform: translateY(-6px); } 35%, 82% { opacity: 1; transform: translateY(0); } 94%, 100% { opacity: 0; transform: translateY(-6px); } }
+@keyframes rhi { 0%, 48% { opacity: 0.15; } 60%, 80% { opacity: 0.55; } 90%, 100% { opacity: 0.15; } }
+@keyframes rtap { 0%, 12% { transform: translate(10px, 14px); } 24%, 34% { transform: translate(0, 0) scale(0.92); } 52%, 74% { transform: translate(18px, 38px); } 90%, 100% { transform: translate(10px, 14px); } }
+@media (max-width: 640px) {
+  .cards {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-height: 460px) {
+  #tutm .box {
+    width: min(96vw, 660px);
+    padding: 12px 14px;
+  }
+  .tgrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .demo {
+    height: 62px;
+  }
+  .demo > svg {
+    max-height: 62px;
+  }
+  #tutm .box button.primary {
+    margin-top: 10px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ov *, .ov *::before, .ov *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  .ku {
+    background: var(--accent);
+    color: #121312;
+    border-color: var(--accent);
+  }
+  .rot .ph {
+    transform: rotate(-90deg);
+  }
+  .s-pulse, .r-menu {
+    opacity: 1;
+  }
+}
 </style>
 </head>
 <body>
@@ -492,8 +850,11 @@ h1.tour-title {
       <span class="btn-label">Map</span>
     </button>
     <button id="fullscreen" class="action-btn icon-only" aria-label="Toggle fullscreen" title="Fullscreen">⛶</button>
+    <button id="helpBtn" class="action-btn icon-only" aria-label="Controls help" title="Controls help">?</button>
   </div>
 </header>
+
+<a class="home-pill" href="../../">Home</a>
 
 <div id="hotspots" aria-label="Scene navigation hotspots"></div>
 
@@ -511,7 +872,7 @@ h1.tour-title {
     <button id="closeMap" class="close-btn" aria-label="Collapse floor plan" style="width:36px;height:36px;">✕</button>
   </div>
   <div class="map-svg-wrap">
-    <svg id="floorPlanSvg" viewBox="0 0 18.878 11.411" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Floor plan"><g class="map-rooms"><polygon class="map-room" points="0.600,10.811 3.788,10.811 3.788,6.252 0.600,6.252"><title>office</title></polygon><polygon class="map-room" points="3.902,10.811 5.261,10.811 5.261,9.757 5.921,9.757 5.921,6.239 6.023,6.239 6.023,6.150 3.889,6.150 3.889,6.239 3.902,6.239"><title>foyer</title></polygon><polygon class="map-room" points="5.261,10.811 7.077,10.811 7.077,8.017 6.036,8.017 6.036,9.757 5.261,9.757"><title>stair</title></polygon><polygon class="map-room" points="7.191,10.811 8.550,10.811 8.550,6.150 7.191,6.150"><title>back hall</title></polygon><polygon class="map-room" points="8.665,10.811 11.878,10.811 11.878,8.537 8.665,8.537"><title>mudroom and laundry</title></polygon><polygon class="map-room" points="8.665,8.423 10.150,8.423 10.150,6.252 8.665,6.252"><title>powder</title></polygon><polygon class="map-room" points="10.265,8.423 11.878,8.423 11.878,6.252 10.265,6.252"><title>pantry</title></polygon><polygon class="map-room" points="6.036,7.902 7.077,7.902 7.077,6.252 6.036,6.252"><title>under stair closet</title></polygon><polygon class="map-room" points="0.600,6.137 3.889,6.137 3.889,6.150 5.528,6.150 5.528,1.362 0.600,1.362"><title>living</title></polygon><polygon class="map-room" points="5.528,6.150 6.023,6.150 6.023,6.137 7.090,6.137 7.090,6.150 8.372,6.150 8.372,1.362 8.169,1.362 8.169,1.349 5.731,1.349 5.731,1.362 5.528,1.362"><title>dining</title></polygon><polygon class="map-room" points="8.372,6.150 8.652,6.150 8.652,6.137 11.878,6.137 11.878,1.362 8.372,1.362"><title>kitchen</title></polygon><polygon class="map-room" points="5.731,1.349 8.169,1.349 8.169,1.210 7.954,1.210 7.344,0.600 6.556,0.600 5.946,1.210 5.731,1.210"><title>breakfast nook</title></polygon><polygon class="map-room" points="12.046,10.201 18.278,10.201 18.278,3.800 12.046,3.800"><title>garage</title></polygon></g><g id="wedgeGroup" transform="translate(0, 0)"><path id="viewWedge" class="map-wedge" d="M 0 0 L -0.65 -1.55 A 1.68 1.68 0 0 1 0.65 -1.55 Z" /></g><g class="map-dots"><circle class="map-dot" data-index="0" cx="4.648" cy="9.463" r="0.32" role="button" tabindex="0" aria-label="Foyer 1"><title>Foyer 1</title></circle><circle class="map-dot" data-index="1" cx="4.648" cy="6.763" r="0.32" role="button" tabindex="0" aria-label="Foyer 2"><title>Foyer 2</title></circle><circle class="map-dot" data-index="2" cx="4.928" cy="10.243" r="0.32" role="button" tabindex="0" aria-label="Stair 1"><title>Stair 1</title></circle><circle class="map-dot" data-index="3" cx="3.048" cy="7.763" r="0.32" role="button" tabindex="0" aria-label="Office 1"><title>Office 1</title></circle><circle class="map-dot" data-index="4" cx="2.198" cy="8.863" r="0.32" role="button" tabindex="0" aria-label="Office 2"><title>Office 2</title></circle><circle class="map-dot" data-index="5" cx="1.448" cy="6.963" r="0.32" role="button" tabindex="0" aria-label="Office 3"><title>Office 3</title></circle><circle class="map-dot" data-index="6" cx="4.748" cy="5.463" r="0.32" role="button" tabindex="0" aria-label="Living room 1"><title>Living room 1</title></circle><circle class="map-dot" data-index="7" cx="1.598" cy="3.763" r="0.32" role="button" tabindex="0" aria-label="Living room 2"><title>Living room 2</title></circle><circle class="map-dot" data-index="8" cx="4.348" cy="2.063" r="0.32" role="button" tabindex="0" aria-label="Living room 3"><title>Living room 3</title></circle><circle class="map-dot" data-index="9" cx="5.898" cy="5.363" r="0.32" role="button" tabindex="0" aria-label="Dining room 1"><title>Dining room 1</title></circle><circle class="map-dot" data-index="10" cx="6.948" cy="2.213" r="0.32" role="button" tabindex="0" aria-label="Dining room 2"><title>Dining room 2</title></circle><circle class="map-dot" data-index="11" cx="7.848" cy="5.563" r="0.32" role="button" tabindex="0" aria-label="Dining room 3"><title>Dining room 3</title></circle><circle class="map-dot" data-index="12" cx="6.948" cy="1.163" r="0.32" role="button" tabindex="0" aria-label="Breakfast nook 1"><title>Breakfast nook 1</title></circle><circle class="map-dot" data-index="13" cx="10.348" cy="3.963" r="0.32" role="button" tabindex="0" aria-label="Kitchen 1"><title>Kitchen 1</title></circle><circle class="map-dot" data-index="14" cx="10.048" cy="2.363" r="0.32" role="button" tabindex="0" aria-label="Kitchen 2"><title>Kitchen 2</title></circle><circle class="map-dot" data-index="15" cx="10.198" cy="5.613" r="0.32" role="button" tabindex="0" aria-label="Kitchen 3"><title>Kitchen 3</title></circle><circle class="map-dot" data-index="16" cx="11.068" cy="7.213" r="0.32" role="button" tabindex="0" aria-label="Pantry 1"><title>Pantry 1</title></circle><circle class="map-dot" data-index="17" cx="7.848" cy="9.763" r="0.32" role="button" tabindex="0" aria-label="Back hall 1"><title>Back hall 1</title></circle><circle class="map-dot" data-index="18" cx="7.528" cy="6.783" r="0.32" role="button" tabindex="0" aria-label="Back hall 2"><title>Back hall 2</title></circle><circle class="map-dot" data-index="19" cx="9.408" cy="7.333" r="0.32" role="button" tabindex="0" aria-label="Powder room 1"><title>Powder room 1</title></circle><circle class="map-dot" data-index="20" cx="9.098" cy="9.613" r="0.32" role="button" tabindex="0" aria-label="Mudroom 1"><title>Mudroom 1</title></circle><circle class="map-dot" data-index="21" cx="10.268" cy="9.713" r="0.32" role="button" tabindex="0" aria-label="Mudroom 2"><title>Mudroom 2</title></circle><circle class="map-dot" data-index="22" cx="11.448" cy="9.163" r="0.32" role="button" tabindex="0" aria-label="Mudroom 3"><title>Mudroom 3</title></circle><circle class="map-dot" data-index="23" cx="12.648" cy="9.213" r="0.32" role="button" tabindex="0" aria-label="Garage 1"><title>Garage 1</title></circle><circle class="map-dot" data-index="24" cx="15.158" cy="7.003" r="0.32" role="button" tabindex="0" aria-label="Garage 2"><title>Garage 2</title></circle><circle class="map-dot" data-index="25" cx="15.158" cy="9.363" r="0.32" role="button" tabindex="0" aria-label="Garage 3"><title>Garage 3</title></circle></g><g class="map-compass" transform="translate(17.68, 1.40)"><line x1="0" y1="0.6" x2="0" y2="-0.6" stroke="#e0dbcd" stroke-width="0.08" /><polygon points="0,-0.7 -0.22,-0.25 0.22,-0.25" fill="#e0dbcd" /><text x="0" y="-0.9" font-size="0.65" text-anchor="middle" fill="#e0dbcd" font-weight="600">N</text></g></svg>
+    <svg id="floorPlanSvg" viewBox="0 0 18.878 11.411" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Floor plan"><g class="map-rooms"><polygon class="map-room" points="0.600,10.811 3.788,10.811 3.788,6.252 0.600,6.252"><title>office</title></polygon><polygon class="map-room" points="3.902,10.811 5.261,10.811 5.261,9.757 5.921,9.757 5.921,6.239 6.023,6.239 6.023,6.150 3.889,6.150 3.889,6.239 3.902,6.239"><title>foyer</title></polygon><polygon class="map-room" points="5.261,10.811 7.077,10.811 7.077,8.017 6.036,8.017 6.036,9.757 5.261,9.757"><title>stair</title></polygon><polygon class="map-room" points="7.191,10.811 8.550,10.811 8.550,6.150 7.191,6.150"><title>back hall</title></polygon><polygon class="map-room" points="8.665,10.811 11.878,10.811 11.878,8.537 8.665,8.537"><title>mudroom and laundry</title></polygon><polygon class="map-room" points="8.665,8.423 10.150,8.423 10.150,6.252 8.665,6.252"><title>powder</title></polygon><polygon class="map-room" points="10.265,8.423 11.878,8.423 11.878,6.252 10.265,6.252"><title>pantry</title></polygon><polygon class="map-room" points="6.036,7.902 7.077,7.902 7.077,6.252 6.036,6.252"><title>under stair closet</title></polygon><polygon class="map-room" points="0.600,6.137 3.889,6.137 3.889,6.150 5.528,6.150 5.528,1.362 0.600,1.362"><title>living</title></polygon><polygon class="map-room" points="5.528,6.150 6.023,6.150 6.023,6.137 7.090,6.137 7.090,6.150 8.372,6.150 8.372,1.362 8.169,1.362 8.169,1.349 5.731,1.349 5.731,1.362 5.528,1.362"><title>dining</title></polygon><polygon class="map-room" points="8.372,6.150 8.652,6.150 8.652,6.137 11.878,6.137 11.878,1.362 8.372,1.362"><title>kitchen</title></polygon><polygon class="map-room" points="5.731,1.349 8.169,1.349 8.169,1.210 7.954,1.210 7.344,0.600 6.556,0.600 5.946,1.210 5.731,1.210"><title>breakfast nook</title></polygon><polygon class="map-room" points="12.046,10.201 18.278,10.201 18.278,3.800 12.046,3.800"><title>garage</title></polygon></g><g id="wedgeGroup" transform="translate(0, 0)"><path id="viewWedge" class="map-wedge" d="M 0 0 L -0.65 -1.55 A 1.68 1.68 0 0 1 0.65 -1.55 Z" /></g><g class="map-dots"><circle class="map-dot" data-index="0" cx="4.648" cy="9.463" r="0.32" role="button" tabindex="0" aria-label="Foyer 1"><title>Foyer 1</title></circle><circle class="map-dot" data-index="1" cx="4.648" cy="6.763" r="0.32" role="button" tabindex="0" aria-label="Foyer 2"><title>Foyer 2</title></circle><circle class="map-dot" data-index="2" cx="4.928" cy="10.243" r="0.32" role="button" tabindex="0" aria-label="Stair"><title>Stair</title></circle><circle class="map-dot" data-index="3" cx="2.198" cy="8.863" r="0.32" role="button" tabindex="0" aria-label="Office"><title>Office</title></circle><circle class="map-dot" data-index="4" cx="4.748" cy="5.463" r="0.32" role="button" tabindex="0" aria-label="Living room 1"><title>Living room 1</title></circle><circle class="map-dot" data-index="5" cx="1.598" cy="3.763" r="0.32" role="button" tabindex="0" aria-label="Living room 2"><title>Living room 2</title></circle><circle class="map-dot" data-index="6" cx="4.348" cy="2.063" r="0.32" role="button" tabindex="0" aria-label="Living room 3"><title>Living room 3</title></circle><circle class="map-dot" data-index="7" cx="5.898" cy="5.363" r="0.32" role="button" tabindex="0" aria-label="Dining room 1"><title>Dining room 1</title></circle><circle class="map-dot" data-index="8" cx="6.948" cy="2.213" r="0.32" role="button" tabindex="0" aria-label="Dining room 2"><title>Dining room 2</title></circle><circle class="map-dot" data-index="9" cx="6.948" cy="1.163" r="0.32" role="button" tabindex="0" aria-label="Breakfast nook"><title>Breakfast nook</title></circle><circle class="map-dot" data-index="10" cx="10.348" cy="3.963" r="0.32" role="button" tabindex="0" aria-label="Kitchen 1"><title>Kitchen 1</title></circle><circle class="map-dot" data-index="11" cx="10.048" cy="2.363" r="0.32" role="button" tabindex="0" aria-label="Kitchen 2"><title>Kitchen 2</title></circle><circle class="map-dot" data-index="12" cx="10.198" cy="5.613" r="0.32" role="button" tabindex="0" aria-label="Kitchen 3"><title>Kitchen 3</title></circle><circle class="map-dot" data-index="13" cx="11.068" cy="7.213" r="0.32" role="button" tabindex="0" aria-label="Pantry"><title>Pantry</title></circle><circle class="map-dot" data-index="14" cx="7.528" cy="6.783" r="0.32" role="button" tabindex="0" aria-label="Back hall"><title>Back hall</title></circle><circle class="map-dot" data-index="15" cx="9.408" cy="7.333" r="0.32" role="button" tabindex="0" aria-label="Powder room"><title>Powder room</title></circle><circle class="map-dot" data-index="16" cx="10.268" cy="9.713" r="0.32" role="button" tabindex="0" aria-label="Mudroom 1"><title>Mudroom 1</title></circle><circle class="map-dot" data-index="17" cx="11.448" cy="9.163" r="0.32" role="button" tabindex="0" aria-label="Mudroom 2"><title>Mudroom 2</title></circle><circle class="map-dot" data-index="18" cx="12.648" cy="9.213" r="0.32" role="button" tabindex="0" aria-label="Garage 1"><title>Garage 1</title></circle><circle class="map-dot" data-index="19" cx="15.158" cy="7.003" r="0.32" role="button" tabindex="0" aria-label="Garage 2"><title>Garage 2</title></circle></g><g class="map-compass" transform="translate(17.68, 1.40)"><line x1="0" y1="0.6" x2="0" y2="-0.6" stroke="#e0dbcd" stroke-width="0.08" /><polygon points="0,-0.7 -0.22,-0.25 0.22,-0.25" fill="#e0dbcd" /><text x="0" y="-0.9" font-size="0.65" text-anchor="middle" fill="#e0dbcd" font-weight="600">N</text></g></svg>
   </div>
   <div id="mapTooltip" class="map-tooltip" role="tooltip" aria-hidden="true"></div>
 </section>
@@ -520,9 +881,53 @@ h1.tour-title {
   <div>WebGL is required to view the interactive panorama tour. Please check browser settings or hardware acceleration.</div>
 </div>
 
+<div id="intro" class="ov modal" role="dialog" aria-modal="true" aria-label="Best on a laptop" hidden>
+  <div class="box">
+    <div class="p1">
+      <p class="big">Best on a laptop</p>
+      <p class="sub">The 360 tour works on a phone, but a bigger screen shows more.</p>
+    </div>
+    <div class="rot p2">
+      <svg viewBox="0 0 120 120" aria-hidden="true">
+        <g class="ph">
+          <rect x="38" y="16" width="44" height="88" rx="8" fill="#1e211f" stroke="#e5b967" stroke-width="4"/>
+          <rect x="44" y="26" width="32" height="62" rx="2" fill="#2d322e"/>
+          <circle cx="60" cy="96" r="3" fill="#e5b967"/>
+        </g>
+      </svg>
+      <p class="sub">Turn your phone sideways for the best view</p>
+    </div>
+    <button id="introgo" class="primary">Continue</button>
+  </div>
+</div>
+
+<div id="tutm" class="ov" role="dialog" aria-label="Tour controls" hidden>
+  <div class="box">
+    <div class="tgrid">
+      <div class="tcard"><div class="demo" data-demo="drag"></div><b>Drag to look around</b></div>
+      <div class="tcard"><div class="demo" data-demo="pinch"></div><b>Pinch to zoom</b></div>
+      <div class="tcard"><div class="demo" data-demo="spot"></div><b>Tap a circle on the floor to move there</b></div>
+      <div class="tcard"><div class="demo" data-demo="rooms"></div><b>Open Rooms to jump to any room</b></div>
+    </div>
+    <button class="primary" data-close>Got it</button>
+  </div>
+</div>
+
+<div id="tutd" class="ov" role="dialog" aria-label="Tour controls" hidden>
+  <div class="box">
+    <div class="cards">
+      <div class="tcard"><div class="demo" data-demo="mouse"></div><b>Drag to look around, scroll to zoom</b></div>
+      <div class="tcard"><div class="demo" data-demo="clickspot"></div><b>Click a circle on the floor to move there</b></div>
+      <div class="tcard"><div class="demo" data-demo="arrows"></div><b>Use the arrow keys to look around</b></div>
+    </div>
+    <p class="note">Open Rooms to jump to any room, or use the floor plan Map. Press Esc to close.</p>
+    <button class="primary" data-close>Got it</button>
+  </div>
+</div>
+
 <script>
 (()=>{
-const DATA = {"viewpoints":[{"name":"foyer 1","room":"foyer","label":"Foyer 1","x":4.2,"y":1.5,"z":1.5431,"slug":"foyer-1","links":[{"name":"foyer 2","through_door":false,"show_hotspot":true},{"name":"stair 1","through_door":false,"show_hotspot":true},{"name":"living 1","through_door":false,"show_hotspot":false},{"name":"living 3","through_door":false,"show_hotspot":false},{"name":"dining 1","through_door":false,"show_hotspot":true},{"name":"dining 2","through_door":false,"show_hotspot":false},{"name":"breakfast nook 1","through_door":false,"show_hotspot":false}],"hotspots":["stair 1","foyer 2","dining 1"]},{"name":"foyer 2","room":"foyer","label":"Foyer 2","x":4.2,"y":4.2,"z":1.5431,"slug":"foyer-2","links":[{"name":"foyer 1","through_door":false,"show_hotspot":true},{"name":"stair 1","through_door":false,"show_hotspot":false},{"name":"office 1","through_door":false,"show_hotspot":true},{"name":"office 3","through_door":false,"show_hotspot":true},{"name":"living 1","through_door":false,"show_hotspot":true},{"name":"living 2","through_door":false,"show_hotspot":true},{"name":"living 3","through_door":false,"show_hotspot":false},{"name":"dining 1","through_door":false,"show_hotspot":true},{"name":"dining 2","through_door":false,"show_hotspot":false},{"name":"breakfast nook 1","through_door":false,"show_hotspot":false},{"name":"kitchen 1","through_door":false,"show_hotspot":false},{"name":"kitchen 2","through_door":false,"show_hotspot":false}],"hotspots":["living 1","dining 1","office 1","foyer 1","office 3","living 2"]},{"name":"stair 1","room":"stair","label":"Stair 1","x":4.48,"y":0.72,"z":1.5431,"slug":"stair-1","links":[{"name":"foyer 1","through_door":false,"show_hotspot":true},{"name":"foyer 2","through_door":false,"show_hotspot":true},{"name":"living 1","through_door":false,"show_hotspot":false},{"name":"living 3","through_door":false,"show_hotspot":false},{"name":"dining 1","through_door":false,"show_hotspot":true}],"hotspots":["foyer 1","foyer 2","dining 1"]},{"name":"office 1","room":"office","label":"Office 1","x":2.6,"y":3.2,"z":1.5431,"slug":"office-1","links":[{"name":"foyer 2","through_door":false,"show_hotspot":true},{"name":"office 2","through_door":false,"show_hotspot":true},{"name":"office 3","through_door":false,"show_hotspot":true},{"name":"dining 1","through_door":false,"show_hotspot":false},{"name":"kitchen 2","through_door":false,"show_hotspot":false}],"hotspots":["office 2","office 3","foyer 2"]},{"name":"office 2","room":"office","label":"Office 2","x":1.75,"y":2.1,"z":1.5431,"slug":"office-2","links":[{"name":"office 1","through_door":false,"show_hotspot":true},{"name":"office 3","through_door":false,"show_hotspot":true},{"name":"dining 1","through_door":false,"show_hotspot":false}],"hotspots":["office 1","office 3"]},{"name":"office 3","room":"office","label":"Office 3","x":1.0,"y":4.0,"z":1.5431,"slug":"office-3","links":[{"name":"foyer 2","through_door":false,"show_hotspot":true},{"name":"office 1","through_door":false,"show_hotspot":true},{"name":"office 2","through_door":false,"show_hotspot":true}],"hotspots":["office 1","office 2","foyer 2"]},{"name":"living 1","room":"living","label":"Living room 1","x":4.3,"y":5.5,"z":1.5431,"slug":"living-1","links":[{"name":"foyer 1","through_door":false,"show_hotspot":false},{"name":"foyer 2","through_door":false,"show_hotspot":true},{"name":"stair 1","through_door":false,"show_hotspot":false},{"name":"living 2","through_door":false,"show_hotspot":true},{"name":"living 3","through_door":false,"show_hotspot":true},{"name":"dining 1","through_door":false,"show_hotspot":true},{"name":"dining 2","through_door":false,"show_hotspot":true},{"name":"dining 3","through_door":false,"show_hotspot":false},{"name":"breakfast nook 1","through_door":false,"show_hotspot":false},{"name":"kitchen 1","through_door":false,"show_hotspot":false},{"name":"kitchen 2","through_door":false,"show_hotspot":true},{"name":"kitchen 3","through_door":false,"show_hotspot":false}],"hotspots":["dining 1","foyer 2","living 3","living 2","dining 2","kitchen 2"]},{"name":"living 2","room":"living","label":"Living room 2","x":1.15,"y":7.2,"z":1.5431,"slug":"living-2","links":[{"name":"foyer 2","through_door":false,"show_hotspot":true},{"name":"living 1","through_door":false,"show_hotspot":true},{"name":"living 3","through_door":false,"show_hotspot":true},{"name":"dining 1","through_door":false,"show_hotspot":false},{"name":"dining 2","through_door":false,"show_hotspot":true},{"name":"dining 3","through_door":false,"show_hotspot":true},{"name":"breakfast nook 1","through_door":false,"show_hotspot":false},{"name":"kitchen 1","through_door":false,"show_hotspot":true},{"name":"kitchen 2","through_door":false,"show_hotspot":false},{"name":"kitchen 3","through_door":false,"show_hotspot":false}],"hotspots":["living 3","living 1","foyer 2","dining 2","dining 3","kitchen 1"]},{"name":"living 3","room":"living","label":"Living room 3","x":3.9,"y":8.9,"z":1.5431,"slug":"living-3","links":[{"name":"foyer 1","through_door":false,"show_hotspot":false},{"name":"foyer 2","through_door":false,"show_hotspot":false},{"name":"stair 1","through_door":false,"show_hotspot":false},{"name":"living 1","through_door":false,"show_hotspot":true},{"name":"living 2","through_door":false,"show_hotspot":true},{"name":"dining 1","through_door":false,"show_hotspot":true},{"name":"dining 2","through_door":false,"show_hotspot":true},{"name":"dining 3","through_door":false,"show_hotspot":true},{"name":"breakfast nook 1","through_door":false,"show_hotspot":true},{"name":"kitchen 1","through_door":false,"show_hotspot":false},{"name":"kitchen 2","through_door":false,"show_hotspot":false},{"name":"kitchen 3","through_door":false,"show_hotspot":false}],"hotspots":["dining 2","breakfast nook 1","living 2","living 1","dining 1","dining 3"]},{"name":"dining 1","room":"dining","label":"Dining room 1","x":5.45,"y":5.6,"z":1.5431,"slug":"dining-1","links":[{"name":"foyer 1","through_door":false,"show_hotspot":true},{"name":"foyer 2","through_door":false,"show_hotspot":true},{"name":"stair 1","through_door":false,"show_hotspot":false},{"name":"office 1","through_door":false,"show_hotspot":false},{"name":"office 2","through_door":false,"show_hotspot":false},{"name":"living 1","through_door":false,"show_hotspot":true},{"name":"living 2","through_door":false,"show_hotspot":false},{"name":"living 3","through_door":false,"show_hotspot":true},{"name":"dining 2","through_door":false,"show_hotspot":true},{"name":"dining 3","through_door":false,"show_hotspot":true},{"name":"breakfast nook 1","through_door":false,"show_hotspot":false},{"name":"kitchen 1","through_door":false,"show_hotspot":false},{"name":"kitchen 2","through_door":false,"show_hotspot":false},{"name":"kitchen 3","through_door":false,"show_hotspot":false}],"hotspots":["living 1","foyer 2","dining 3","dining 2","living 3","foyer 1"]},{"name":"dining 2","room":"dining","label":"Dining room 2","x":6.5,"y":8.75,"z":1.5431,"slug":"dining-2","links":[{"name":"foyer 1","through_door":false,"show_hotspot":false},{"name":"foyer 2","through_door":false,"show_hotspot":false},{"name":"living 1","through_door":false,"show_hotspot":false},{"name":"living 2","through_door":false,"show_hotspot":false},{"name":"living 3","through_door":false,"show_hotspot":true},{"name":"dining 1","through_door":false,"show_hotspot":true},{"name":"dining 3","through_door":false,"show_hotspot":true},{"name":"breakfast nook 1","through_door":false,"show_hotspot":true},{"name":"kitchen 1","through_door":false,"show_hotspot":true},{"name":"kitchen 2","through_door":false,"show_hotspot":true},{"name":"kitchen 3","through_door":false,"show_hotspot":false},{"name":"back hall 1","through_door":false,"show_hotspot":false},{"name":"back hall 2","through_door":false,"show_hotspot":false}],"hotspots":["breakfast nook 1","living 3","kitchen 2","dining 1","dining 3","kitchen 1"]},{"name":"dining 3","room":"dining","label":"Dining room 3","x":7.4,"y":5.4,"z":1.5431,"slug":"dining-3","links":[{"name":"living 1","through_door":false,"show_hotspot":false},{"name":"living 2","through_door":false,"show_hotspot":false},{"name":"living 3","through_door":false,"show_hotspot":false},{"name":"dining 1","through_door":false,"show_hotspot":true},{"name":"dining 2","through_door":false,"show_hotspot":true},{"name":"breakfast nook 1","through_door":false,"show_hotspot":false},{"name":"kitchen 1","through_door":false,"show_hotspot":true},{"name":"kitchen 2","through_door":false,"show_hotspot":true},{"name":"kitchen 3","through_door":false,"show_hotspot":true},{"name":"back hall 2","through_door":false,"show_hotspot":true}],"hotspots":["back hall 2","dining 1","kitchen 3","kitchen 1","dining 2","kitchen 2"]},{"name":"breakfast nook 1","room":"breakfast nook","label":"Breakfast nook 1","x":6.5,"y":9.8,"z":1.5431,"slug":"breakfast-nook-1","links":[{"name":"foyer 1","through_door":false,"show_hotspot":false},{"name":"foyer 2","through_door":false,"show_hotspot":false},{"name":"living 1","through_door":false,"show_hotspot":true},{"name":"living 2","through_door":false,"show_hotspot":false},{"name":"living 3","through_door":false,"show_hotspot":true},{"name":"dining 1","through_door":false,"show_hotspot":true},{"name":"dining 2","through_door":false,"show_hotspot":true},{"name":"dining 3","through_door":false,"show_hotspot":false},{"name":"kitchen 1","through_door":false,"show_hotspot":true},{"name":"kitchen 2","through_door":false,"show_hotspot":true},{"name":"kitchen 3","through_door":false,"show_hotspot":false},{"name":"back hall 1","through_door":false,"show_hotspot":false},{"name":"back hall 2","through_door":false,"show_hotspot":false}],"hotspots":["dining 2","living 3","kitchen 2","dining 1","kitchen 1","living 1"]},{"name":"kitchen 1","room":"kitchen","label":"Kitchen 1","x":9.9,"y":7.0,"z":1.5431,"slug":"kitchen-1","links":[{"name":"foyer 2","through_door":false,"show_hotspot":false},{"name":"living 1","through_door":false,"show_hotspot":false},{"name":"living 2","through_door":false,"show_hotspot":false},{"name":"living 3","through_door":false,"show_hotspot":false},{"name":"dining 1","through_door":false,"show_hotspot":false},{"name":"dining 2","through_door":false,"show_hotspot":true},{"name":"dining 3","through_door":false,"show_hotspot":true},{"name":"breakfast nook 1","through_door":false,"show_hotspot":true},{"name":"kitchen 2","through_door":false,"show_hotspot":true},{"name":"kitchen 3","through_door":false,"show_hotspot":true},{"name":"back hall 2","through_door":false,"show_hotspot":true}],"hotspots":["kitchen 2","kitchen 3","dining 3","dining 2","back hall 2","breakfast nook 1"]},{"name":"kitchen 2","room":"kitchen","label":"Kitchen 2","x":9.6,"y":8.6,"z":1.5431,"slug":"kitchen-2","links":[{"name":"foyer 2","through_door":false,"show_hotspot":false},{"name":"office 1","through_door":false,"show_hotspot":false},{"name":"living 1","through_door":false,"show_hotspot":false},{"name":"living 2","through_door":false,"show_hotspot":true},{"name":"living 3","through_door":false,"show_hotspot":false},{"name":"dining 1","through_door":false,"show_hotspot":true},{"name":"dining 2","through_door":false,"show_hotspot":true},{"name":"dining 3","through_door":false,"show_hotspot":true},{"name":"breakfast nook 1","through_door":false,"show_hotspot":true},{"name":"kitchen 1","through_door":false,"show_hotspot":true},{"name":"kitchen 3","through_door":false,"show_hotspot":false},{"name":"back hall 2","through_door":false,"show_hotspot":false}],"hotspots":["kitchen 1","dining 2","breakfast nook 1","dining 3","dining 1","living 2"]},{"name":"kitchen 3","room":"kitchen","label":"Kitchen 3","x":9.75,"y":5.35,"z":1.5431,"slug":"kitchen-3","links":[{"name":"living 1","through_door":false,"show_hotspot":false},{"name":"living 2","through_door":false,"show_hotspot":false},{"name":"living 3","through_door":false,"show_hotspot":true},{"name":"dining 1","through_door":false,"show_hotspot":false},{"name":"dining 2","through_door":false,"show_hotspot":true},{"name":"dining 3","through_door":false,"show_hotspot":true},{"name":"breakfast nook 1","through_door":false,"show_hotspot":false},{"name":"kitchen 1","through_door":false,"show_hotspot":true},{"name":"kitchen 2","through_door":false,"show_hotspot":false},{"name":"pantry 1","through_door":true,"show_hotspot":true}],"hotspots":["kitchen 1","pantry 1","dining 3","dining 2","living 3"]},{"name":"pantry 1","room":"pantry","label":"Pantry 1","x":10.62,"y":3.75,"z":1.5367,"slug":"pantry-1","links":[{"name":"kitchen 3","through_door":true,"show_hotspot":true}],"hotspots":["kitchen 3"]},{"name":"back hall 1","room":"back hall","label":"Back hall 1","x":7.4,"y":1.2,"z":1.5431,"slug":"back-hall-1","links":[{"name":"dining 2","through_door":false,"show_hotspot":false},{"name":"breakfast nook 1","through_door":false,"show_hotspot":false},{"name":"back hall 2","through_door":false,"show_hotspot":true},{"name":"mudroom 1","through_door":false,"show_hotspot":true},{"name":"mudroom 2","through_door":false,"show_hotspot":false},{"name":"mudroom 3","through_door":false,"show_hotspot":false},{"name":"garage 1","through_door":false,"show_hotspot":false},{"name":"garage 3","through_door":false,"show_hotspot":false}],"hotspots":["mudroom 1","back hall 2"]},{"name":"back hall 2","room":"back hall","label":"Back hall 2","x":7.08,"y":4.18,"z":1.5431,"slug":"back-hall-2","links":[{"name":"dining 2","through_door":false,"show_hotspot":true},{"name":"dining 3","through_door":false,"show_hotspot":true},{"name":"breakfast nook 1","through_door":false,"show_hotspot":false},{"name":"kitchen 1","through_door":false,"show_hotspot":true},{"name":"kitchen 2","through_door":false,"show_hotspot":true},{"name":"back hall 1","through_door":false,"show_hotspot":true},{"name":"powder 1","through_door":false,"show_hotspot":true}],"hotspots":["dining 3","powder 1","back hall 1","kitchen 1","dining 2","kitchen 2"]},{"name":"powder 1","room":"powder","label":"Powder room 1","x":8.96,"y":3.63,"z":1.5367,"slug":"powder-1","links":[{"name":"back hall 2","through_door":false,"show_hotspot":true}],"hotspots":["back hall 2"]},{"name":"mudroom 1","room":"mudroom and laundry","label":"Mudroom 1","x":8.65,"y":1.35,"z":1.5367,"slug":"mudroom-1","links":[{"name":"back hall 1","through_door":false,"show_hotspot":true},{"name":"mudroom 2","through_door":false,"show_hotspot":true},{"name":"mudroom 3","through_door":false,"show_hotspot":true},{"name":"garage 1","through_door":false,"show_hotspot":false},{"name":"garage 3","through_door":false,"show_hotspot":false}],"hotspots":["mudroom 2","back hall 1","mudroom 3"]},{"name":"mudroom 2","room":"mudroom and laundry","label":"Mudroom 2","x":9.82,"y":1.25,"z":1.5367,"slug":"mudroom-2","links":[{"name":"back hall 1","through_door":false,"show_hotspot":false},{"name":"mudroom 1","through_door":false,"show_hotspot":true},{"name":"mudroom 3","through_door":false,"show_hotspot":true},{"name":"garage 1","through_door":false,"show_hotspot":true}],"hotspots":["mudroom 1","mudroom 3","garage 1"]},{"name":"mudroom 3","room":"mudroom and laundry","label":"Mudroom 3","x":11.0,"y":1.8,"z":1.5367,"slug":"mudroom-3","links":[{"name":"back hall 1","through_door":false,"show_hotspot":false},{"name":"mudroom 1","through_door":false,"show_hotspot":true},{"name":"mudroom 2","through_door":false,"show_hotspot":true},{"name":"garage 1","through_door":false,"show_hotspot":true},{"name":"garage 2","through_door":false,"show_hotspot":true},{"name":"garage 3","through_door":false,"show_hotspot":false}],"hotspots":["garage 1","mudroom 2","mudroom 1","garage 2"]},{"name":"garage 1","room":"garage","label":"Garage 1","x":12.2,"y":1.75,"z":1.3399,"slug":"garage-1","links":[{"name":"back hall 1","through_door":false,"show_hotspot":false},{"name":"mudroom 1","through_door":false,"show_hotspot":false},{"name":"mudroom 2","through_door":false,"show_hotspot":true},{"name":"mudroom 3","through_door":false,"show_hotspot":true},{"name":"garage 2","through_door":false,"show_hotspot":true},{"name":"garage 3","through_door":false,"show_hotspot":true}],"hotspots":["mudroom 3","mudroom 2","garage 3","garage 2"]},{"name":"garage 2","room":"garage","label":"Garage 2","x":14.71,"y":3.96,"z":1.3399,"slug":"garage-2","links":[{"name":"mudroom 3","through_door":false,"show_hotspot":false},{"name":"garage 1","through_door":false,"show_hotspot":true},{"name":"garage 3","through_door":false,"show_hotspot":true}],"hotspots":["garage 3","garage 1"]},{"name":"garage 3","room":"garage","label":"Garage 3","x":14.71,"y":1.6,"z":1.3399,"slug":"garage-3","links":[{"name":"back hall 1","through_door":false,"show_hotspot":false},{"name":"mudroom 1","through_door":false,"show_hotspot":false},{"name":"mudroom 3","through_door":false,"show_hotspot":false},{"name":"garage 1","through_door":false,"show_hotspot":true},{"name":"garage 2","through_door":false,"show_hotspot":true}],"hotspots":["garage 2","garage 1"]}],"rooms":[{"room":"foyer","title":"Foyer","viewpoints":[{"index":0,"name":"foyer 1","label":"Foyer 1","slug":"foyer-1"},{"index":1,"name":"foyer 2","label":"Foyer 2","slug":"foyer-2"}]},{"room":"stair","title":"Stair","viewpoints":[{"index":2,"name":"stair 1","label":"Stair 1","slug":"stair-1"}]},{"room":"office","title":"Office","viewpoints":[{"index":3,"name":"office 1","label":"Office 1","slug":"office-1"},{"index":4,"name":"office 2","label":"Office 2","slug":"office-2"},{"index":5,"name":"office 3","label":"Office 3","slug":"office-3"}]},{"room":"living","title":"Living","viewpoints":[{"index":6,"name":"living 1","label":"Living room 1","slug":"living-1"},{"index":7,"name":"living 2","label":"Living room 2","slug":"living-2"},{"index":8,"name":"living 3","label":"Living room 3","slug":"living-3"}]},{"room":"dining","title":"Dining","viewpoints":[{"index":9,"name":"dining 1","label":"Dining room 1","slug":"dining-1"},{"index":10,"name":"dining 2","label":"Dining room 2","slug":"dining-2"},{"index":11,"name":"dining 3","label":"Dining room 3","slug":"dining-3"}]},{"room":"breakfast nook","title":"Breakfast Nook","viewpoints":[{"index":12,"name":"breakfast nook 1","label":"Breakfast nook 1","slug":"breakfast-nook-1"}]},{"room":"kitchen","title":"Kitchen","viewpoints":[{"index":13,"name":"kitchen 1","label":"Kitchen 1","slug":"kitchen-1"},{"index":14,"name":"kitchen 2","label":"Kitchen 2","slug":"kitchen-2"},{"index":15,"name":"kitchen 3","label":"Kitchen 3","slug":"kitchen-3"}]},{"room":"pantry","title":"Pantry","viewpoints":[{"index":16,"name":"pantry 1","label":"Pantry 1","slug":"pantry-1"}]},{"room":"back hall","title":"Back Hall","viewpoints":[{"index":17,"name":"back hall 1","label":"Back hall 1","slug":"back-hall-1"},{"index":18,"name":"back hall 2","label":"Back hall 2","slug":"back-hall-2"}]},{"room":"powder","title":"Powder","viewpoints":[{"index":19,"name":"powder 1","label":"Powder room 1","slug":"powder-1"}]},{"room":"mudroom and laundry","title":"Mudroom And Laundry","viewpoints":[{"index":20,"name":"mudroom 1","label":"Mudroom 1","slug":"mudroom-1"},{"index":21,"name":"mudroom 2","label":"Mudroom 2","slug":"mudroom-2"},{"index":22,"name":"mudroom 3","label":"Mudroom 3","slug":"mudroom-3"}]},{"room":"garage","title":"Garage","viewpoints":[{"index":23,"name":"garage 1","label":"Garage 1","slug":"garage-1"},{"index":24,"name":"garage 2","label":"Garage 2","slug":"garage-2"},{"index":25,"name":"garage 3","label":"Garage 3","slug":"garage-3"}]}],"svgCoords":[[4.6476,9.4632],[4.6476,6.7632],[4.9276,10.2432],[3.0476,7.763199999999999],[2.1976,8.863199999999999],[1.4476,6.9632000000000005],[4.747599999999999,5.4632000000000005],[1.5976,3.7632000000000003],[4.3476,2.0632],[5.8976,5.363200000000001],[6.9475999999999996,2.2132000000000005],[7.8476,5.5632],[6.9475999999999996,1.1631999999999998],[10.3476,3.9632000000000005],[10.0476,2.363200000000001],[10.1976,5.613200000000001],[11.067599999999999,7.2132000000000005],[7.8476,9.763200000000001],[7.5276,6.783200000000001],[9.4076,7.333200000000001],[9.0976,9.613199999999999],[10.2676,9.7132],[11.4476,9.1632],[12.647599999999999,9.2132],[15.1576,7.0032000000000005],[15.1576,9.363199999999999]]};
+const DATA = {"viewpoints":[{"name":"foyer 1","room":"foyer","label":"Foyer 1","x":4.2,"y":1.5,"z":1.5431,"slug":"foyer-1","links":[{"name":"foyer 2","through_door":false,"show_hotspot":true},{"name":"stair 1","through_door":false,"show_hotspot":true},{"name":"living 1","through_door":false,"show_hotspot":false},{"name":"living 3","through_door":false,"show_hotspot":false},{"name":"dining 1","through_door":false,"show_hotspot":true},{"name":"dining 2","through_door":false,"show_hotspot":false},{"name":"breakfast nook 1","through_door":false,"show_hotspot":false}],"hotspots":["stair 1","foyer 2","dining 1"]},{"name":"foyer 2","room":"foyer","label":"Foyer 2","x":4.2,"y":4.2,"z":1.5431,"slug":"foyer-2","links":[{"name":"foyer 1","through_door":false,"show_hotspot":true},{"name":"stair 1","through_door":false,"show_hotspot":false},{"name":"living 1","through_door":false,"show_hotspot":true},{"name":"living 2","through_door":false,"show_hotspot":true},{"name":"living 3","through_door":false,"show_hotspot":false},{"name":"dining 1","through_door":false,"show_hotspot":true},{"name":"dining 2","through_door":false,"show_hotspot":true},{"name":"breakfast nook 1","through_door":false,"show_hotspot":false},{"name":"kitchen 1","through_door":false,"show_hotspot":false},{"name":"kitchen 2","through_door":false,"show_hotspot":false},{"name":"office 2","through_door":true,"show_hotspot":true}],"hotspots":["living 1","dining 1","foyer 1","office 2","living 2","dining 2"]},{"name":"stair 1","room":"stair","label":"Stair","x":4.48,"y":0.72,"z":1.5431,"slug":"stair-1","links":[{"name":"foyer 1","through_door":false,"show_hotspot":true},{"name":"foyer 2","through_door":false,"show_hotspot":true},{"name":"living 1","through_door":false,"show_hotspot":false},{"name":"living 3","through_door":false,"show_hotspot":false},{"name":"dining 1","through_door":false,"show_hotspot":true}],"hotspots":["foyer 1","foyer 2","dining 1"]},{"name":"office 2","room":"office","label":"Office","x":1.75,"y":2.1,"z":1.5431,"slug":"office-2","links":[{"name":"dining 1","through_door":false,"show_hotspot":false},{"name":"foyer 2","through_door":true,"show_hotspot":true}],"hotspots":["foyer 2"]},{"name":"living 1","room":"living","label":"Living room 1","x":4.3,"y":5.5,"z":1.5431,"slug":"living-1","links":[{"name":"foyer 1","through_door":false,"show_hotspot":false},{"name":"foyer 2","through_door":false,"show_hotspot":true},{"name":"stair 1","through_door":false,"show_hotspot":false},{"name":"living 2","through_door":false,"show_hotspot":true},{"name":"living 3","through_door":false,"show_hotspot":true},{"name":"dining 1","through_door":false,"show_hotspot":true},{"name":"dining 2","through_door":false,"show_hotspot":true},{"name":"breakfast nook 1","through_door":false,"show_hotspot":false},{"name":"kitchen 1","through_door":false,"show_hotspot":false},{"name":"kitchen 2","through_door":false,"show_hotspot":true},{"name":"kitchen 3","through_door":false,"show_hotspot":false}],"hotspots":["dining 1","foyer 2","living 3","living 2","dining 2","kitchen 2"]},{"name":"living 2","room":"living","label":"Living room 2","x":1.15,"y":7.2,"z":1.5431,"slug":"living-2","links":[{"name":"foyer 2","through_door":false,"show_hotspot":true},{"name":"living 1","through_door":false,"show_hotspot":true},{"name":"living 3","through_door":false,"show_hotspot":true},{"name":"dining 1","through_door":false,"show_hotspot":false},{"name":"dining 2","through_door":false,"show_hotspot":true},{"name":"breakfast nook 1","through_door":false,"show_hotspot":false},{"name":"kitchen 1","through_door":false,"show_hotspot":true},{"name":"kitchen 2","through_door":false,"show_hotspot":false},{"name":"kitchen 3","through_door":false,"show_hotspot":false}],"hotspots":["living 3","living 1","foyer 2","dining 2","kitchen 1"]},{"name":"living 3","room":"living","label":"Living room 3","x":3.9,"y":8.9,"z":1.5431,"slug":"living-3","links":[{"name":"foyer 1","through_door":false,"show_hotspot":false},{"name":"foyer 2","through_door":false,"show_hotspot":false},{"name":"stair 1","through_door":false,"show_hotspot":false},{"name":"living 1","through_door":false,"show_hotspot":true},{"name":"living 2","through_door":false,"show_hotspot":true},{"name":"dining 1","through_door":false,"show_hotspot":true},{"name":"dining 2","through_door":false,"show_hotspot":true},{"name":"breakfast nook 1","through_door":false,"show_hotspot":true},{"name":"kitchen 1","through_door":false,"show_hotspot":true},{"name":"kitchen 2","through_door":false,"show_hotspot":false},{"name":"kitchen 3","through_door":false,"show_hotspot":false}],"hotspots":["dining 2","breakfast nook 1","living 2","living 1","dining 1","kitchen 1"]},{"name":"dining 1","room":"dining","label":"Dining room 1","x":5.45,"y":5.6,"z":1.5431,"slug":"dining-1","links":[{"name":"foyer 1","through_door":false,"show_hotspot":true},{"name":"foyer 2","through_door":false,"show_hotspot":true},{"name":"stair 1","through_door":false,"show_hotspot":false},{"name":"office 2","through_door":false,"show_hotspot":false},{"name":"living 1","through_door":false,"show_hotspot":true},{"name":"living 2","through_door":false,"show_hotspot":false},{"name":"living 3","through_door":false,"show_hotspot":true},{"name":"dining 2","through_door":false,"show_hotspot":true},{"name":"breakfast nook 1","through_door":false,"show_hotspot":false},{"name":"kitchen 1","through_door":false,"show_hotspot":false},{"name":"kitchen 2","through_door":false,"show_hotspot":false},{"name":"kitchen 3","through_door":false,"show_hotspot":true}],"hotspots":["living 1","foyer 2","dining 2","living 3","foyer 1","kitchen 3"]},{"name":"dining 2","room":"dining","label":"Dining room 2","x":6.5,"y":8.75,"z":1.5431,"slug":"dining-2","links":[{"name":"foyer 1","through_door":false,"show_hotspot":false},{"name":"foyer 2","through_door":false,"show_hotspot":false},{"name":"living 1","through_door":false,"show_hotspot":true},{"name":"living 2","through_door":false,"show_hotspot":false},{"name":"living 3","through_door":false,"show_hotspot":true},{"name":"dining 1","through_door":false,"show_hotspot":true},{"name":"breakfast nook 1","through_door":false,"show_hotspot":true},{"name":"kitchen 1","through_door":false,"show_hotspot":true},{"name":"kitchen 2","through_door":false,"show_hotspot":true},{"name":"kitchen 3","through_door":false,"show_hotspot":false},{"name":"back hall 2","through_door":false,"show_hotspot":false}],"hotspots":["breakfast nook 1","living 3","kitchen 2","dining 1","kitchen 1","living 1"]},{"name":"breakfast nook 1","room":"breakfast nook","label":"Breakfast nook","x":6.5,"y":9.8,"z":1.5431,"slug":"breakfast-nook-1","links":[{"name":"foyer 1","through_door":false,"show_hotspot":false},{"name":"foyer 2","through_door":false,"show_hotspot":false},{"name":"living 1","through_door":false,"show_hotspot":true},{"name":"living 2","through_door":false,"show_hotspot":false},{"name":"living 3","through_door":false,"show_hotspot":true},{"name":"dining 1","through_door":false,"show_hotspot":true},{"name":"dining 2","through_door":false,"show_hotspot":true},{"name":"kitchen 1","through_door":false,"show_hotspot":true},{"name":"kitchen 2","through_door":false,"show_hotspot":true},{"name":"kitchen 3","through_door":false,"show_hotspot":false},{"name":"back hall 2","through_door":false,"show_hotspot":false}],"hotspots":["dining 2","living 3","kitchen 2","dining 1","kitchen 1","living 1"]},{"name":"kitchen 1","room":"kitchen","label":"Kitchen 1","x":9.9,"y":7.0,"z":1.5431,"slug":"kitchen-1","links":[{"name":"foyer 2","through_door":false,"show_hotspot":false},{"name":"living 1","through_door":false,"show_hotspot":false},{"name":"living 2","through_door":false,"show_hotspot":false},{"name":"living 3","through_door":false,"show_hotspot":false},{"name":"dining 1","through_door":false,"show_hotspot":true},{"name":"dining 2","through_door":false,"show_hotspot":true},{"name":"breakfast nook 1","through_door":false,"show_hotspot":true},{"name":"kitchen 2","through_door":false,"show_hotspot":true},{"name":"kitchen 3","through_door":false,"show_hotspot":true},{"name":"back hall 2","through_door":false,"show_hotspot":true}],"hotspots":["kitchen 2","kitchen 3","dining 2","back hall 2","breakfast nook 1","dining 1"]},{"name":"kitchen 2","room":"kitchen","label":"Kitchen 2","x":9.6,"y":8.6,"z":1.5431,"slug":"kitchen-2","links":[{"name":"foyer 2","through_door":false,"show_hotspot":false},{"name":"living 1","through_door":false,"show_hotspot":false},{"name":"living 2","through_door":false,"show_hotspot":true},{"name":"living 3","through_door":false,"show_hotspot":false},{"name":"dining 1","through_door":false,"show_hotspot":true},{"name":"dining 2","through_door":false,"show_hotspot":true},{"name":"breakfast nook 1","through_door":false,"show_hotspot":true},{"name":"kitchen 1","through_door":false,"show_hotspot":true},{"name":"kitchen 3","through_door":false,"show_hotspot":false},{"name":"back hall 2","through_door":false,"show_hotspot":true}],"hotspots":["kitchen 1","dining 2","breakfast nook 1","back hall 2","dining 1","living 2"]},{"name":"kitchen 3","room":"kitchen","label":"Kitchen 3","x":9.75,"y":5.35,"z":1.5431,"slug":"kitchen-3","links":[{"name":"living 1","through_door":false,"show_hotspot":false},{"name":"living 2","through_door":false,"show_hotspot":false},{"name":"living 3","through_door":false,"show_hotspot":true},{"name":"dining 1","through_door":false,"show_hotspot":true},{"name":"dining 2","through_door":false,"show_hotspot":true},{"name":"breakfast nook 1","through_door":false,"show_hotspot":false},{"name":"kitchen 1","through_door":false,"show_hotspot":true},{"name":"kitchen 2","through_door":false,"show_hotspot":false},{"name":"pantry 1","through_door":true,"show_hotspot":true}],"hotspots":["kitchen 1","pantry 1","dining 1","dining 2","living 3"]},{"name":"pantry 1","room":"pantry","label":"Pantry","x":10.62,"y":3.75,"z":1.5367,"slug":"pantry-1","links":[{"name":"kitchen 3","through_door":true,"show_hotspot":true}],"hotspots":["kitchen 3"]},{"name":"back hall 2","room":"back hall","label":"Back hall","x":7.08,"y":4.18,"z":1.5431,"slug":"back-hall-2","links":[{"name":"dining 2","through_door":false,"show_hotspot":true},{"name":"breakfast nook 1","through_door":false,"show_hotspot":false},{"name":"kitchen 1","through_door":false,"show_hotspot":true},{"name":"kitchen 2","through_door":false,"show_hotspot":true},{"name":"powder 1","through_door":false,"show_hotspot":true},{"name":"mudroom 2","through_door":true,"show_hotspot":true}],"hotspots":["powder 1","kitchen 1","mudroom 2","dining 2","kitchen 2"]},{"name":"powder 1","room":"powder","label":"Powder room","x":8.96,"y":3.63,"z":1.5367,"slug":"powder-1","links":[{"name":"back hall 2","through_door":false,"show_hotspot":true}],"hotspots":["back hall 2"]},{"name":"mudroom 2","room":"mudroom and laundry","label":"Mudroom 1","x":9.82,"y":1.25,"z":1.5367,"slug":"mudroom-2","links":[{"name":"mudroom 3","through_door":false,"show_hotspot":true},{"name":"garage 1","through_door":false,"show_hotspot":true},{"name":"back hall 2","through_door":true,"show_hotspot":true}],"hotspots":["mudroom 3","garage 1","back hall 2"]},{"name":"mudroom 3","room":"mudroom and laundry","label":"Mudroom 2","x":11.0,"y":1.8,"z":1.5367,"slug":"mudroom-3","links":[{"name":"mudroom 2","through_door":false,"show_hotspot":true},{"name":"garage 1","through_door":false,"show_hotspot":true},{"name":"garage 2","through_door":false,"show_hotspot":true}],"hotspots":["garage 1","mudroom 2","garage 2"]},{"name":"garage 1","room":"garage","label":"Garage 1","x":12.2,"y":1.75,"z":1.3399,"slug":"garage-1","links":[{"name":"mudroom 2","through_door":false,"show_hotspot":true},{"name":"mudroom 3","through_door":false,"show_hotspot":true},{"name":"garage 2","through_door":false,"show_hotspot":true}],"hotspots":["mudroom 3","mudroom 2","garage 2"]},{"name":"garage 2","room":"garage","label":"Garage 2","x":14.71,"y":3.96,"z":1.3399,"slug":"garage-2","links":[{"name":"mudroom 3","through_door":false,"show_hotspot":false},{"name":"garage 1","through_door":false,"show_hotspot":true}],"hotspots":["garage 1"]}],"rooms":[{"room":"foyer","title":"Foyer","viewpoints":[{"index":0,"name":"foyer 1","label":"Foyer 1","slug":"foyer-1"},{"index":1,"name":"foyer 2","label":"Foyer 2","slug":"foyer-2"}]},{"room":"stair","title":"Stair","viewpoints":[{"index":2,"name":"stair 1","label":"Stair","slug":"stair-1"}]},{"room":"office","title":"Office","viewpoints":[{"index":3,"name":"office 2","label":"Office","slug":"office-2"}]},{"room":"living","title":"Living","viewpoints":[{"index":4,"name":"living 1","label":"Living room 1","slug":"living-1"},{"index":5,"name":"living 2","label":"Living room 2","slug":"living-2"},{"index":6,"name":"living 3","label":"Living room 3","slug":"living-3"}]},{"room":"dining","title":"Dining","viewpoints":[{"index":7,"name":"dining 1","label":"Dining room 1","slug":"dining-1"},{"index":8,"name":"dining 2","label":"Dining room 2","slug":"dining-2"}]},{"room":"breakfast nook","title":"Breakfast Nook","viewpoints":[{"index":9,"name":"breakfast nook 1","label":"Breakfast nook","slug":"breakfast-nook-1"}]},{"room":"kitchen","title":"Kitchen","viewpoints":[{"index":10,"name":"kitchen 1","label":"Kitchen 1","slug":"kitchen-1"},{"index":11,"name":"kitchen 2","label":"Kitchen 2","slug":"kitchen-2"},{"index":12,"name":"kitchen 3","label":"Kitchen 3","slug":"kitchen-3"}]},{"room":"pantry","title":"Pantry","viewpoints":[{"index":13,"name":"pantry 1","label":"Pantry","slug":"pantry-1"}]},{"room":"back hall","title":"Back Hall","viewpoints":[{"index":14,"name":"back hall 2","label":"Back hall","slug":"back-hall-2"}]},{"room":"powder","title":"Powder","viewpoints":[{"index":15,"name":"powder 1","label":"Powder room","slug":"powder-1"}]},{"room":"mudroom and laundry","title":"Mudroom And Laundry","viewpoints":[{"index":16,"name":"mudroom 2","label":"Mudroom 1","slug":"mudroom-2"},{"index":17,"name":"mudroom 3","label":"Mudroom 2","slug":"mudroom-3"}]},{"room":"garage","title":"Garage","viewpoints":[{"index":18,"name":"garage 1","label":"Garage 1","slug":"garage-1"},{"index":19,"name":"garage 2","label":"Garage 2","slug":"garage-2"}]}],"svgCoords":[[4.6476,9.4632],[4.6476,6.7632],[4.9276,10.2432],[2.1976,8.863199999999999],[4.747599999999999,5.4632000000000005],[1.5976,3.7632000000000003],[4.3476,2.0632],[5.8976,5.363200000000001],[6.9475999999999996,2.2132000000000005],[6.9475999999999996,1.1631999999999998],[10.3476,3.9632000000000005],[10.0476,2.363200000000001],[10.1976,5.613200000000001],[11.067599999999999,7.2132000000000005],[7.5276,6.783200000000001],[9.4076,7.333200000000001],[10.2676,9.7132],[11.4476,9.1632],[12.647599999999999,9.2132],[15.1576,7.0032000000000005]]};
 const scenes = DATA.viewpoints;
 const rooms = DATA.rooms;
 const svgCoords = DATA.svgCoords;
@@ -1092,6 +1497,103 @@ resize();
 yaw = 0;
 pitch = 0;
 navigateToScene(0, 0);
+
+// onboarding, rotate prompt, and tutorials (same behavior and storage rule as the walkthrough houses)
+(() => {
+  const $ = id => document.getElementById(id);
+  const intro = $('intro');
+  const tutm = $('tutm');
+  const tutd = $('tutd');
+  const helpBtn = $('helpBtn');
+  const isTouch = matchMedia('(pointer: coarse)').matches || (navigator.maxTouchPoints > 0 && Math.min(innerWidth, innerHeight) < 600);
+  const land = () => innerWidth > innerHeight;
+
+  const DEMO = {
+    drag: '<svg viewBox="0 0 160 92" aria-hidden="true"><rect width="160" height="92" rx="8" fill="#1e2220"/><path d="M36 42H124L160 92H0z" fill="#322d26"/><path d="M44 34h72M44 34l8-6M44 34l8 6M116 34l-8-6M116 34l-8 6" stroke="#e5b967" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><g class="d-look"><circle class="fg" cx="80" cy="60" r="9"/></g></svg>',
+    pinch: '<svg viewBox="0 0 160 92" aria-hidden="true"><rect width="160" height="92" rx="8" fill="#1e2220"/><rect class="tp p-box" x="48" y="20" width="64" height="52" rx="6" fill="rgba(229,185,103,0.12)" stroke="#e5b967" stroke-width="2" stroke-dasharray="5 3"/><g class="p-f1"><circle class="fg" cx="68" cy="54" r="8"/></g><g class="p-f2"><circle class="fg" cx="92" cy="38" r="8"/></g></svg>',
+    spot: '<svg viewBox="0 0 160 92" aria-hidden="true"><rect width="160" height="92" rx="8" fill="#1e2220"/><path d="M36 38H124L160 92H0z" fill="#322d26"/><circle class="tp s-pulse" cx="80" cy="64" r="15" fill="none" stroke="#e5b967" stroke-width="2"/><circle cx="80" cy="64" r="11" fill="rgba(18,20,19,0.78)" stroke="#f4f1eb" stroke-width="2"/><circle cx="80" cy="64" r="3.5" fill="#f4f1eb"/><g class="s-tap"><circle class="fg" cx="84" cy="68" r="8"/></g></svg>',
+    rooms: '<svg viewBox="0 0 160 92" aria-hidden="true"><rect width="160" height="92" rx="8" fill="#1e2220"/><rect x="42" y="10" width="76" height="24" rx="12" fill="rgba(22,24,23,0.92)" stroke="rgba(255,255,255,0.28)" stroke-width="1.5"/><rect x="52" y="17" width="4" height="4" fill="#f4f1eb"/><rect x="58" y="17" width="4" height="4" fill="#f4f1eb"/><rect x="52" y="23" width="4" height="4" fill="#f4f1eb"/><rect x="58" y="23" width="4" height="4" fill="#f4f1eb"/><text x="69" y="26" fill="#f4f1eb" font-size="11" font-weight="600" font-family="system-ui,sans-serif">Rooms</text><g class="r-menu"><rect x="34" y="40" width="92" height="44" rx="8" fill="rgba(22,24,23,0.95)" stroke="rgba(255,255,255,0.2)" stroke-width="1.2"/><rect x="42" y="47" width="76" height="12" rx="4" fill="rgba(255,255,255,0.1)"/><rect class="r-hi" x="42" y="64" width="76" height="12" rx="4" fill="#e5b967"/></g><g class="r-tap"><circle class="fg" cx="74" cy="24" r="7.5"/></g></svg>',
+    mouse: '<div class="mscene"><div class="mouse"><svg viewBox="0 0 40 60" aria-hidden="true"><rect x="3" y="3" width="34" height="54" rx="17" fill="#1e211f" stroke="#e5b967" stroke-width="3"/><path d="M20 4v20M3 24h34" stroke="#e5b967" stroke-width="2.5" fill="none"/><rect class="mwheel" x="17" y="9" width="6" height="10" rx="3" fill="#e5b967"/></svg></div><div class="cone"><svg viewBox="0 0 60 60" aria-hidden="true"><path d="M30 34L10 6a38 38 0 0 1 40 0z" fill="rgba(229,185,103,0.28)" stroke="#e5b967" stroke-width="2"/><circle cx="30" cy="40" r="8" fill="#e5b967"/><circle cx="30" cy="40" r="3" fill="#121312"/></svg></div></div>',
+    clickspot: '<svg viewBox="0 0 160 92" aria-hidden="true"><rect width="160" height="92" rx="8" fill="#1e2220"/><path d="M36 38H124L160 92H0z" fill="#322d26"/><circle class="tp s-pulse" cx="76" cy="60" r="16" fill="none" stroke="#e5b967" stroke-width="2"/><circle cx="76" cy="60" r="12" fill="rgba(18,20,19,0.78)" stroke="#f4f1eb" stroke-width="2"/><circle cx="76" cy="60" r="4" fill="#f4f1eb"/><g class="s-tap"><path d="M80 62l13 5-5.5 2.5L85 75z" fill="#f4f1eb" stroke="#121312" stroke-width="1.2" stroke-linejoin="round"/></g></svg>',
+    arrows: '<div class="kbd"><div class="keys"><span class="key ku" aria-hidden="true">&#8593;</span><span class="key kl" aria-hidden="true">&#8592;</span><span class="key kd" aria-hidden="true">&#8595;</span><span class="key kr" aria-hidden="true">&#8594;</span></div><div class="arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 9h-4.5v9h-5v-9H5z"/></svg></div></div>'
+  };
+
+  let cur = null;
+  let introTimer = 0;
+  let tutShown = false;
+
+  function open(el, auto, opener) {
+    close();
+    cur = { el, at: performance.now(), t: auto ? setTimeout(close, auto) : 0, opener: opener || null };
+    el.querySelectorAll('[data-demo]').forEach(n => {
+      n.innerHTML = DEMO[n.dataset.demo] || '';
+    });
+    el.hidden = false;
+    const b = el.querySelector('[data-close], button');
+    if (b) b.focus({ preventScroll: true });
+  }
+
+  function close() {
+    if (!cur) return;
+    const c = cur;
+    cur = null;
+    clearTimeout(c.t);
+    clearTimeout(introTimer);
+    c.el.hidden = true;
+    c.el.querySelectorAll('[data-demo]').forEach(n => {
+      n.textContent = '';
+    });
+    if (c.opener) c.opener.focus({ preventScroll: true });
+  }
+
+  function openTutorial(auto, opener) {
+    tutShown = true;
+    open(isTouch ? tutm : tutd, auto || 0, opener);
+  }
+
+  function finishIntro() {
+    if (!cur || cur.el !== intro) return;
+    close();
+    if (!tutShown) openTutorial(8000);
+  }
+
+  function introCheck() {
+    if (cur && cur.el === intro && intro.dataset.phase === '2' && land()) {
+      finishIntro();
+    }
+  }
+
+  $('introgo').addEventListener('click', finishIntro);
+  document.querySelectorAll('[data-close]').forEach(b => {
+    b.addEventListener('click', close);
+  });
+  helpBtn.addEventListener('click', () => {
+    openTutorial(0, helpBtn);
+  });
+
+  window.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && cur) {
+      if (cur.el === intro) finishIntro();
+      else close();
+    } else if (cur && cur.el === tutd && /^Arrow(Up|Down|Left|Right)$/.test(e.key) && performance.now() - cur.at > 1500) {
+      close();
+    }
+  });
+  window.addEventListener('resize', introCheck);
+  window.addEventListener('orientationchange', () => { setTimeout(introCheck, 200); });
+
+  if (isTouch) {
+    intro.dataset.phase = '1';
+    open(intro);
+    introTimer = setTimeout(() => {
+      if (!cur || cur.el !== intro) return;
+      if (land()) finishIntro();
+      else intro.dataset.phase = '2';
+    }, 2000);
+  } else {
+    openTutorial(8000);
+  }
+})();
 
 })();
 </script>
