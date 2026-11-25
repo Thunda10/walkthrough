@@ -12,10 +12,23 @@
   img { display: block; width: 100%; height: auto; border-radius: 6px; }
   a { color: #4a6f8a; }
   .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
-  header .bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 4px 16px; padding-top: 12px; padding-bottom: 12px; border-bottom: 1px solid #e6e4df; }
-  .brand { font-weight: 600; font-size: 1.05rem; color: #2d3136; text-decoration: none; display: inline-block; min-height: 44px; line-height: 44px; }
-  .call a { display: inline-block; min-height: 44px; line-height: 44px; text-decoration: none; font-size: 0.95rem; }
-  .call a + a { margin-left: 20px; }
+  header { position: relative; z-index: 20; background: #fbfaf8; border-bottom: 1px solid #d6d3cc; box-shadow: 0 2px 8px rgba(30,35,40,0.07); }
+  header .bar { display: flex; justify-content: space-between; align-items: center; gap: 4px 16px; min-height: 64px; }
+  .brand { font-weight: 600; font-size: 1.15rem; color: #1a1d20; text-decoration: none; display: inline-flex; align-items: center; min-height: 44px; }
+  .call { display: flex; align-items: center; }
+  .call .links { display: flex; align-items: center; gap: 6px; }
+  .call .links a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 8px; color: #1a1d20; font-size: 18px; font-weight: 600; text-decoration: none; }
+  .call .links a:hover { background: #eeece7; }
+  .brand[aria-current="page"] { box-shadow: inset 0 -3px 0 #4a6f8a; }
+  .call .links a[aria-current="page"] { background: #dfe9f0; box-shadow: inset 0 -3px 0 #4a6f8a; }
+  .call .links a:focus-visible, .brand:focus-visible, .menu:focus-visible { outline: 3px solid #4a6f8a; outline-offset: 2px; }
+  .menu { display: none; align-items: center; justify-content: center; width: 48px; height: 48px; padding: 0; border: 1px solid #c9c5bd; border-radius: 8px; background: #fff; color: #1a1d20; cursor: pointer; }
+  @media (max-width: 719px) {
+    header.js .menu { display: inline-flex; }
+    header.js .call .links { display: none; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; align-items: stretch; gap: 0; background: #fbfaf8; border-bottom: 1px solid #d6d3cc; box-shadow: 0 8px 16px rgba(30,35,40,0.12); }
+    header.js.open .call .links { display: flex; }
+    header.js .call .links a { min-height: 56px; padding: 0 20px; border-radius: 0; border-top: 1px solid #e6e4df; font-size: 19px; }
+  }
   h1 { margin: 48px 0 16px; font-size: clamp(2rem, 4.6vw, 3.1rem); line-height: 1.15; font-weight: 600; letter-spacing: -0.01em; }
   .lead { margin: 0; max-width: 46rem; font-size: 1.15rem; color: #4b5157; }
   .intro { max-width: 46rem; margin: 32px 0 0; color: #3f454b; }
@@ -62,7 +75,6 @@
   @media (max-width: 1000px) { .cards { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 760px) {
     body { font-size: 16px; }
-    header .bar { padding-left: 20px; padding-right: 20px; }
     h1 { margin-top: 32px; }
     .grid, .cards { grid-template-columns: 1fr; }
     .btn { width: 100%; }
@@ -80,7 +92,10 @@
 <header>
   <div class="wrap bar">
     <a class="brand" href="../index.html">Jared Pearlstein</a>
-    <span class="call"><a href="index.html">Services</a><a href="sms:+18143152469">Text (814) 315-2469</a></span>
+    <nav class="call" aria-label="Main">
+      <button class="menu" type="button" aria-expanded="false" aria-controls="navlinks"><span class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap">Menu</span><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
+      <div class="links" id="navlinks"><a href="../samples/">Samples</a><a href="index.html" aria-current="page">Services</a><a href="sms:+18143152469">Text (814) 315-2469</a></div>
+    </nav>
   </div>
 </header>
 
@@ -88,17 +103,17 @@
 <div class="wrap">
 <h1>Street views for zoning and design review</h1>
 <p class="lead">For land use attorneys, developers and owners going before a board.</p>
-<section><h2>What it is</h2><p>Views of a proposed building from the street, built from the plans, with every camera position and height written down so the board and the neighbors can check them.</p></section>
+<section><h2>What it is</h2><p>Views of a proposed building from the street, built from the plans. Every camera position and height is written down so the board and the neighbors can check them.</p></section>
 <section><h2>What you get</h2><ul class="list"><li>Four to six views from standing eye height</li><li>A map showing where each view was taken from</li><li>A method sheet listing the camera positions, the lens and where each height came from</li><li>The neighboring buildings shown as simple shapes, or in detail if their dimensions are supplied</li><li>Files sized for exhibit boards and slides</li></ul></section>
-<section><h2>How it works</h2><ol class="steps"><li><span class="num" aria-hidden="true">1</span><div>Send the plans and the site plan.</div></li><li><span class="num" aria-hidden="true">2</span><div>I build the building and the lot from the drawings.</div></li><li><span class="num" aria-hidden="true">3</span><div>I place cameras at standing eye height at the spots you choose.</div></li><li><span class="num" aria-hidden="true">4</span><div>You get the views, the map and the method sheet for the hearing.</div></li></ol></section>
-<section><h2>See a sample</h2><p class="cap">Sample on a fictional lot. The neighboring houses are placeholder shapes.</p>
+<section><h2>How it works</h2><ol class="steps"><li><span class="num" aria-hidden="true">1</span><div>Send the plans and the site plan.</div></li><li><span class="num" aria-hidden="true">2</span><div>I model the building and the lot from the drawings.</div></li><li><span class="num" aria-hidden="true">3</span><div>I place cameras at standing eye height at the spots you choose.</div></li><li><span class="num" aria-hidden="true">4</span><div>You get the views, the map and the method sheet for the hearing.</div></li></ol></section>
+<section><h2>See a sample</h2><p class="cap">Sample on a fictional lot, with the neighboring houses as placeholder shapes.</p>
 <div class="grid"><figure><img src="img/hearing-v1.jpg" width="2000" height="1250" alt="View 1 from the street" loading="lazy"><figcaption>View 1</figcaption></figure><figure><img src="img/hearing-v2.jpg" width="2000" height="1250" alt="View 2 from the street" loading="lazy"><figcaption>View 2</figcaption></figure><figure><img src="img/hearing-v3.jpg" width="2000" height="1250" alt="View 3 from the street" loading="lazy"><figcaption>View 3</figcaption></figure><figure><img src="img/hearing-v4.jpg" width="2000" height="1250" alt="View 4 from the street" loading="lazy"><figcaption>View 4</figcaption></figure></div>
 <figure class="map"><a href="img/hearing-map.png"><img src="img/hearing-map.png" width="1600" height="1200" alt="Map showing where each view was taken from" loading="lazy"></a><figcaption>Tap or click the map to open it full size.</figcaption></figure>
 <div class="tablebox" role="region" aria-label="Camera positions" tabindex="0"><table><thead><tr><th>View</th><th>Where the camera stands</th><th>Position (ft)</th><th>Eye height</th><th>Lens</th><th>Looking at</th></tr></thead><tbody><tr><td data-label="View">V1</td><td data-label="Where the camera stands">Opposite sidewalk, straight across from the house</td><td data-label="Position (ft)">x 35.0, y -41.5</td><td data-label="Eye height">5 ft 6 in</td><td data-label="Lens">35 mm (54 degree view)</td><td data-label="Looking at">House front, straight across</td></tr><tr><td data-label="View">V2</td><td data-label="Where the camera stands">Lawn behind the opposite sidewalk, about 64 ft left of V1</td><td data-label="Position (ft)">x -29.3, y -51.6</td><td data-label="Eye height">5 ft 6 in</td><td data-label="Lens">35 mm (54 degree view)</td><td data-label="Looking at">House front left corner (main body)</td></tr><tr><td data-label="View">V3</td><td data-label="Where the camera stands">Our side of the street, on the sidewalk in front of the right neighbor</td><td data-label="Position (ft)">x 110.0, y -2.5</td><td data-label="Eye height">5 ft 6 in</td><td data-label="Lens">35 mm (54 degree view)</td><td data-label="Looking at">House center front, along the street</td></tr><tr><td data-label="View">V4</td><td data-label="Where the camera stands">Lawn behind the opposite sidewalk, about 84 ft left of V1</td><td data-label="Position (ft)">x -49.4, y -66.7</td><td data-label="Eye height">5 ft 6 in</td><td data-label="Lens">35 mm (54 degree view)</td><td data-label="Looking at">House and left neighbor</td></tr></tbody></table></div>
 <p class="cap">Positions are in feet from the front left corner of the lot. Negative y is toward the street.</p></section>
-<p class="note">Views show the building as drawn. They are not a shadow, traffic or code study.</p>
+<p class="note">Views show the building as drawn and are not a shadow, traffic or code study.</p>
 <section class="contact">
-  <h2>Want to see it on your project?</h2>
+  <h2>See it on your project</h2>
   <div class="buttons">
     <a class="btn" href="sms:+18143152469">Text (814) 315-2469</a>
   </div>
@@ -110,5 +125,14 @@
   <div class="wrap">&copy; 2026 Jared Pearlstein</div>
 </footer>
 
+<script>
+(function(){var h=document.querySelector("header"),b=h.querySelector(".menu");h.classList.add("js");
+function set(o){h.classList.toggle("open",o);b.setAttribute("aria-expanded",o)}
+b.addEventListener("click",function(e){e.stopPropagation();set(!h.classList.contains("open"))});
+h.querySelectorAll(".links a").forEach(function(a){a.addEventListener("click",function(){set(false)})});
+document.addEventListener("click",function(e){if(!h.contains(e.target))set(false)});
+document.addEventListener("keydown",function(e){if(e.key==="Escape"&&h.classList.contains("open")){set(false);b.focus()}});
+})();
+</script>
 </body>
 </html>
