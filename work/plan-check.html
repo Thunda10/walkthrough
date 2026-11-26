@@ -4,14 +4,64 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Shore house drawing check | Jared Pearlstein</title>
-<meta name="description" content="Drawing check on a three story shore house: places where the drawing sheets disagree, and what the 3D model used.">
+<meta name="description" content="Drawing check on a three-story shore house: places where the drawing sheets disagree, and what the 3D model used.">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../assets/site.css">
 <style>
-  .pc { margin: 20px 0 32px; max-width: 900px; }
-  .pc .row { display: grid; gap: 16px; grid-template-columns: 1fr; align-items: start; justify-items: center; }
-  .pc.two .row { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
-  .pc img { width: auto; max-width: 100%; height: auto; margin: 0 auto; border: 1px solid var(--hairline); border-radius: 10px; background: var(--canvas); }
-  .pc figcaption { margin-top: 10px; }
+  .jump-list { margin: 0 0 36px; padding: 18px 22px; max-width: 46rem; background: var(--pearl); border: 1px solid var(--hairline); border-radius: 14px; }
+  .jump-list h2 { font-size: 14px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-muted); margin: 0 0 10px; }
+  .jump-list ol { margin: 0; padding-left: 1.4em; columns: 2; column-gap: 28px; font-size: 15px; line-height: 1.5; }
+  .jump-list li { break-inside: avoid; margin-bottom: 4px; }
+  .jump-list .jump-more { margin: 10px 0 0; font-size: 14px; color: var(--ink-muted); }
+  .doc-section h2[id], .doc-section h3[id] { scroll-margin-top: calc(var(--nav-h) + 16px); }
+  .pc-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin: 20px 0 32px; max-width: 900px; align-items: start; }
+  .pc-grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .pc-grid.single { grid-template-columns: 1fr; }
+  .pc { margin: 0; }
+  .pc a { display: block; width: fit-content; max-width: 100%; margin: 0 auto; border-radius: 10px; overflow: hidden; }
+  .pc img { width: auto; max-width: 100%; max-height: 620px; height: auto; object-fit: contain; margin: 0 auto; border: 1px solid var(--hairline); border-radius: 10px; background: var(--canvas); transition: transform 0.25s ease; }
+  .pc a:hover img, .pc a:focus-visible img { transform: scale(1.015); }
+  .pc figcaption { margin-top: 8px; }
+  dialog.lightbox {
+    width: min(94vw, 1180px);
+    max-width: 94vw;
+    max-height: 92vh;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 16px;
+    background: #1f1d1a;
+    color: #fff;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+  }
+  dialog.lightbox::backdrop { background: rgba(20, 19, 17, 0.86); backdrop-filter: blur(6px); }
+  dialog.lightbox[open] { display: flex; flex-direction: column; gap: 14px; }
+  .lb-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .lb-count { font-size: 14px; color: var(--on-dark-muted); }
+  .lb-close {
+    width: 44px; height: 44px; border: 1px solid rgba(255, 255, 255, 0.22); border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.08); color: #fff; font: inherit; font-size: 20px; line-height: 1; cursor: pointer;
+  }
+  .lb-close:hover { background: rgba(255, 255, 255, 0.16); }
+  .lb-img { max-width: 100%; max-height: 68vh; width: auto; height: auto; margin: 0 auto; border-radius: 10px; object-fit: contain; }
+  .lb-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 16px; }
+  .lb-cap { margin: 0; font-size: 15px; color: #f4f1ec; }
+  .lb-orig { font-size: 14px; color: var(--primary-on-dark); margin-left: 12px; white-space: nowrap; }
+  .lb-nav { display: flex; gap: 8px; }
+  .lb-btn {
+    min-height: 44px; padding: 8px 18px; border-radius: 9999px; border: 1px solid rgba(255, 255, 255, 0.24);
+    background: rgba(255, 255, 255, 0.1); color: #fff; font: inherit; font-size: 15px; font-weight: 600; cursor: pointer;
+  }
+  .lb-btn:hover { background: rgba(255, 255, 255, 0.18); }
+  @media (max-width: 719px) {
+    .jump-list ol { columns: 1; }
+    .pc-grid, .pc-grid.three { grid-template-columns: 1fr; gap: 20px; }
+    dialog.lightbox { padding: 14px; }
+    .lb-img { max-height: 58vh; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pc img { transition: none; }
+    .pc a:hover img, .pc a:focus-visible img { transform: none; }
+  }
 </style>
 </head>
 <body>
@@ -22,7 +72,7 @@
     <a class="home-btn" href="../index.html">Home</a>
     <nav aria-label="Main">
       <button class="menu" type="button" aria-expanded="false" aria-controls="navlinks"><span class="sr-only">Menu</span><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 8h16M4 16h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
-      <div class="links" id="navlinks"><a href="../index.html#walkthroughs">Walkthroughs</a><a href="../index.html#tours">360 tours</a><a href="../index.html#renders">Renders</a><a href="../index.html#plan-work">Plan work</a></div>
+      <div class="links" id="navlinks"><a href="../index.html#walkthroughs">Walkthroughs</a><a href="../index.html#tours">360 tours</a><a href="../index.html#renders">Renders</a><a href="../index.html#plan-work" aria-current="page">Plan work</a></div>
     </nav>
   </div>
 </header>
@@ -32,7 +82,7 @@
   <section class="page-head">
     <div class="wrap">
       <h1>Shore house drawing check</h1>
-      <p class="lead">A three story shore house.</p>
+      <p class="lead">Ten places where the drawing sheets disagree on a three-story shore house, with sheet excerpts and model views.</p>
     </div>
   </section>
 
@@ -40,76 +90,130 @@
     <div class="wrap">
       <p class="intro">I found these places while building a 3D model from the drawings, to the inch. In each one, the sheets disagree with each other or with a printed number. Names and location are removed, and nothing here is a judgment on the design. Each item says what the model used.</p>
 
+      <nav class="jump-list" aria-label="Findings list">
+        <h2>Jump to a finding</h2>
+        <ol>
+          <li><a href="#f1">Ground to first floor stair: headroom</a></li>
+          <li><a href="#f2">Interior stair step heights</a></li>
+          <li><a href="#f3">Rear outdoor stair and the back door</a></li>
+          <li><a href="#f4">First floor height on the foundation plan</a></li>
+          <li><a href="#f5">Dormer roof slope</a></li>
+          <li><a href="#f6">Big sliding door on the first floor</a></li>
+          <li><a href="#f7">Garage door</a></li>
+          <li><a href="#f8">Door and window tags that don't match</a></li>
+          <li><a href="#f9">Flood vents</a></li>
+          <li><a href="#f10">Half-story deck step</a></li>
+        </ol>
+        <p class="jump-more">Plus: <a href="#smaller">Smaller drawing details</a></p>
+      </nav>
+
       <h2>Findings</h2>
 
-      <h3>1. Ground to first floor stair: headroom</h3>
+      <h3 id="f1">1. Ground to first floor stair: headroom</h3>
       <p>Section 2 notes 80" of stair headroom. With the stair and the floor above where they are drawn, the clear height over the second step comes out at about 72.7". The model was built as drawn.</p>
-      <figure class="pc"><div class="row"><img src="img/pc-headroom-note.png" width="834" height="556" alt="From the plans: the headroom note on Section 2, sheet A-4.0" loading="lazy" decoding="async"></div><figcaption>From the plans: the headroom note on Section 2, sheet A-4.0</figcaption></figure>
-      <figure class="pc"><div class="row"><img src="img/pc-model-stair.jpg" width="1400" height="933" alt="Ground floor stair, as drawn" loading="lazy" decoding="async"></div><figcaption>Ground floor stair, as drawn</figcaption></figure>
+      <div class="pc-grid">
+        <figure class="pc"><a href="img/pc-headroom-note.png"><img src="img/pc-headroom-note.png" width="834" height="556" alt="From the plans: the headroom note on Section 2, sheet A-4.0" decoding="async" fetchpriority="high"></a><figcaption>From the plans: the headroom note on Section 2, sheet A-4.0</figcaption></figure>
+        <figure class="pc"><a href="img/pc-model-stair.jpg"><img src="img/pc-model-stair.jpg" width="1400" height="933" alt="Ground floor stair, as drawn" loading="lazy" decoding="async"></a><figcaption>Model view: ground floor stair, as drawn</figcaption></figure>
+      </div>
 
-      <h3>2. Interior stair step heights</h3>
+      <h3 id="f2">2. Interior stair step heights</h3>
       <ul class="list">
         <li>First to second floor: 15 risers over 9'-11 3/4" works out to just under 8" each, which is on the tall side for a house stair.</li>
         <li>Ground to first floor: the section prints about 7.63" per riser, but 8'-10" over 14 risers is 7.57".</li>
         <li>First and last step: the treads are stepped off the subfloor. Once the floor finishes go on, the first step is about 1/2" to 3/4" shorter than the rest. The last step is about 3/4" taller. Across a flight, the tallest and shortest steps end up 1 1/4" to 1 1/2" apart.</li>
       </ul>
-      <figure class="pc two"><div class="row"><img src="img/pc-riser-ground-first.png" width="834" height="167" alt="From the plans: the ground to first floor stair heights printed on sheet A-4.0" loading="lazy" decoding="async"><img src="img/pc-riser-first-second.png" width="1027" height="230" alt="From the plans: the first to second floor stair heights printed on sheet A-4.0" loading="lazy" decoding="async"></div><figcaption>From the plans: the stair heights printed on sheet A-4.0</figcaption></figure>
+      <div class="pc-grid">
+        <figure class="pc"><a href="img/pc-riser-ground-first.png"><img src="img/pc-riser-ground-first.png" width="834" height="167" alt="From the plans: the ground to first floor stair heights printed on sheet A-4.0" loading="lazy" decoding="async"></a><figcaption>Sheet A-4.0: ground to first floor stair heights</figcaption></figure>
+        <figure class="pc"><a href="img/pc-riser-first-second.png"><img src="img/pc-riser-first-second.png" width="1027" height="230" alt="From the plans: the first to second floor stair heights printed on sheet A-4.0" loading="lazy" decoding="async"></a><figcaption>Sheet A-4.0: first to second floor stair heights</figcaption></figure>
+      </div>
 
-      <h3>3. Rear outdoor stair and the back door</h3>
+      <h3 id="f3">3. Rear outdoor stair and the back door</h3>
       <ul class="list">
         <li>Landing height: the rear elevation shows the landing one step below the back door. The left elevation shows it level with the door. The model follows the rear elevation, which gives 13 even steps of about 7.7".</li>
         <li>Step at the door: from the landing up and over the door's bottom frame is about 8.5", a bit more than the 8.25" maximum printed for the stair. The sill isn't detailed.</li>
         <li>Concrete pad: the pad at the bottom of the stair is drawn two different sizes, and its top level isn't given.</li>
       </ul>
-      <figure class="pc two"><div class="row"><img src="img/pc-rear-elevation.png" width="946" height="945" alt="From the plans: the rear elevation on A-3.0" loading="lazy" decoding="async"><img src="img/pc-rear-stair-detail.png" width="1087" height="595" alt="From the plans: the rear stair detail on A-8.0" loading="lazy" decoding="async"></div><figcaption>From the plans: the rear elevation on A-3.0 (left) and the stair detail on A-8.0 (right)</figcaption></figure>
-      <figure class="pc two"><div class="row"><img src="img/pc-pad-foundation.png" width="834" height="473" alt="From the plans: the concrete pad on the foundation plan A-6.0" loading="lazy" decoding="async"><img src="img/pc-pad-detail.png" width="834" height="334" alt="From the plans: the concrete pad on the stair detail A-8.0" loading="lazy" decoding="async"></div><figcaption>From the plans: the pad on the foundation plan A-6.0 (left) and on the stair detail A-8.0 (right)</figcaption></figure>
-      <figure class="pc"><div class="row"><img src="img/pc-model-rear-stair.jpg" width="1100" height="777" alt="Rear stair, landing one step below the door" loading="lazy" decoding="async"></div><figcaption>Rear stair, landing one step below the door</figcaption></figure>
+      <div class="pc-grid">
+        <figure class="pc"><a href="img/pc-rear-elevation.png"><img src="img/pc-rear-elevation.png" width="946" height="945" alt="From the plans: the rear elevation on A-3.0" loading="lazy" decoding="async"></a><figcaption>From the plans: rear elevation on A-3.0</figcaption></figure>
+        <figure class="pc"><a href="img/pc-model-rear-stair.jpg"><img src="img/pc-model-rear-stair.jpg" width="1100" height="777" alt="Rear stair, landing one step below the door" loading="lazy" decoding="async"></a><figcaption>Model view: rear stair, landing one step below the door</figcaption></figure>
+      </div>
+      <div class="pc-grid three">
+        <figure class="pc"><a href="img/pc-rear-stair-detail.png"><img src="img/pc-rear-stair-detail.png" width="1087" height="595" alt="From the plans: the rear stair detail on A-8.0" loading="lazy" decoding="async"></a><figcaption>Stair detail on A-8.0</figcaption></figure>
+        <figure class="pc"><a href="img/pc-pad-foundation.png"><img src="img/pc-pad-foundation.png" width="834" height="473" alt="From the plans: the concrete pad on the foundation plan A-6.0" loading="lazy" decoding="async"></a><figcaption>Pad on foundation plan A-6.0</figcaption></figure>
+        <figure class="pc"><a href="img/pc-pad-detail.png"><img src="img/pc-pad-detail.png" width="834" height="334" alt="From the plans: the concrete pad on the stair detail A-8.0" loading="lazy" decoding="async"></a><figcaption>Pad on stair detail A-8.0</figcaption></figure>
+      </div>
 
-      <h3>4. First floor height on the foundation plan</h3>
+      <h3 id="f4">4. First floor height on the foundation plan</h3>
       <p>The foundation plan prints the first floor subfloor at +11.0. Every other sheet says +16.50, and the block height on the same foundation sheet only works with +16.50. The model uses +16.50.</p>
-      <figure class="pc two"><div class="row"><img src="img/pc-level-foundation.png" width="1168" height="501" alt="From the plans: the first floor height on the foundation plan A-6.0" loading="lazy" decoding="async"><img src="img/pc-level-elevation.png" width="834" height="195" alt="From the plans: the first floor height on elevation A-3.0" loading="lazy" decoding="async"></div><figcaption>From the plans: the foundation plan on A-6.0 (left) and an elevation on A-3.0 (right)</figcaption></figure>
+      <div class="pc-grid">
+        <figure class="pc"><a href="img/pc-level-foundation.png"><img src="img/pc-level-foundation.png" width="1168" height="501" alt="From the plans: the first floor height on the foundation plan A-6.0" loading="lazy" decoding="async"></a><figcaption>Foundation plan on A-6.0</figcaption></figure>
+        <figure class="pc"><a href="img/pc-level-elevation.png"><img src="img/pc-level-elevation.png" width="834" height="195" alt="From the plans: the first floor height on elevation A-3.0" loading="lazy" decoding="async"></a><figcaption>Elevation on A-3.0</figcaption></figure>
+      </div>
 
-      <h3>5. Dormer roof slope</h3>
+      <h3 id="f5">5. Dormer roof slope</h3>
       <p>The roof plan prints 5:12 on the dormer. The elevations and Section 1 all draw it closer to 4.2:12. At a true 5:12, the dormer ridge would sit about 3" above the main ridge it runs into. The elevations note that pitches are approximate, so the model follows the elevations.</p>
-      <figure class="pc"><div class="row"><img src="img/pc-dormer-roof-plan.png" width="1034" height="1131" alt="From the plans: the dormer slope labels on the roof plan, sheet A-2.2" loading="lazy" decoding="async"></div><figcaption>From the plans: the dormer slope labels on the roof plan, sheet A-2.2</figcaption></figure>
+      <div class="pc-grid single">
+        <figure class="pc"><a href="img/pc-dormer-roof-plan.png"><img src="img/pc-dormer-roof-plan.png" width="1034" height="1131" alt="From the plans: the dormer slope labels on the roof plan, sheet A-2.2" loading="lazy" decoding="async"></a><figcaption>From the plans: the dormer slope labels on the roof plan, sheet A-2.2</figcaption></figure>
+      </div>
 
-      <h3>6. Big sliding door on the first floor</h3>
+      <h3 id="f6">6. Big sliding door on the first floor</h3>
       <p>The plan draws the opening 282" wide. The front elevation draws the door 276.5" wide, about 5 1/2" narrower. There's no size chart for this unit, so the model uses the plan.</p>
-      <figure class="pc"><div class="row"><img src="img/pc-slide-door-plan.png" width="1400" height="501" alt="From the plans: the door on the first floor plan, A-2.0" loading="lazy" decoding="async"></div><figcaption>From the plans: the door on the first floor plan, A-2.0. The widths are measured off the drawings.</figcaption></figure>
-      <figure class="pc"><div class="row"><img src="img/pc-slide-door-elevation.png" width="1400" height="625" alt="From the plans: the same door on the front elevation, A-3.0" loading="lazy" decoding="async"></div><figcaption>From the plans: the same door on the front elevation, A-3.0</figcaption></figure>
+      <div class="pc-grid">
+        <figure class="pc"><a href="img/pc-slide-door-plan.png"><img src="img/pc-slide-door-plan.png" width="1400" height="501" alt="From the plans: the door on the first floor plan, A-2.0" loading="lazy" decoding="async"></a><figcaption>First floor plan A-2.0 (widths measured off the drawings)</figcaption></figure>
+        <figure class="pc"><a href="img/pc-slide-door-elevation.png"><img src="img/pc-slide-door-elevation.png" width="1400" height="625" alt="From the plans: the same door on the front elevation, A-3.0" loading="lazy" decoding="async"></a><figcaption>Front elevation A-3.0</figcaption></figure>
+      </div>
 
-      <h3>7. Garage door</h3>
+      <h3 id="f7">7. Garage door</h3>
       <ul class="list">
         <li>Size: the tag reads 18'-6" wide, but the plan opening is about 15'-0 1/2".</li>
-        <li>Panels: the elevation shows panels only on the left part, because a car is drawn over the rest. The model mirrors them onto the right half for now. The real panel layout should be confirmed.</li>
+        <li>Panels: the elevation shows panels only on the left part, because a car is drawn over the rest. The model mirrors the drawn panels onto the right half. The real panel layout is not on the sheet.</li>
       </ul>
-      <figure class="pc two"><div class="row"><img src="img/pc-garage-plan.png" width="945" height="557" alt="From the plans: the garage door tag on plan A-2.0" loading="lazy" decoding="async"><img src="img/pc-garage-elevation.png" width="1223" height="835" alt="From the plans: the garage door on front elevation A-3.0" loading="lazy" decoding="async"></div><figcaption>From the plans: the garage door tag on the plan A-2.0 (left) and the front elevation A-3.0 (right)</figcaption></figure>
-      <figure class="pc"><div class="row"><img src="img/pc-model-garage-door.jpg" width="1100" height="536" alt="Garage door, panels mirrored from the drawn half" loading="lazy" decoding="async"></div><figcaption>Garage door, panels mirrored from the drawn half</figcaption></figure>
+      <div class="pc-grid">
+        <figure class="pc"><a href="img/pc-garage-plan.png"><img src="img/pc-garage-plan.png" width="945" height="557" alt="From the plans: the garage door tag on plan A-2.0" loading="lazy" decoding="async"></a><figcaption>Garage door tag on plan A-2.0</figcaption></figure>
+        <figure class="pc"><a href="img/pc-garage-elevation.png"><img src="img/pc-garage-elevation.png" width="1223" height="835" alt="From the plans: the garage door on front elevation A-3.0" loading="lazy" decoding="async"></a><figcaption>Garage door on front elevation A-3.0</figcaption></figure>
+      </div>
+      <div class="pc-grid single">
+        <figure class="pc"><a href="img/pc-model-garage-door.jpg"><img src="img/pc-model-garage-door.jpg" width="1100" height="536" alt="Garage door, panels mirrored from the drawn half" loading="lazy" decoding="async"></a><figcaption>Model view: garage door with panels mirrored from the drawn half</figcaption></figure>
+      </div>
 
-      <h3>8. Door and window tags that don't match</h3>
+      <h3 id="f8">8. Door and window tags that don't match</h3>
       <ul class="list">
         <li>Back doors: the plans call for inswing doors, the elevations for outswing.</li>
         <li>Front entry: the entry door and sidelights are tagged as different sizes on the plan and on the elevation.</li>
         <li>First floor rear windows: three windows are ACW 2840 on the plan and ACW 2848 on the elevation.</li>
         <li>Size chart: a few sliders and casements are drawn slightly different from the maker's chart size for their tag.</li>
       </ul>
-      <figure class="pc two"><div class="row"><img src="img/pc-backdoor-plan.png" width="834" height="473" alt="Back door on plan A-2.0" loading="lazy" decoding="async"><img src="img/pc-backdoor-elevation.png" width="834" height="474" alt="Back door on elevation A-3.0" loading="lazy" decoding="async"></div><figcaption>Back door: plan A-2.0 (left), elevation A-3.0 (right)</figcaption></figure>
-      <figure class="pc two"><div class="row"><img src="img/pc-entry-plan.png" width="834" height="695" alt="Front entry on plan A-2.0" loading="lazy" decoding="async"><img src="img/pc-entry-elevation.png" width="834" height="473" alt="Front entry on elevation A-3.0" loading="lazy" decoding="async"><img src="img/pc-entry-elevation-side.png" width="835" height="473" alt="Front entry on side elevation A-3.1" loading="lazy" decoding="async"></div><figcaption>Front entry: plan A-2.0 (left), elevations A-3.0 and A-3.1 (right)</figcaption></figure>
-      <figure class="pc two"><div class="row"><img src="img/pc-rearwin-plan.png" width="834" height="474" alt="Rear windows on plan A-2.0" loading="lazy" decoding="async"><img src="img/pc-rearwin-elevation.png" width="834" height="473" alt="Rear windows on elevation A-3.0" loading="lazy" decoding="async"></div><figcaption>Rear windows: plan A-2.0 (left), elevation A-3.0 (right)</figcaption></figure>
+      <div class="pc-grid">
+        <figure class="pc"><a href="img/pc-backdoor-plan.png"><img src="img/pc-backdoor-plan.png" width="834" height="473" alt="Back door on plan A-2.0" loading="lazy" decoding="async"></a><figcaption>Back door on plan A-2.0</figcaption></figure>
+        <figure class="pc"><a href="img/pc-backdoor-elevation.png"><img src="img/pc-backdoor-elevation.png" width="834" height="474" alt="Back door on elevation A-3.0" loading="lazy" decoding="async"></a><figcaption>Back door on elevation A-3.0</figcaption></figure>
+      </div>
+      <div class="pc-grid three">
+        <figure class="pc"><a href="img/pc-entry-plan.png"><img src="img/pc-entry-plan.png" width="834" height="695" alt="Front entry on plan A-2.0" loading="lazy" decoding="async"></a><figcaption>Front entry on plan A-2.0</figcaption></figure>
+        <figure class="pc"><a href="img/pc-entry-elevation.png"><img src="img/pc-entry-elevation.png" width="834" height="473" alt="Front entry on elevation A-3.0" loading="lazy" decoding="async"></a><figcaption>Front entry on elevation A-3.0</figcaption></figure>
+        <figure class="pc"><a href="img/pc-entry-elevation-side.png"><img src="img/pc-entry-elevation-side.png" width="835" height="473" alt="Front entry on side elevation A-3.1" loading="lazy" decoding="async"></a><figcaption>Front entry on side elevation A-3.1</figcaption></figure>
+      </div>
+      <div class="pc-grid">
+        <figure class="pc"><a href="img/pc-rearwin-plan.png"><img src="img/pc-rearwin-plan.png" width="834" height="474" alt="Rear windows on plan A-2.0" loading="lazy" decoding="async"></a><figcaption>Rear windows on plan A-2.0</figcaption></figure>
+        <figure class="pc"><a href="img/pc-rearwin-elevation.png"><img src="img/pc-rearwin-elevation.png" width="834" height="473" alt="Rear windows on elevation A-3.0" loading="lazy" decoding="async"></a><figcaption>Rear windows on elevation A-3.0</figcaption></figure>
+      </div>
 
-      <h3>9. Flood vents</h3>
+      <h3 id="f9">9. Flood vents</h3>
       <p>The notes say 5 vents (4 required). The foundation plan marks 15, and the ground floor plan draws 6. One east wall vent also sits in a different spot on the plan and on the side elevation. The model includes the 6 from the ground floor plan.</p>
-      <figure class="pc"><div class="row"><img src="img/pc-flood-note.png" width="1168" height="417" alt="From the plans: the flood vent note on the foundation plan, A-6.0" loading="lazy" decoding="async"></div><figcaption>From the plans: the flood vent note on the foundation plan, A-6.0</figcaption></figure>
+      <div class="pc-grid single">
+        <figure class="pc"><a href="img/pc-flood-note.png"><img src="img/pc-flood-note.png" width="1168" height="417" alt="From the plans: the flood vent note on the foundation plan, A-6.0" loading="lazy" decoding="async"></a><figcaption>From the plans: the flood vent note on the foundation plan, A-6.0</figcaption></figure>
+      </div>
 
-      <h3>10. Half story deck step</h3>
+      <h3 id="f10">10. Half-story deck step</h3>
       <p>The plan writes the deck surface about 1 1/4" below the indoor floor. Section 1 draws it flush. The model uses the written number, so there's a small step at the deck doors.</p>
-      <figure class="pc"><div class="row"><img src="img/pc-deck-level.png" width="835" height="473" alt="From the plans: the written deck level on the half story plan, A-2.1" loading="lazy" decoding="async"></div><figcaption>From the plans: the written deck level on the half story plan, A-2.1. The step comes from comparing it with the half story floor level.</figcaption></figure>
+      <div class="pc-grid single">
+        <figure class="pc"><a href="img/pc-deck-level.png"><img src="img/pc-deck-level.png" width="835" height="473" alt="From the plans: the written deck level on the half-story plan, A-2.1" loading="lazy" decoding="async"></a><figcaption>From the plans: the written deck level on the half-story plan, A-2.1. The step comes from comparing it with the half-story floor level.</figcaption></figure>
+      </div>
 
-      <h2>Smaller drawing details</h2>
+      <h2 id="smaller">Smaller drawing details</h2>
       <p>These are small, and the model just picked one reading for each:</p>
       <ul class="list">
         <li>Second floor ceilings: heights are written only for Bedroom #2. The other rooms come from what the sections draw, 8'-0".</li>
-        <li>Half story ceilings: the plan, the section and the mechanical sheet give slightly different heights that can't all work together.</li>
+        <li>Half-story ceilings: the plan, the section and the mechanical sheet give slightly different heights that can't all work together.</li>
         <li>Roof: the main roof slopes, the cricket and the dormer valleys are a little off between the roof plan and the elevations.</li>
         <li>Second floor door heads: one detail prints both 8'-0" and 7'-0". The door tags say 7'-0".</li>
         <li>Trim and siding: baseboard, V-groove spacing, column width and siding exposure are drawn slightly differently from the written sizes.</li>
@@ -121,17 +225,33 @@
 
       <div class="doc-links">
         <a class="pill" href="../house1/">Open shore house walkthrough</a>
-        <a class="pill secondary" href="baseline.html">Read dimension report</a>
       </div>
+
+      <p class="note">Also: <a href="baseline.html">Shore house dimension report</a>.</p>
     </div>
   </section>
 
 </main>
 
+<dialog class="lightbox" id="lightbox" aria-label="Full size drawing or model view">
+  <div class="lb-head">
+    <span class="lb-count" id="lbCount"></span>
+    <button type="button" class="lb-close" id="lbClose" aria-label="Close">&times;</button>
+  </div>
+  <img class="lb-img" id="lbImg" src="" alt="">
+  <div class="lb-foot">
+    <div><span class="lb-cap" id="lbCap"></span><a class="lb-orig" id="lbOrig" href="" target="_blank" rel="noopener">Open original</a></div>
+    <div class="lb-nav">
+      <button type="button" class="lb-btn" id="lbPrev">Previous</button>
+      <button type="button" class="lb-btn" id="lbNext">Next</button>
+    </div>
+  </div>
+</dialog>
+
 <footer class="site-footer">
   <div class="wrap">
     <span>&copy; 2026 Jared Pearlstein</span>
-    <span>Contact: <a href="sms:+18143152469">text (814) 315-2469</a></span>
+    <span>Contact: <a href="sms:+18143152469">text (814) 315-2469</a> <span style="white-space:nowrap">or email <a href="mailto:jpearlsteinprof10@gmail.com">jpearlsteinprof10@gmail.com</a></span></span>
   </div>
 </footer>
 
@@ -142,6 +262,37 @@ b.addEventListener("click",function(e){e.stopPropagation();set(!h.classList.cont
 h.querySelectorAll(".links a").forEach(function(a){a.addEventListener("click",function(){set(false)})});
 document.addEventListener("click",function(e){if(!h.contains(e.target))set(false)});
 document.addEventListener("keydown",function(e){if(e.key==="Escape"&&h.classList.contains("open")){set(false);b.focus()}});
+})();
+(function(){
+var dlg=document.getElementById("lightbox");
+if(!dlg||!dlg.showModal)return;
+var links=Array.prototype.slice.call(document.querySelectorAll(".pc a"));
+var img=document.getElementById("lbImg"),cap=document.getElementById("lbCap"),orig=document.getElementById("lbOrig"),cnt=document.getElementById("lbCount");
+var idx=0,opener=null;
+function show(i){
+  idx=(i+links.length)%links.length;
+  var a=links[idx],im=a.querySelector("img"),fc=a.parentElement.querySelector("figcaption");
+  img.src=a.getAttribute("href");
+  img.alt=im?im.alt:"";
+  cap.textContent=fc?fc.textContent:"";
+  orig.href=a.getAttribute("href");
+  cnt.textContent=(idx+1)+" of "+links.length;
+}
+links.forEach(function(a,i){
+  a.addEventListener("click",function(e){
+    if(e.metaKey||e.ctrlKey||e.shiftKey||e.altKey||e.button!==0)return;
+    e.preventDefault();opener=a;show(i);dlg.showModal();
+  });
+});
+document.getElementById("lbPrev").addEventListener("click",function(){show(idx-1)});
+document.getElementById("lbNext").addEventListener("click",function(){show(idx+1)});
+document.getElementById("lbClose").addEventListener("click",function(){dlg.close()});
+dlg.addEventListener("click",function(e){if(e.target===dlg)dlg.close()});
+dlg.addEventListener("keydown",function(e){
+  if(e.key==="ArrowLeft"){e.preventDefault();show(idx-1)}
+  else if(e.key==="ArrowRight"){e.preventDefault();show(idx+1)}
+});
+dlg.addEventListener("close",function(){if(opener){opener.focus();opener=null}});
 })();
 </script>
 </body>

@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Renders | Jared Pearlstein</title>
 <meta name="description" content="Photoreal renders, finish comparisons and 3D floor plans built from architectural plans by Jared Pearlstein.">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../assets/site.css">
 <style>
   .render-section { padding: 64px 0; }
@@ -12,12 +13,44 @@
   .render-section h2 { font-size: clamp(28px, 3vw, 34px); line-height: 1.15; letter-spacing: -0.2px; }
   .render-desc { margin: 10px 0 0; max-width: 46rem; color: var(--ink-muted); }
   .render-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 28px; }
+  .render-grid.three { grid-template-columns: repeat(3, 1fr); }
   .render-grid figure a { display: block; border-radius: 12px; overflow: hidden; }
-  .render-grid img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 12px; }
-  .render-grid img.plan { object-fit: contain; background: #e8e4dc; }
+  .render-grid img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 12px; transition: transform 0.25s ease; }
+  .render-grid figure a:hover img, .render-grid figure a:focus-visible img { transform: scale(1.02); }
+  .render-grid img.plan { object-fit: contain; background: #b3b2b0; }
   .render-grid figcaption { margin-top: 10px; }
+  dialog.lightbox {
+    width: min(94vw, 1180px);
+    max-width: 94vw;
+    max-height: 92vh;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 16px;
+    background: #1f1d1a;
+    color: #fff;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+  }
+  dialog.lightbox::backdrop { background: rgba(20, 19, 17, 0.86); backdrop-filter: blur(6px); }
+  dialog.lightbox[open] { display: flex; flex-direction: column; gap: 14px; }
+  .lb-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .lb-count { font-size: 14px; color: var(--on-dark-muted); }
+  .lb-close {
+    width: 44px; height: 44px; border: 1px solid rgba(255, 255, 255, 0.22); border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.08); color: #fff; font: inherit; font-size: 20px; line-height: 1; cursor: pointer;
+  }
+  .lb-close:hover { background: rgba(255, 255, 255, 0.16); }
+  .lb-img { max-width: 100%; max-height: 68vh; width: auto; height: auto; margin: 0 auto; border-radius: 10px; object-fit: contain; }
+  .lb-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 16px; }
+  .lb-cap { margin: 0; font-size: 15px; color: #f4f1ec; }
+  .lb-orig { font-size: 14px; color: var(--primary-on-dark); margin-left: 12px; white-space: nowrap; }
+  .lb-nav { display: flex; gap: 8px; }
+  .lb-btn {
+    min-height: 44px; padding: 8px 18px; border-radius: 9999px; border: 1px solid rgba(255, 255, 255, 0.24);
+    background: rgba(255, 255, 255, 0.1); color: #fff; font: inherit; font-size: 15px; font-weight: 600; cursor: pointer;
+  }
+  .lb-btn:hover { background: rgba(255, 255, 255, 0.18); }
   @media (min-width: 720px) {
-    .render-grid figure:last-child:nth-child(odd) {
+    .render-grid:not(.three) figure:last-child:nth-child(odd) {
       grid-column: 1 / -1;
       width: calc(50% - 14px);
       justify-self: center;
@@ -25,7 +58,13 @@
   }
   @media (max-width: 719px) {
     .render-section { padding: 44px 0; }
-    .render-grid { grid-template-columns: 1fr; gap: 24px; }
+    .render-grid, .render-grid.three { grid-template-columns: 1fr; gap: 24px; }
+    dialog.lightbox { padding: 14px; }
+    .lb-img { max-height: 58vh; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .render-grid img { transition: none; }
+    .render-grid figure a:hover img, .render-grid figure a:focus-visible img { transform: none; }
   }
 </style>
 </head>
@@ -37,7 +76,7 @@
     <a class="home-btn" href="../index.html">Home</a>
     <nav aria-label="Main">
       <button class="menu" type="button" aria-expanded="false" aria-controls="navlinks"><span class="sr-only">Menu</span><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 8h16M4 16h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
-      <div class="links" id="navlinks"><a href="../index.html#walkthroughs">Walkthroughs</a><a href="../index.html#tours">360 tours</a><a href="../index.html#renders">Renders</a><a href="../index.html#plan-work">Plan work</a></div>
+      <div class="links" id="navlinks"><a href="../index.html#walkthroughs">Walkthroughs</a><a href="../index.html#tours">360 tours</a><a href="index.html" aria-current="page">Renders</a><a href="../index.html#plan-work">Plan work</a></div>
     </nav>
   </div>
 </header>
@@ -55,88 +94,18 @@
     <div class="wrap">
       <h2 id="farmhouse-heading">Farmhouse exterior</h2>
       <p class="render-desc">Photoreal exterior views of a new build, made from the architectural drawings.</p>
-      <div class="render-grid">
+      <div class="render-grid three">
         <figure>
-          <a href="../images/samples/farmhouse-front.jpg"><img src="../images/samples/farmhouse-front.jpg" width="1600" height="1067" alt="Farmhouse front, seen from a three quarter angle" loading="lazy" decoding="async"></a>
-          <figcaption>Front, three quarter view</figcaption>
+          <a href="../images/samples/farmhouse-front.jpg"><img src="../images/samples/farmhouse-front.jpg" srcset="../images/samples/farmhouse-front-800.jpg 800w, ../images/samples/farmhouse-front.jpg 1600w" sizes="(min-width: 1028px) 308px, (min-width: 720px) calc((100vw - 104px) / 3), calc(100vw - 48px)" width="1600" height="1067" alt="Farmhouse front, seen from a three-quarter angle" decoding="async" fetchpriority="high"></a>
+          <figcaption>Front, three-quarter view</figcaption>
         </figure>
         <figure>
-          <a href="../images/samples/farmhouse-front-straight.jpg"><img src="../images/samples/farmhouse-front-straight.jpg" width="1600" height="1067" alt="Farmhouse front, seen straight on" loading="lazy" decoding="async"></a>
+          <a href="../images/samples/farmhouse-front-straight.jpg"><img src="../images/samples/farmhouse-front-straight.jpg" srcset="../images/samples/farmhouse-front-straight-800.jpg 800w, ../images/samples/farmhouse-front-straight.jpg 1600w" sizes="(min-width: 1028px) 308px, (min-width: 720px) calc((100vw - 104px) / 3), calc(100vw - 48px)" width="1600" height="1067" alt="Farmhouse front, seen straight on" decoding="async"></a>
           <figcaption>Front, straight on</figcaption>
         </figure>
         <figure>
-          <a href="../images/samples/farmhouse-rear.jpg"><img src="../images/samples/farmhouse-rear.jpg" width="1600" height="1067" alt="Farmhouse rear, seen from a three quarter angle" loading="lazy" decoding="async"></a>
-          <figcaption>Rear, three quarter view</figcaption>
-        </figure>
-      </div>
-    </div>
-  </section>
-
-  <section class="render-section alt" id="apartment" aria-labelledby="apartment-heading">
-    <div class="wrap">
-      <h2 id="apartment-heading">Two bedroom apartment</h2>
-      <p class="render-desc">Furnished interior renders and 3D floor plans of the full unit.</p>
-      <div class="render-grid">
-        <figure>
-          <a href="../images/samples/apartment-plan-top.jpg"><img src="../images/samples/apartment-plan-top.jpg" class="plan" width="1600" height="1600" alt="3D floor plan of the two bedroom apartment, seen from above" loading="lazy" decoding="async"></a>
-          <figcaption>3D floor plan, top view</figcaption>
-        </figure>
-        <figure>
-          <a href="../images/samples/apartment-plan-angled.jpg"><img src="../images/samples/apartment-plan-angled.jpg" width="1600" height="1067" alt="3D floor plan of the apartment, seen from an angle" loading="lazy" decoding="async"></a>
-          <figcaption>3D floor plan, angled view</figcaption>
-        </figure>
-        <figure>
-          <a href="../images/samples/apartment-living.jpg"><img src="../images/samples/apartment-living.jpg" width="1600" height="1067" alt="Furnished living room open to the kitchen" loading="lazy" decoding="async"></a>
-          <figcaption>Living room and kitchen</figcaption>
-        </figure>
-        <figure>
-          <a href="../images/samples/apartment-kitchen.jpg"><img src="../images/samples/apartment-kitchen.jpg" width="1600" height="1067" alt="Apartment kitchen with cabinets and counters" loading="lazy" decoding="async"></a>
-          <figcaption>Kitchen</figcaption>
-        </figure>
-        <figure>
-          <a href="../images/samples/apartment-dining.jpg"><img src="../images/samples/apartment-dining.jpg" width="1600" height="1067" alt="Dining area with table and chairs" loading="lazy" decoding="async"></a>
-          <figcaption>Dining</figcaption>
-        </figure>
-        <figure>
-          <a href="../images/samples/apartment-primary-bedroom.jpg"><img src="../images/samples/apartment-primary-bedroom.jpg" width="1600" height="1067" alt="Furnished primary bedroom" loading="lazy" decoding="async"></a>
-          <figcaption>Primary bedroom</figcaption>
-        </figure>
-        <figure>
-          <a href="../images/samples/apartment-bedroom-2.jpg"><img src="../images/samples/apartment-bedroom-2.jpg" width="1600" height="1067" alt="Furnished second bedroom" loading="lazy" decoding="async"></a>
-          <figcaption>Bedroom 2</figcaption>
-        </figure>
-        <figure>
-          <a href="../images/samples/apartment-primary-bath.jpg"><img src="../images/samples/apartment-primary-bath.jpg" width="1600" height="1067" alt="Primary bathroom with a long wood vanity and mirror" loading="lazy" decoding="async"></a>
-          <figcaption>Primary bath</figcaption>
-        </figure>
-      </div>
-    </div>
-  </section>
-
-  <section class="render-section" id="dental-office" aria-labelledby="dental-heading">
-    <div class="wrap">
-      <h2 id="dental-heading">Dental office</h2>
-      <p class="render-desc">Exterior, waiting room, operatory and a 3D floor plan of a small dental practice.</p>
-      <div class="render-grid">
-        <figure>
-          <a href="../images/samples/dental-entry.jpg"><img src="../images/samples/dental-entry.jpg" width="1600" height="1067" alt="Dental office exterior at the front entry" loading="lazy" decoding="async"></a>
-          <figcaption>Front entry</figcaption>
-        </figure>
-        <figure>
-          <a href="../images/samples/dental-aerial.jpg"><img src="../images/samples/dental-aerial.jpg" width="1600" height="1067" alt="Dental office building seen from above" loading="lazy" decoding="async"></a>
-          <figcaption>Aerial view</figcaption>
-        </figure>
-        <figure>
-          <a href="../images/samples/dental-waiting-room.jpg"><img src="../images/samples/dental-waiting-room.jpg" width="1600" height="1067" alt="Dental office waiting room with seating and front desk" loading="lazy" decoding="async"></a>
-          <figcaption>Waiting room</figcaption>
-        </figure>
-        <figure>
-          <a href="../images/samples/dental-operatory.jpg"><img src="../images/samples/dental-operatory.jpg" width="1600" height="1067" alt="Dental operatory with patient chair and equipment" loading="lazy" decoding="async"></a>
-          <figcaption>Operatory</figcaption>
-        </figure>
-        <figure>
-          <a href="../images/samples/dental-floor-plan.jpg"><img src="../images/samples/dental-floor-plan.jpg" width="1600" height="1067" alt="3D floor plan of the dental office" loading="lazy" decoding="async"></a>
-          <figcaption>3D floor plan</figcaption>
+          <a href="../images/samples/farmhouse-rear.jpg"><img src="../images/samples/farmhouse-rear.jpg" srcset="../images/samples/farmhouse-rear-800.jpg 800w, ../images/samples/farmhouse-rear.jpg 1600w" sizes="(min-width: 1028px) 308px, (min-width: 720px) calc((100vw - 104px) / 3), calc(100vw - 48px)" width="1600" height="1067" alt="Farmhouse rear, seen from a three-quarter angle" decoding="async"></a>
+          <figcaption>Rear, three-quarter view</figcaption>
         </figure>
       </div>
     </div>
@@ -148,12 +117,82 @@
       <p class="render-desc">The same kitchen shown in two cabinet and hardware finishes.</p>
       <div class="render-grid">
         <figure>
-          <a href="../images/samples/kitchen-option-a.jpg"><img src="../images/samples/kitchen-option-a.jpg" width="1600" height="1066" alt="Kitchen with the option A cabinets and hardware" loading="lazy" decoding="async"></a>
-          <figcaption>Option A</figcaption>
+          <a href="../images/samples/kitchen-option-a.jpg"><img src="../images/samples/kitchen-option-a.jpg" srcset="../images/samples/kitchen-option-a-800.jpg 800w, ../images/samples/kitchen-option-a.jpg 1600w" sizes="(min-width: 1028px) 476px, (min-width: 720px) calc(50vw - 38px), calc(100vw - 48px)" width="1600" height="1066" alt="Kitchen with white cabinets, white counters, wood-top island stools and chrome hardware" loading="lazy" decoding="async"></a>
+          <figcaption>Option A: white cabinets</figcaption>
         </figure>
         <figure>
-          <a href="../images/samples/kitchen-option-b.jpg"><img src="../images/samples/kitchen-option-b.jpg" width="1600" height="1066" alt="The same kitchen with the option B cabinets and hardware" loading="lazy" decoding="async"></a>
-          <figcaption>Option B</figcaption>
+          <a href="../images/samples/kitchen-option-b.jpg"><img src="../images/samples/kitchen-option-b.jpg" srcset="../images/samples/kitchen-option-b-800.jpg 800w, ../images/samples/kitchen-option-b.jpg 1600w" sizes="(min-width: 1028px) 476px, (min-width: 720px) calc(50vw - 38px), calc(100vw - 48px)" width="1600" height="1066" alt="Kitchen with green lower cabinets, light oak upper cabinets, brass hardware and wood-top island stools" loading="lazy" decoding="async"></a>
+          <figcaption>Option B: green and oak cabinets with brass hardware</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="render-section" id="dental-office" aria-labelledby="dental-heading">
+    <div class="wrap">
+      <h2 id="dental-heading">Dental office</h2>
+      <p class="render-desc">Exterior, waiting room, operatory and a 3D floor plan of a small dental practice.</p>
+      <div class="render-grid">
+        <figure>
+          <a href="../images/samples/dental-entry.jpg"><img src="../images/samples/dental-entry.jpg" srcset="../images/samples/dental-entry-800.jpg 800w, ../images/samples/dental-entry.jpg 1600w" sizes="(min-width: 1028px) 476px, (min-width: 720px) calc(50vw - 38px), calc(100vw - 48px)" width="1600" height="1067" alt="Dental office exterior at the front entry" loading="lazy" decoding="async"></a>
+          <figcaption>Front entry</figcaption>
+        </figure>
+        <figure>
+          <a href="../images/samples/dental-aerial.jpg"><img src="../images/samples/dental-aerial.jpg" srcset="../images/samples/dental-aerial-800.jpg 800w, ../images/samples/dental-aerial.jpg 1600w" sizes="(min-width: 1028px) 476px, (min-width: 720px) calc(50vw - 38px), calc(100vw - 48px)" width="1600" height="1067" alt="Dental office building seen from above" loading="lazy" decoding="async"></a>
+          <figcaption>Aerial view</figcaption>
+        </figure>
+        <figure>
+          <a href="../images/samples/dental-waiting-room.jpg"><img src="../images/samples/dental-waiting-room.jpg" srcset="../images/samples/dental-waiting-room-800.jpg 800w, ../images/samples/dental-waiting-room.jpg 1600w" sizes="(min-width: 1028px) 476px, (min-width: 720px) calc(50vw - 38px), calc(100vw - 48px)" width="1600" height="1067" alt="Dental office waiting room with seating and front desk" loading="lazy" decoding="async"></a>
+          <figcaption>Waiting room</figcaption>
+        </figure>
+        <figure>
+          <a href="../images/samples/dental-operatory.jpg"><img src="../images/samples/dental-operatory.jpg" srcset="../images/samples/dental-operatory-800.jpg 800w, ../images/samples/dental-operatory.jpg 1600w" sizes="(min-width: 1028px) 476px, (min-width: 720px) calc(50vw - 38px), calc(100vw - 48px)" width="1600" height="1067" alt="Dental operatory with patient chair and equipment" loading="lazy" decoding="async"></a>
+          <figcaption>Operatory</figcaption>
+        </figure>
+        <figure>
+          <a href="../images/samples/dental-floor-plan.jpg"><img src="../images/samples/dental-floor-plan.jpg" srcset="../images/samples/dental-floor-plan-800.jpg 800w, ../images/samples/dental-floor-plan.jpg 1600w" sizes="(min-width: 1028px) 476px, (min-width: 720px) calc(50vw - 38px), calc(100vw - 48px)" width="1600" height="1067" alt="3D floor plan of the dental office" loading="lazy" decoding="async"></a>
+          <figcaption>3D floor plan</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="render-section alt" id="apartment" aria-labelledby="apartment-heading">
+    <div class="wrap">
+      <h2 id="apartment-heading">Two-bedroom apartment</h2>
+      <p class="render-desc">Furnished interior renders and 3D floor plans of the full unit.</p>
+      <div class="render-grid">
+        <figure>
+          <a href="../images/samples/apartment-plan-top.jpg"><img src="../images/samples/apartment-plan-top.jpg" srcset="../images/samples/apartment-plan-top-800.jpg 800w, ../images/samples/apartment-plan-top.jpg 1600w" sizes="(min-width: 1028px) 476px, (min-width: 720px) calc(50vw - 38px), calc(100vw - 48px)" class="plan" width="1600" height="1600" alt="3D floor plan of the two-bedroom apartment, seen from above" loading="lazy" decoding="async"></a>
+          <figcaption>3D floor plan, top view</figcaption>
+        </figure>
+        <figure>
+          <a href="../images/samples/apartment-plan-angled.jpg"><img src="../images/samples/apartment-plan-angled.jpg" srcset="../images/samples/apartment-plan-angled-800.jpg 800w, ../images/samples/apartment-plan-angled.jpg 1600w" sizes="(min-width: 1028px) 476px, (min-width: 720px) calc(50vw - 38px), calc(100vw - 48px)" width="1600" height="1067" alt="3D floor plan of the apartment, seen from an angle" loading="lazy" decoding="async"></a>
+          <figcaption>3D floor plan, angled view</figcaption>
+        </figure>
+        <figure>
+          <a href="../images/samples/apartment-living.jpg"><img src="../images/samples/apartment-living.jpg" srcset="../images/samples/apartment-living-800.jpg 800w, ../images/samples/apartment-living.jpg 1600w" sizes="(min-width: 1028px) 476px, (min-width: 720px) calc(50vw - 38px), calc(100vw - 48px)" width="1600" height="1067" alt="Furnished living room with sofa, accent chair, TV console and balcony doors" loading="lazy" decoding="async"></a>
+          <figcaption>Living room</figcaption>
+        </figure>
+        <figure>
+          <a href="../images/samples/apartment-kitchen.jpg"><img src="../images/samples/apartment-kitchen.jpg" srcset="../images/samples/apartment-kitchen-800.jpg 800w, ../images/samples/apartment-kitchen.jpg 1600w" sizes="(min-width: 1028px) 476px, (min-width: 720px) calc(50vw - 38px), calc(100vw - 48px)" width="1600" height="1067" alt="Apartment kitchen with cabinets and counters" loading="lazy" decoding="async"></a>
+          <figcaption>Kitchen</figcaption>
+        </figure>
+        <figure>
+          <a href="../images/samples/apartment-dining.jpg"><img src="../images/samples/apartment-dining.jpg" srcset="../images/samples/apartment-dining-800.jpg 800w, ../images/samples/apartment-dining.jpg 1600w" sizes="(min-width: 1028px) 476px, (min-width: 720px) calc(50vw - 38px), calc(100vw - 48px)" width="1600" height="1067" alt="Dining area with table and chairs" loading="lazy" decoding="async"></a>
+          <figcaption>Dining</figcaption>
+        </figure>
+        <figure>
+          <a href="../images/samples/apartment-primary-bedroom.jpg"><img src="../images/samples/apartment-primary-bedroom.jpg" srcset="../images/samples/apartment-primary-bedroom-800.jpg 800w, ../images/samples/apartment-primary-bedroom.jpg 1600w" sizes="(min-width: 1028px) 476px, (min-width: 720px) calc(50vw - 38px), calc(100vw - 48px)" width="1600" height="1067" alt="Furnished primary bedroom" loading="lazy" decoding="async"></a>
+          <figcaption>Primary bedroom</figcaption>
+        </figure>
+        <figure>
+          <a href="../images/samples/apartment-bedroom-2.jpg"><img src="../images/samples/apartment-bedroom-2.jpg" srcset="../images/samples/apartment-bedroom-2-800.jpg 800w, ../images/samples/apartment-bedroom-2.jpg 1600w" sizes="(min-width: 1028px) 476px, (min-width: 720px) calc(50vw - 38px), calc(100vw - 48px)" width="1600" height="1067" alt="Furnished second bedroom" loading="lazy" decoding="async"></a>
+          <figcaption>Bedroom 2</figcaption>
+        </figure>
+        <figure>
+          <a href="../images/samples/apartment-primary-bath.jpg"><img src="../images/samples/apartment-primary-bath.jpg" srcset="../images/samples/apartment-primary-bath-800.jpg 800w, ../images/samples/apartment-primary-bath.jpg 1600w" sizes="(min-width: 1028px) 476px, (min-width: 720px) calc(50vw - 38px), calc(100vw - 48px)" width="1600" height="1067" alt="Primary bathroom with a long wood vanity and mirror" loading="lazy" decoding="async"></a>
+          <figcaption>Primary bath</figcaption>
         </figure>
       </div>
     </div>
@@ -161,10 +200,25 @@
 
 </main>
 
+<dialog class="lightbox" id="lightbox" aria-label="Full size render">
+  <div class="lb-head">
+    <span class="lb-count" id="lbCount"></span>
+    <button type="button" class="lb-close" id="lbClose" aria-label="Close">&times;</button>
+  </div>
+  <img class="lb-img" id="lbImg" src="" alt="">
+  <div class="lb-foot">
+    <div><span class="lb-cap" id="lbCap"></span><a class="lb-orig" id="lbOrig" href="" target="_blank" rel="noopener">Open original</a></div>
+    <div class="lb-nav">
+      <button type="button" class="lb-btn" id="lbPrev">Previous</button>
+      <button type="button" class="lb-btn" id="lbNext">Next</button>
+    </div>
+  </div>
+</dialog>
+
 <footer class="site-footer">
   <div class="wrap">
     <span>&copy; 2026 Jared Pearlstein</span>
-    <span>Contact: <a href="sms:+18143152469">text (814) 315-2469</a></span>
+    <span>Contact: <a href="sms:+18143152469">text (814) 315-2469</a> <span style="white-space:nowrap">or email <a href="mailto:jpearlsteinprof10@gmail.com">jpearlsteinprof10@gmail.com</a></span></span>
   </div>
 </footer>
 
@@ -175,6 +229,37 @@ b.addEventListener("click",function(e){e.stopPropagation();set(!h.classList.cont
 h.querySelectorAll(".links a").forEach(function(a){a.addEventListener("click",function(){set(false)})});
 document.addEventListener("click",function(e){if(!h.contains(e.target))set(false)});
 document.addEventListener("keydown",function(e){if(e.key==="Escape"&&h.classList.contains("open")){set(false);b.focus()}});
+})();
+(function(){
+var dlg=document.getElementById("lightbox");
+if(!dlg||!dlg.showModal)return;
+var links=Array.prototype.slice.call(document.querySelectorAll(".render-grid figure a"));
+var img=document.getElementById("lbImg"),cap=document.getElementById("lbCap"),orig=document.getElementById("lbOrig"),cnt=document.getElementById("lbCount");
+var idx=0,opener=null;
+function show(i){
+  idx=(i+links.length)%links.length;
+  var a=links[idx],im=a.querySelector("img"),fc=a.parentElement.querySelector("figcaption");
+  img.src=a.getAttribute("href");
+  img.alt=im?im.alt:"";
+  cap.textContent=fc?fc.textContent:"";
+  orig.href=a.getAttribute("href");
+  cnt.textContent=(idx+1)+" of "+links.length;
+}
+links.forEach(function(a,i){
+  a.addEventListener("click",function(e){
+    if(e.metaKey||e.ctrlKey||e.shiftKey||e.altKey||e.button!==0)return;
+    e.preventDefault();opener=a;show(i);dlg.showModal();
+  });
+});
+document.getElementById("lbPrev").addEventListener("click",function(){show(idx-1)});
+document.getElementById("lbNext").addEventListener("click",function(){show(idx+1)});
+document.getElementById("lbClose").addEventListener("click",function(){dlg.close()});
+dlg.addEventListener("click",function(e){if(e.target===dlg)dlg.close()});
+dlg.addEventListener("keydown",function(e){
+  if(e.key==="ArrowLeft"){e.preventDefault();show(idx-1)}
+  else if(e.key==="ArrowRight"){e.preventDefault();show(idx+1)}
+});
+dlg.addEventListener("close",function(){if(opener){opener.focus();opener=null}});
 })();
 </script>
 </body>
