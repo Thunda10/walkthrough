@@ -7,39 +7,39 @@
 <meta name="description" content="Interactive 3D walkthrough of a three-story shore house modeled from architectural drawings by Jared Pearlstein.">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <style>
-  :root { --side: 0px; --ink: #1a1d20; --sub: #3a4148; --accent: #2f4e66; --line: #cfcbc3; --card: rgba(255,255,255,.94); }
-  html, body { margin: 0; height: 100%; overflow: hidden; background: #e3e9ef; color: var(--ink); font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  :root { --side: 0px; --ink: var(--ink); --sub: var(--sub); --accent: var(--accent); --line: var(--line); --card: rgba(255,255,255,.94); }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: var(--bg); color: var(--ink); font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
   [hidden] { display: none !important; }
   #view { position: absolute; left: 0; top: 0; width: 100%; height: 100%; display: block; outline: none; touch-action: none; }
   #panel { position: absolute; left: 12px; top: 12px; z-index: 5; width: 296px; max-width: calc(100% - 24px); max-height: calc(100% - 24px); overflow-y: auto; box-sizing: border-box; padding: 16px; background: var(--card); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border-radius: 16px; box-shadow: 0 8px 32px rgba(30,35,40,.2); }
   body.collapsed #panel { display: none; }
   #head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
-  h1 { font-size: 18px; margin: 0; font-weight: 600; }
-  h2, summary { font-size: 13px; margin: 0 0 8px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--sub); }
+  h1 { font-size: 1.125rem; margin: 0; font-weight: 600; }
+  h2, summary { font-size: 0.8125rem; margin: 0 0 8px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--sub); }
   section, details { margin: 0; padding: 12px 0 0; border-top: 1px solid var(--line); }
   section { margin-top: 8px; }
   details { margin-top: 8px; }
   details[open] > summary { margin-bottom: 8px; }
   summary { cursor: pointer; min-height: 24px; }
-  button { font: inherit; font-size: 14px; color: var(--ink); background: #fff; border: 1px solid #b9b5ad; border-radius: 8px; padding: 8px 12px; min-height: 40px; margin: 0 8px 8px 0; cursor: pointer; }
-  button:hover { background: #eeece7; }
-  button:focus-visible, summary:focus-visible, input:focus-visible { outline: 3px solid #4a6f8a; outline-offset: 2px; }
-  button.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+  button { font: inherit; font-size: 0.875rem; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; min-height: 40px; margin: 0 8px 8px 0; cursor: pointer; }
+  button:hover { background: var(--accent-soft); }
+  button:focus-visible, summary:focus-visible, input:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  button.on { background: var(--accent); border-color: var(--accent); color: var(--bg); }
   .row { display: flex; flex-wrap: wrap; }
   #hide, #show { width: 44px; height: 44px; min-height: 44px; padding: 0; margin: 0; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; flex: none; }
   #show { position: absolute; left: 12px; top: 12px; z-index: 6; display: none; background: var(--card); box-shadow: 0 4px 16px rgba(30,35,40,.25); }
   body.collapsed #show { display: inline-flex; }
   #hide svg, #show svg { width: 22px; height: 22px; }
-  .group { margin: 8px 0 8px; font-size: 13px; font-weight: 600; color: var(--sub); }
-  label { display: block; margin: 8px 0; font-size: 14px; }
+  .group { margin: 8px 0 8px; font-size: 0.8125rem; font-weight: 600; color: var(--sub); }
+  label { display: block; margin: 8px 0; font-size: 0.875rem; }
   input[type=range] { width: 100%; margin: 4px 0 0; height: 24px; }
   input[type=checkbox] { width: 20px; height: 20px; vertical-align: middle; margin: 0 8px 0 0; }
-  #hint { margin: 0 0 8px; color: var(--sub); font-size: 14px; }
+  #hint { margin: 0 0 8px; color: var(--sub); font-size: 0.875rem; }
   #tags { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: hidden; pointer-events: none; }
-  .tag { position: absolute; left: 0; top: 0; max-width: 190px; padding: 1px 5px; box-sizing: border-box; background: rgba(255,255,255,.84); color: #1c1c1c; border: 1px solid rgba(0,0,0,.28); border-radius: 3px; font: 11px/1.25 Arial, Helvetica, sans-serif; text-align: center; will-change: transform; }
+  .tag { position: absolute; left: 0; top: 0; max-width: 190px; padding: 1px 5px; box-sizing: border-box; background: rgba(255,255,255,.84); color: var(--ink); border: 1px solid rgba(0,0,0,.28); border-radius: 3px; font: 11px/1.25 Arial, Helvetica, sans-serif; text-align: center; will-change: transform; }
   .tag::after { content: ''; position: absolute; left: 50%; bottom: -4px; width: 6px; height: 6px; margin-left: -3px; background: rgba(255,255,255,.84); border: solid rgba(0,0,0,.28); border-width: 0 1px 1px 0; transform: rotate(45deg) scale(.8); }
   .tag.room { font-weight: 600; letter-spacing: .03em; background: rgba(255,255,255,.7); }
-  #wait { position: absolute; left: 0; right: 0; top: 45%; text-align: center; color: #4a4f55; font-size: 15px; }
+  #wait { position: absolute; left: 0; right: 0; top: 45%; text-align: center; color: var(--sub); font-size: 0.9375rem; }
   #stick { position: absolute; left: 16px; bottom: 16px; z-index: 4; width: 120px; height: 120px; box-sizing: border-box; border-radius: 50%; border: 2px solid rgba(255,255,255,.75); background: rgba(40,40,40,.18); display: none; touch-action: none; }
   #thumb { position: absolute; left: 50%; top: 50%; width: 48px; height: 48px; margin: -24px 0 0 -24px; box-sizing: border-box; border-radius: 50%; background: rgba(255,255,255,.8); border: 1px solid rgba(0,0,0,.3); pointer-events: none; }
   body.mobile.walk-on #stick { display: block; }
@@ -53,28 +53,28 @@
   .ov { position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; padding: 16px; pointer-events: none; }
   .ov.modal { pointer-events: auto; background: rgba(251,250,248,.97); z-index: 60; }
   .ov .box { pointer-events: auto; background: rgba(255,255,255,.96); border-radius: 16px; box-shadow: 0 8px 32px rgba(30,35,40,.25); padding: 16px; max-width: min(100%, 640px); text-align: center; }
-  .ov .box p { margin: 8px 0 0; font-size: 15px; color: var(--ink); }
-  .ov .box button { margin: 16px 0 0; min-height: 44px; min-width: 120px; font-size: 16px; }
-  .ov .box button.primary, .half button { background: var(--accent); border-color: var(--accent); color: #fff; }
-  .ov .big { font-size: 24px; font-weight: 600; margin: 0; }
-  .ov .sub { font-size: 16px; color: var(--sub); margin: 8px 0 0; }
+  .ov .box p { margin: 8px 0 0; font-size: 0.9375rem; color: var(--ink); }
+  .ov .box button { margin: 16px 0 0; min-height: 44px; min-width: 120px; font-size: 1.0rem; }
+  .ov .box button.primary, .half button { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+  .ov .big { font-size: 1.5rem; font-weight: 600; margin: 0; }
+  .ov .sub { font-size: 1.0rem; color: var(--sub); margin: 8px 0 0; }
   .cards { display: flex; gap: 16px; justify-content: center; }
-  .tcard { flex: 1 1 0; min-width: 0; background: #f3f1ec; border-radius: 12px; padding: 16px 8px 12px; }
-  .tcard b { display: block; margin-top: 12px; font-size: 15px; }
+  .tcard { flex: 1 1 0; min-width: 0; background: var(--surface); border-radius: 12px; padding: 16px 8px 12px; }
+  .tcard b { display: block; margin-top: 12px; font-size: 0.9375rem; }
   #tutd .box { width: min(46vw, 640px); }
-  #tutd .esc { margin: 12px 0 0; font-size: 14px; color: var(--sub); }
+  #tutd .esc { margin: 12px 0 0; font-size: 0.875rem; color: var(--sub); }
   .kbd { display: flex; align-items: center; justify-content: center; gap: 16px; min-height: 100px; }
   .keys { display: grid; grid-template-columns: repeat(3, 36px); gap: 4px; }
-  .key { height: 36px; display: flex; align-items: center; justify-content: center; border: 2px solid #8a867d; border-radius: 6px; background: #fff; font-weight: 700; font-size: 15px; color: var(--ink); }
+  .key { height: 36px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--sub); border-radius: 6px; background: var(--surface); font-weight: 700; font-size: 0.9375rem; color: var(--ink); }
   .kw { grid-column: 2; grid-row: 1; animation: lw 4s infinite; }
   .ka { grid-column: 1; grid-row: 2; animation: la 4s infinite; }
   .ks { grid-column: 2; grid-row: 2; animation: ls 4s infinite; }
   .kd { grid-column: 3; grid-row: 2; animation: ld 4s infinite; }
-  @keyframes lw { 0%, 22% { background: var(--accent); color: #fff; border-color: var(--accent); } 25%, 100% { background: #fff; color: var(--ink); border-color: #8a867d; } }
-  @keyframes la { 0%, 25% { background: #fff; color: var(--ink); border-color: #8a867d; } 26%, 47% { background: var(--accent); color: #fff; border-color: var(--accent); } 50%, 100% { background: #fff; color: var(--ink); border-color: #8a867d; } }
-  @keyframes ls { 0%, 50% { background: #fff; color: var(--ink); border-color: #8a867d; } 51%, 72% { background: var(--accent); color: #fff; border-color: var(--accent); } 75%, 100% { background: #fff; color: var(--ink); border-color: #8a867d; } }
-  @keyframes ld { 0%, 75% { background: #fff; color: var(--ink); border-color: #8a867d; } 76%, 97% { background: var(--accent); color: #fff; border-color: var(--accent); } 100% { background: #fff; color: var(--ink); border-color: #8a867d; } }
-  .arrow { width: 44px; height: 44px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; }
+  @keyframes lw { 0%, 22% { background: var(--accent); color: var(--bg); border-color: var(--accent); } 25%, 100% { background: var(--surface); color: var(--ink); border-color: var(--sub); } }
+  @keyframes la { 0%, 25% { background: var(--surface); color: var(--ink); border-color: var(--sub); } 26%, 47% { background: var(--accent); color: var(--bg); border-color: var(--accent); } 50%, 100% { background: var(--surface); color: var(--ink); border-color: var(--sub); } }
+  @keyframes ls { 0%, 50% { background: var(--surface); color: var(--ink); border-color: var(--sub); } 51%, 72% { background: var(--accent); color: var(--bg); border-color: var(--accent); } 75%, 100% { background: var(--surface); color: var(--ink); border-color: var(--sub); } }
+  @keyframes ld { 0%, 75% { background: var(--surface); color: var(--ink); border-color: var(--sub); } 76%, 97% { background: var(--accent); color: var(--bg); border-color: var(--accent); } 100% { background: var(--surface); color: var(--ink); border-color: var(--sub); } }
+  .arrow { width: 44px; height: 44px; border-radius: 50%; background: var(--surface); display: flex; align-items: center; justify-content: center; }
   .arrow svg { width: 24px; height: 24px; fill: var(--accent); animation: mv 4s infinite; }
   @keyframes mv { 0%, 22% { transform: translate(0,-6px) rotate(0); } 25%, 47% { transform: translate(-6px,0) rotate(-90deg); } 50%, 72% { transform: translate(0,6px) rotate(180deg); } 75%, 97% { transform: translate(6px,0) rotate(90deg); } 100% { transform: translate(0,-6px) rotate(0); } }
   .mscene { display: flex; align-items: center; justify-content: center; gap: 12px; min-height: 100px; }
@@ -91,27 +91,27 @@
   #intro:not([data-phase="2"]) .p2, #intro[data-phase="2"] .p1 { display: none; }
   /* mobile choice and tutorial demos */
   #choice { flex-direction: row; gap: 16px; align-items: stretch; }
-  #choice h2.ttl { position: absolute; left: 0; right: 0; padding: 0 104px; box-sizing: border-box; top: 8px; text-align: center; margin: 0; font-size: 16px; text-transform: none; letter-spacing: 0; color: var(--ink); }
-  .half { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 8px 12px; text-align: center; }
-  .half h3 { margin: 0; font-size: 18px; }
-  .half p { margin: 4px 0 0; font-size: 14px; color: var(--sub); }
-  .half button { margin: 8px 0 0; min-height: 44px; min-width: 120px; font-size: 16px; }
+  #choice h2.ttl { position: absolute; left: 0; right: 0; padding: 0 104px; box-sizing: border-box; top: 8px; text-align: center; margin: 0; font-size: 1.0rem; text-transform: none; letter-spacing: 0; color: var(--ink); }
+  .half { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 8px 12px; text-align: center; }
+  .half h3 { margin: 0; font-size: 1.125rem; }
+  .half p { margin: 4px 0 0; font-size: 0.875rem; color: var(--sub); }
+  .half button { margin: 8px 0 0; min-height: 44px; min-width: 120px; font-size: 1.0rem; }
   .half .demo { width: 100%; flex: 1 1 auto; min-height: 0; display: flex; align-items: center; justify-content: center; }
   .demo svg { width: 100%; height: 100%; max-height: 150px; }
   .skip { position: absolute; right: 16px; top: 8px; margin: 0 !important; }
   @media (orientation: portrait) { #choice { flex-direction: column; padding-top: 60px; } }
   @media (orientation: landscape) { #choice { padding-top: 60px; } .half .demo { max-height: 55%; } }
   .fg { fill: #f2c9a0; stroke: #8a6a4a; stroke-width: 1.5; }
-  .ring { fill: rgba(40,40,40,.15); stroke: #fff; stroke-width: 3; }
+  .ring { fill: rgba(40,40,40,.15); stroke: var(--surface); stroke-width: 3; }
   .tp { transform-box: fill-box; transform-origin: center; }
   .j-thumb { animation: jt 4s ease-in-out infinite; }
   .j-look { animation: jl 4s ease-in-out infinite; }
   @keyframes jt { 0%, 10% { transform: translate(0,0); } 40%, 60% { transform: translate(0,-12px); } 90%, 100% { transform: translate(0,0); } }
   @keyframes jl { 0%, 10% { transform: translate(-26px,0); } 50% { transform: translate(26px,0); } 90%, 100% { transform: translate(-26px,0); } }
-  .t-ring { animation: tr 6s infinite; opacity: 0; }
-  .t-tap { animation: tf 6s infinite; opacity: 0; }
-  .t-cam { animation: tc 6s ease-in-out infinite; }
-  .t-look { animation: tl 6s ease-in-out infinite; opacity: 0; }
+  .t-ring { animation: tr 4.8s infinite; opacity: 0; }
+  .t-tap { animation: tf 4.8s infinite; opacity: 0; }
+  .t-cam { animation: tc 4.8s ease-in-out infinite; }
+  .t-look { animation: tl 4.8s ease-in-out infinite; opacity: 0; }
   @keyframes tr { 0%, 15% { opacity: 0; transform: scale(.3); } 20% { opacity: 1; transform: scale(1); } 55% { opacity: 1; } 60%, 100% { opacity: 0; transform: scale(1); } }
   @keyframes tf { 0%, 12% { opacity: 0; transform: translateY(-14px); } 18% { opacity: 1; transform: translateY(0) scale(.9); } 26% { opacity: 1; } 32%, 100% { opacity: 0; } }
   @keyframes tc { 0%, 30% { transform: translate(0,0); } 50%, 100% { transform: translate(90px,-12px); } }
@@ -122,17 +122,85 @@
   @media (max-width: 899px) { #tutd .box { width: min(92vw, 560px); } }
   @media (prefers-reduced-motion: reduce) {
     .ov *, .ov *::before { animation: none !important; }
-    .kw { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .kw { background: var(--accent); color: var(--bg); border-color: var(--accent); }
     .t-ring, .t-tap, .t-look { opacity: 1; }
     .rot .ph { transform: rotate(-90deg); }
   }
   #stair-pills { position: fixed; left: 50%; bottom: max(20px, calc(env(safe-area-inset-bottom) + 12px)); transform: translateX(-50%); z-index: 30; display: flex; flex-wrap: nowrap; gap: 10px; align-items: center; justify-content: center; pointer-events: none; max-width: calc(100vw - 24px); }
   @media (max-width: 680px) { body.mobile.walk-on:not(.scheme-tap) #stair-pills { bottom: max(148px, calc(env(safe-area-inset-bottom) + 144px)); } }
-  .stair-pill { pointer-events: auto; display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px; padding: 8px 16px; margin: 0; border-radius: 9999px; background: var(--accent); color: #fff; border: 1px solid rgba(255,255,255,.22); font-size: 14px; font-weight: 600; line-height: 20px; white-space: nowrap; box-shadow: 0 4px 16px rgba(20,30,40,.3); cursor: pointer; }
-  .stair-pill:hover { background: #233b4e; }
-  .stair-pill:focus-visible { outline: 3px solid #4a6f8a; outline-offset: 2px; }
+  .stair-pill { pointer-events: auto; display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px; padding: 8px 16px; margin: 0; border-radius: 9999px; background: var(--accent); color: var(--bg); border: 1px solid rgba(255,255,255,.22); font-size: 0.875rem; font-weight: 600; line-height: 20px; white-space: nowrap; box-shadow: 0 4px 16px rgba(20,30,40,.3); cursor: pointer; }
+  .stair-pill:hover { background: var(--accent); }
+  .stair-pill:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
   .stair-pill svg { width: 16px; height: 16px; flex: none; }
-  @media (max-width: 420px) { #stair-pills { gap: 8px; } .stair-pill { padding: 8px 12px; font-size: 13px; } }
+  @media (max-width: 420px) { #stair-pills { gap: 8px; } .stair-pill { padding: 8px 12px; font-size: 0.8125rem; } }
+
+  /* Shared viewer tokens. The scene canvas and renderer are unchanged. */
+  :root { --bg: #121312; --surface: #1c1d1b; --text: #f4f1eb; --text-dim: #b8b3a7; --ink: var(--text); --sub: var(--text-dim); --accent: #e5b967; --accent-soft: rgba(229,185,103,.22); --line: rgba(255,255,255,.16); --card: #1c1d1b; }
+  html, body { background: var(--bg); font: 1.0625rem/1.53 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  html { font-size: 100%; }
+  #panel, #show, .ov .box, .half, .tag, #wait, #stick { background: var(--card); border: 1px solid var(--line); box-shadow: 0 12px 40px rgba(0,0,0,.55); }
+  #panel { width: 320px; padding: 16px; border-radius: 18px; scrollbar-color: var(--sub) var(--surface); scroll-padding: 16px; overflow-x: hidden; }
+  #head { align-items: flex-start; }
+  h1 { font-size: 1.125rem; line-height: 1.4; padding-top: 8px; min-width: 0; overflow-wrap: anywhere; }
+  h2, summary, .group { font-size: .75rem; line-height: 1.5; letter-spacing: .14em; text-transform: uppercase; color: var(--sub); }
+  summary, body.mobile summary { min-height: 44px; box-sizing: border-box; padding: 12px 0; margin: 0; }
+  button { min-width: 44px; min-height: 44px; border-radius: 9999px; border-color: var(--line); background: transparent; color: var(--ink); padding: 10px 14px; font-size: .875rem; line-height: 1.45; }
+  button:hover { background: var(--accent-soft); border-color: var(--accent); }
+  button.on, .ov .box button.primary, .half button, .stair-pill { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+  button.on:hover, .primary:hover, .half button:hover, .stair-pill:hover { background: var(--accent); color: var(--bg); filter: brightness(1.06); }
+  :is(button,a,summary,input,#view):focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; box-shadow: 0 0 0 6px var(--bg); }
+  #view:focus-visible { outline-offset: -6px; box-shadow: inset 0 0 0 8px var(--bg); }
+  .row { gap: 8px; margin-bottom: 8px; }
+  .row button { margin: 0; }
+  label { font-size: 1rem; line-height: 1.53; min-height: 44px; box-sizing: border-box; padding: 8px 0; margin: 4px 0; cursor: pointer; }
+  label:has(input[type=checkbox]) { display: flex; align-items: center; gap: 10px; }
+  input[type=checkbox] { accent-color: var(--accent); flex: none; margin: 0; }
+  input[type=range] { appearance: none; -webkit-appearance: none; display: block; width: 100%; height: 44px; background: transparent; cursor: pointer; }
+  input[type=range]::-webkit-slider-runnable-track { height: 4px; border-radius: 9999px; background: var(--sub); }
+  input[type=range]::-webkit-slider-thumb { appearance: none; width: 24px; height: 24px; margin-top: -10px; border-radius: 50%; background: var(--accent); border: 2px solid var(--bg); }
+  input[type=range]::-moz-range-track { height: 4px; background: var(--sub); }
+  input[type=range]::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: var(--accent); border: 2px solid var(--bg); }
+  #hint { font-size: .875rem; }
+  .tag, .tag.room { font: .75rem/1.4 system-ui, sans-serif; color: var(--ink); background: var(--card); padding: 4px 8px; border-radius: 8px; }
+  .tag::after { background: var(--surface); border-color: var(--line); }
+  #wait { left: 50%; right: auto; transform: translateX(-50%); padding: 12px 20px; border-radius: 9999px; color: var(--ink); font-size: 1rem; white-space: nowrap; }
+  #stick { border: 2px solid var(--sub); }
+  #thumb { background: var(--accent); border: 2px solid var(--bg); }
+  .ov { box-sizing: border-box; padding: max(72px, calc(env(safe-area-inset-top) + 60px)) 16px max(16px,env(safe-area-inset-bottom)); }
+  .ov.modal { background: rgba(18,19,18,.94); }
+  .ov .box, #intro .box { box-sizing: border-box; border-radius: 18px; max-height: 100%; overflow-y: auto; padding: 18px; background: var(--card); box-shadow: 0 12px 40px rgba(0,0,0,.55); }
+  .ov .box p { font-size: 1.0625rem; }
+  .ov .box .big { font-size: 1.5rem; }
+  .ov .box .sub, .ov .box .esc { color: var(--sub); }
+  .tcard { background: rgba(255,255,255,.04); border: 1px solid var(--line); border-radius: 12px; }
+  .key, .arrow { background: var(--surface); border-color: var(--sub); }
+  .half { border-radius: 18px; box-sizing: border-box; padding: 12px; overflow-y: auto; }
+  .half p { font-size: .875rem; }
+  .half h3 { font-size: 1.125rem; }
+  .fg { fill: var(--accent); stroke: var(--bg); }
+  .ring { fill: var(--surface); stroke: var(--sub); }
+  #choice { gap: 12px; padding-top: max(112px,calc(env(safe-area-inset-top) + 100px)); }
+  #choice h2.ttl { top: 66px; padding: 0 16px; font-size: 1rem; }
+  #choice .skip { top: 12px; right: 12px; }
+  .stair-pill { white-space: normal; min-width: 44px; font-size: .875rem; line-height: 1.45; border-radius: 9999px; }
+  #stair-pills { width: max-content; }
+  /* A single short demonstration avoids persistent automatic movement. */
+  .ov *, .ov *::before { animation-iteration-count: 1; animation-fill-mode: both; }
+  @supports ((backdrop-filter: blur(18px)) or (-webkit-backdrop-filter: blur(18px))) {
+    :root { --card: rgba(22,24,23,.84); }
+    #panel, #show, .ov .box, .half, .tag, #wait, #stick { -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); }
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    :root { --card: #1c1d1b; }
+    #panel, #show, .ov .box, .half, .tag, #wait, #stick { -webkit-backdrop-filter: none; backdrop-filter: none; }
+    .ov.modal { background: var(--bg); }
+  }
+  @media (prefers-reduced-motion: reduce) { .ov .kw { background: var(--accent); color: var(--bg); border-color: var(--accent); } }
+  @media (max-width: 899px) {
+    #panel, body.mobile #panel { top: max(66px,calc(env(safe-area-inset-top) + 54px)); max-height: calc(100% - 80px - env(safe-area-inset-bottom)); width: min(86vw, 340px); }
+  }
+  @media (max-width: 560px) { .cards { flex-direction: column; gap: 8px; } .tcard { padding: 8px; } .kbd, .mscene { min-height: 72px; } }
+  @media (max-height: 440px) { .ov .box { padding: 12px; } .kbd, .mscene { min-height: 72px; } .tcard { padding: 8px; } .half .demo { flex: 0 0 48px; } .half { justify-content: flex-start; } }
 </style>
 </head>
 <body>
@@ -141,9 +209,9 @@
 <div id="wait">Loading the model</div>
 <div id="stick"><div id="thumb"></div></div>
 <div id="stair-pills" role="group" aria-label="Stairs" hidden></div>
-<button id="show" title="Open menu" aria-label="Open menu"><svg viewBox="0 0 24 24" fill="none" stroke="#1a1d20" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+<button id="show" title="Open menu" aria-label="Open menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
 <div id="panel" role="region" aria-label="Walkthrough controls">
-  <div id="head"><h1>Shore house walkthrough</h1><button id="hide" title="Collapse menu" aria-label="Collapse menu"><svg viewBox="0 0 24 24" fill="none" stroke="#1a1d20" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div id="head"><h1>Shore house walkthrough</h1><button id="hide" title="Collapse menu" aria-label="Collapse menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
   <section>
     <h2>View modes</h2>
     <div class="row"><button id="walk">Walk</button><button id="orbit">Orbit</button></div>
@@ -179,7 +247,7 @@
 <div id="intro" class="ov modal" role="dialog" aria-modal="true" aria-label="Best on a laptop" hidden>
   <div class="box">
     <div class="p1"><p class="big">Best on a laptop</p><p class="sub">The 3D view works on a phone, but a bigger screen shows more.</p></div>
-    <div class="rot p2"><svg viewBox="0 0 120 120" aria-hidden="true"><g class="ph"><rect x="38" y="16" width="44" height="88" rx="8" fill="#fff" stroke="#2f4e66" stroke-width="4"/><rect x="44" y="26" width="32" height="62" rx="2" fill="#dfe9f0"/><circle cx="60" cy="96" r="3" fill="#2f4e66"/></g></svg><p>Turn your phone sideways for the best view</p></div>
+    <div class="rot p2"><svg viewBox="0 0 120 120" aria-hidden="true"><g class="ph"><rect x="38" y="16" width="44" height="88" rx="8" fill="var(--surface)" stroke="var(--accent)" stroke-width="4"/><rect x="44" y="26" width="32" height="62" rx="2" fill="var(--surface)"/><circle cx="60" cy="96" r="3" fill="var(--accent)"/></g></svg><p>Turn your phone sideways for the best view</p></div>
     <button id="introgo" class="primary">Continue</button>
   </div>
 </div>
@@ -196,7 +264,7 @@
   <div class="box">
     <div class="cards">
       <div class="tcard"><div class="kbd"><div class="keys"><span class="key kw">W</span><span class="key ka">A</span><span class="key ks">S</span><span class="key kd">D</span></div><div class="arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 9h-4.5v9h-5v-9H5z"/></svg></div></div><b>Walk with W A S D</b></div>
-      <div class="tcard"><div class="mscene"><div class="mouse"><svg viewBox="0 0 40 60" aria-hidden="true"><rect x="3" y="3" width="34" height="54" rx="17" fill="#fff" stroke="#2f4e66" stroke-width="3"/><path d="M20 4v20M3 24h34" stroke="#2f4e66" stroke-width="3" fill="none"/><rect x="17" y="9" width="6" height="10" rx="3" fill="#2f4e66"/></svg></div><div class="cone"><svg viewBox="0 0 60 60" aria-hidden="true"><path d="M30 34L10 6a38 38 0 0 1 40 0z" fill="rgba(47,78,102,.25)" stroke="#2f4e66" stroke-width="2"/><circle cx="30" cy="40" r="9" fill="#2f4e66"/><circle cx="30" cy="40" r="3.5" fill="#fff"/></svg></div></div><b>Move the mouse to look around</b></div>
+      <div class="tcard"><div class="mscene"><div class="mouse"><svg viewBox="0 0 40 60" aria-hidden="true"><rect x="3" y="3" width="34" height="54" rx="17" fill="var(--surface)" stroke="var(--accent)" stroke-width="3"/><path d="M20 4v20M3 24h34" stroke="var(--accent)" stroke-width="3" fill="none"/><rect x="17" y="9" width="6" height="10" rx="3" fill="var(--accent)"/></svg></div><div class="cone"><svg viewBox="0 0 60 60" aria-hidden="true"><path d="M30 34L10 6a38 38 0 0 1 40 0z" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"/><circle cx="30" cy="40" r="9" fill="var(--accent)"/><circle cx="30" cy="40" r="3.5" fill="var(--surface)"/></svg></div></div><b>Move the mouse to look around</b></div>
     </div>
     <p class="esc">Press Esc to release the mouse, then pick Orbit to leave walk mode</p>
     <button class="primary" data-close>Got it</button>
@@ -4768,8 +4836,8 @@ bool _bvhIntersectFirstHit(
 
   // animated demos, shared by the choice screen and the tutorial (built on open, emptied on close)
   var DEMO = {
-    joy: '<svg viewBox="0 0 240 130" aria-hidden="true"><rect width="240" height="130" rx="10" fill="#dfe9f0"/><path d="M70 50H170L240 130H0z" fill="#d8c9b0"/><circle class="ring" cx="48" cy="92" r="28"/><circle class="j-thumb" cx="48" cy="92" r="12" fill="rgba(255,255,255,.9)" stroke="#555"/><g class="j-thumb"><circle class="fg" cx="48" cy="97" r="9"/></g><path d="M150 36h60M150 36l8-6M150 36l8 6M210 36l-8-6M210 36l-8 6" stroke="#2f4e66" stroke-width="2.5" fill="none" stroke-linecap="round"/><g class="j-look"><circle class="fg" cx="180" cy="70" r="9"/></g></svg>',
-    tap: '<svg viewBox="0 0 240 130" aria-hidden="true"><rect width="240" height="130" rx="10" fill="#dfe9f0"/><path d="M70 50H170L240 130H0z" fill="#d8c9b0"/><ellipse class="tp t-ring" cx="150" cy="100" rx="16" ry="6" fill="none" stroke="#2f4e66" stroke-width="3"/><g class="t-cam"><path d="M60 112l-13-24h26z" fill="rgba(47,78,102,.3)"/><circle cx="60" cy="112" r="8" fill="#2f4e66"/></g><g class="t-tap"><circle class="fg" cx="150" cy="100" r="9"/></g><g class="t-look"><path d="M90 30h60M90 30l8-6M90 30l8 6M150 30l-8-6M150 30l-8 6" stroke="#2f4e66" stroke-width="2.5" fill="none" stroke-linecap="round"/><circle class="fg" cx="120" cy="44" r="9"/></g></svg>'
+    joy: '<svg viewBox="0 0 240 130" aria-hidden="true"><rect width="240" height="130" rx="10" fill="var(--surface)"/><path d="M70 50H170L240 130H0z" fill="rgba(229,185,103,.22)"/><circle class="ring" cx="48" cy="92" r="28"/><circle class="j-thumb" cx="48" cy="92" r="12" fill="var(--accent)" stroke="var(--bg)"/><g class="j-thumb"><circle class="fg" cx="48" cy="97" r="9"/></g><path d="M150 36h60M150 36l8-6M150 36l8 6M210 36l-8-6M210 36l-8 6" stroke="var(--accent)" stroke-width="2.5" fill="none" stroke-linecap="round"/><g class="j-look"><circle class="fg" cx="180" cy="70" r="9"/></g></svg>',
+    tap: '<svg viewBox="0 0 240 130" aria-hidden="true"><rect width="240" height="130" rx="10" fill="var(--surface)"/><path d="M70 50H170L240 130H0z" fill="rgba(229,185,103,.22)"/><ellipse class="tp t-ring" cx="150" cy="100" rx="16" ry="6" fill="none" stroke="var(--accent)" stroke-width="3"/><g class="t-cam"><path d="M60 112l-13-24h26z" fill="var(--accent-soft)"/><circle cx="60" cy="112" r="8" fill="var(--accent)"/></g><g class="t-tap"><circle class="fg" cx="150" cy="100" r="9"/></g><g class="t-look"><path d="M90 30h60M90 30l8-6M90 30l8 6M150 30l-8-6M150 30l-8 6" stroke="var(--accent)" stroke-width="2.5" fill="none" stroke-linecap="round"/><circle class="fg" cx="120" cy="44" r="9"/></g></svg>'
   };
   var TXT = { joy: 'Walk with your left thumb on the stick and drag the right side to look around.', tap: 'Tap the floor to glide there, or drag anywhere to look around.' };
 
@@ -4865,14 +4933,14 @@ bool _bvhIntersectFirstHit(
 })();
 </script>
 <style>
-.home-btn{position:fixed;top:max(18px,calc(env(safe-area-inset-top) + 6px));left:50%;transform:translateX(-50%);z-index:100;display:inline-flex;align-items:center;justify-content:center;padding:6px 16px;border-radius:9999px;background:#36475e;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:14px;font-weight:600;line-height:20px;letter-spacing:-0.224px;text-decoration:none;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,.25);pointer-events:auto}
-.home-btn::after{content:"";position:absolute;left:0;right:0;top:50%;height:44px;transform:translateY(-50%)}
-.home-btn:hover{background:#2b3a4d;text-decoration:none}
-.home-btn:focus-visible{outline:2px solid #4f6d8c;outline-offset:2px}
-#choice{padding-top:96px}
-#choice h2.ttl{top:56px}
-@media (max-width:719px){#panel{top:64px;max-height:calc(100% - 76px)}}
-.related{margin:10px 0 0;padding:10px 0 0;border-top:1px solid var(--line);font-size:13px;color:var(--sub)}.related a{color:var(--accent);text-decoration:none;font-weight:500}.related a:hover{text-decoration:underline}
+.home-btn { position: fixed; top: max(12px,calc(env(safe-area-inset-top) + 6px)); left: 50%; transform: translateX(-50%); z-index: 100; display: inline-flex; align-items: center; justify-content: center; min-width: 44px; height: 44px; padding: 0 16px; box-sizing: border-box; color: var(--ink); font: 600 .875rem/1.25 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; text-decoration: none; border-radius: 9999px; isolation: isolate; }
+.home-btn::before { content: ""; position: absolute; inset: 6px 0; z-index: -1; border-radius: inherit; background: var(--card); border: 1px solid var(--line); box-shadow: 0 12px 40px rgba(0,0,0,.55); }
+.home-btn:hover::before { border-color: var(--accent); }
+@supports ((backdrop-filter: blur(18px)) or (-webkit-backdrop-filter: blur(18px))) { .home-btn::before { -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); } }
+@media (prefers-reduced-transparency: reduce) { .home-btn::before { -webkit-backdrop-filter: none; backdrop-filter: none; } }
+.related { margin: 10px 0 0; padding-top: 10px; border-top: 1px solid var(--line); font-size: .8125rem; color: var(--sub); }
+.related a { display: inline-flex; align-items: center; min-width: 44px; min-height: 44px; color: var(--accent); text-decoration: none; font-weight: 500; }
+.related a:hover { text-decoration: underline; }
 </style>
 <a class="home-btn" href="../">Home</a>
 </body>
