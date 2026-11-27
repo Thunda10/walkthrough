@@ -202,6 +202,23 @@
   }
   @media (max-width: 560px) { .cards { flex-direction: column; gap: 8px; } .tcard { padding: 8px; } .kbd, .mscene { min-height: 72px; } }
   @media (max-height: 440px) { .ov .box { padding: 12px; } .kbd, .mscene { min-height: 72px; } .tcard { padding: 8px; } .half .demo { flex: 0 0 48px; } .half { justify-content: flex-start; } }
+  #credit {
+    position: fixed;
+    left: calc(10px + env(safe-area-inset-left));
+    bottom: calc(10px + env(safe-area-inset-bottom));
+    z-index: 2147483647;
+    margin: 0;
+    font: 400 11px/1.2 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    color: rgba(255, 255, 255, 0.7);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  @media (max-width: 600px), (max-height: 500px) {
+    #credit { font-size: 10px; }
+  }
 </style>
 </head>
 <body>
@@ -4952,5 +4969,49 @@ bool _bvhIntersectFirstHit(
 .related a:hover { text-decoration: underline; }
 </style>
 <a class="home-btn" href="../">Home</a>
+<div id="credit">experience built by Jared Pearlstein</div>
+<script>
+(function () {
+  var c = document.getElementById('credit'), $ = function (id) { return document.getElementById(id); };
+  var obs = [$('panel'), $('stick'), $('stair-pills')];
+  function box(e) { var r = e.getBoundingClientRect(); return r.width && r.height ? r : null; }
+  function hit(a, b) { return b && a.right > b.left && a.left < b.right && a.bottom > b.top && a.top < b.bottom; }
+  function clear() { var a = c.getBoundingClientRect(); return obs.every(function (e) { return !hit(a, box(e)); }); }
+  function bottom() { return parseFloat(getComputedStyle(c).bottom); }
+  function lift() {
+    for (var i = 0; i < 4; i++) {
+      var a = c.getBoundingClientRect(), d = 0;
+      [obs[1], obs[2]].forEach(function (e) { var q = box(e); if (hit(a, q)) d = Math.max(d, a.bottom - q.top + 6); });
+      if (!d) return;
+      c.style.bottom = (bottom() + d) + 'px';
+    }
+  }
+  function beside(e) {
+    var q = box(e), w = c.getBoundingClientRect().width;
+    if (!q || q.right + 10 + w > document.documentElement.clientWidth - 10) return false;
+    c.style.left = (q.right + 10) + 'px';
+    return true;
+  }
+  function under(e) {
+    var q = box(e), a = c.getBoundingClientRect();
+    if (q) c.style.bottom = Math.max(0, bottom() - (q.bottom + 1 - a.top)) + 'px';
+  }
+  // first clear spot: the corner, above the joystick or stair buttons, right of the menu, right of the joystick, under the menu
+  var tries = [function () {}, lift, function () { if (beside(obs[0])) lift(); }, function () { beside(obs[1]); }, function () { under(obs[0]); }];
+  function place() {
+    for (var i = 0; i < tries.length; i++) {
+      c.style.bottom = ''; c.style.left = '';
+      tries[i]();
+      if (clear()) return;
+    }
+    c.style.bottom = ''; c.style.left = '';
+    lift();
+  }
+  addEventListener('resize', place);
+  if (window.ResizeObserver) obs.forEach(function (e) { new ResizeObserver(place).observe(e); });
+  new MutationObserver(place).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+  place();
+})();
+</script>
 </body>
 </html>

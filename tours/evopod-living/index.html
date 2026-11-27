@@ -540,6 +540,23 @@ h1.tour-title {
     transform: rotate(-90deg);
   }
 }
+#credit {
+  position: fixed;
+  left: calc(10px + env(safe-area-inset-left));
+  bottom: calc(10px + env(safe-area-inset-bottom));
+  z-index: 2147483647;
+  margin: 0;
+  font: 400 11px/1.2 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: rgba(255, 255, 255, 0.7);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+@media (max-width: 600px), (max-height: 500px) {
+  #credit { font-size: 10px; }
+}
 </style>
 </head>
 <body>
@@ -1018,5 +1035,6 @@ loadPanoImage();
 
 })();
 </script>
+<div id="credit">experience built by Jared Pearlstein</div>
 </body>
 </html>
