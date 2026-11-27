@@ -1,0 +1,1008 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#121312">
+<title>Living room</title>
+<meta name="description" content="Interactive 360 view of the living room.">
+<meta name="robots" content="noindex, nofollow">
+<style>
+:root {
+  color-scheme: dark;
+  --bg: #121312;
+  --panel-bg: rgba(22, 24, 23, 0.84);
+  --panel-border: rgba(255, 255, 255, 0.16);
+  --accent: #e5b967;
+  --accent-soft: rgba(229, 185, 103, 0.22);
+  --text: #f4f1eb;
+  --text-dim: #b8b3a7;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+}
+body {
+  touch-action: none;
+}
+#view {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+#shade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.40) 0%,
+    rgba(0, 0, 0, 0.29) 2.5%,
+    rgba(0, 0, 0, 0.201) 5%,
+    rgba(0, 0, 0, 0.129) 7.5%,
+    rgba(0, 0, 0, 0.076) 10%,
+    rgba(0, 0, 0, 0.038) 12.5%,
+    rgba(0, 0, 0, 0.014) 15%,
+    rgba(0, 0, 0, 0.003) 17.5%,
+    rgba(0, 0, 0, 0) 20%,
+    rgba(0, 0, 0, 0) 70%,
+    rgba(0, 0, 0, 0.003) 73.75%,
+    rgba(0, 0, 0, 0.017) 77.5%,
+    rgba(0, 0, 0, 0.046) 81.25%,
+    rgba(0, 0, 0, 0.091) 85%,
+    rgba(0, 0, 0, 0.155) 88.75%,
+    rgba(0, 0, 0, 0.241) 92.5%,
+    rgba(0, 0, 0, 0.348) 96.25%,
+    rgba(0, 0, 0, 0.48) 100%
+  );
+}
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  background: none;
+  border: none;
+  touch-action: manipulation;
+}
+button:focus-visible, [tabindex="0"]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--bg);
+}
+.loading-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #bfa05d, var(--accent));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0;
+}
+.loading-bar.active {
+  opacity: 1;
+  animation: barProgress 1.1s infinite ease-in-out;
+}
+@keyframes barProgress {
+  0% { transform: scaleX(0.08) translateX(-10%); }
+  50% { transform: scaleX(0.65) translateX(60%); }
+  100% { transform: scaleX(0.15) translateX(550%); }
+}
+.top-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: max(12px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) 10px max(14px, env(safe-area-inset-left));
+  pointer-events: none;
+  z-index: 30;
+}
+.heading-wrap {
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+h1.tour-title {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 12px rgba(0,0,0,0.85);
+}
+.top-actions {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.action-btn {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px 14px;
+  border-radius: 22px;
+  border: 1px solid var(--panel-border);
+  background: var(--panel-bg);
+  backdrop-filter: blur(14px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.4);
+  transition: background 0.18s, border-color 0.18s;
+}
+.action-btn:hover {
+  background: rgba(36, 40, 37, 0.94);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+.icon-only {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  font-size: 18px;
+}
+.error-view {
+  position: absolute;
+  inset: 0;
+  display: none;
+  place-items: center;
+  background: #121312;
+  color: var(--text);
+  text-align: center;
+  padding: 24px;
+  z-index: 50;
+}
+.error-view.show {
+  display: grid;
+}
+@media (max-width: 480px) {
+  .top-bar {
+    gap: 8px;
+  }
+  h1.tour-title {
+    font-size: 10.5px;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+  .top-actions {
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .action-btn {
+    padding: 0;
+    width: 44px;
+    height: 44px;
+  }
+}
+[hidden] {
+  display: none !important;
+}
+.home-pill {
+  position: fixed;
+  top: max(18px, calc(env(safe-area-inset-top) + 6px));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 35;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 16px;
+  border-radius: 9999px;
+  background: rgba(22, 24, 23, 0.84);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: -0.224px;
+  text-decoration: none;
+  white-space: nowrap;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+  pointer-events: auto;
+  touch-action: manipulation;
+  transition: background 0.16s ease, border-color 0.16s ease;
+  height: 32px;
+  min-height: 32px;
+}
+.home-pill::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 44px;
+  transform: translateY(-50%);
+}
+.home-pill:hover {
+  background: rgba(36, 40, 37, 0.94);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+.home-pill:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--bg);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .action-btn, .ov .box, .home-pill { background: #1c1d1b !important; }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .action-btn, .ov .box, .home-pill { background: #1c1d1b !important; }
+  .action-btn, .ov .box, .home-pill { backdrop-filter: none; -webkit-backdrop-filter: none; }
+}
+@media (max-width: 720px) {
+  .home-pill {
+    top: max(68px, calc(env(safe-area-inset-top) + 56px));
+  }
+}
+/* overlays: tutorials let clicks through, modal screens do not */
+.ov {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  pointer-events: none;
+}
+.ov.modal {
+  pointer-events: auto;
+  background: rgba(18, 19, 18, 0.96);
+  z-index: 70;
+}
+.ov .box {
+  pointer-events: auto;
+  background: rgba(22, 24, 23, 0.95);
+  border: 1px solid var(--panel-border);
+  backdrop-filter: blur(18px);
+  border-radius: 16px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.65);
+  padding: 18px;
+  max-width: min(100%, 660px);
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  text-align: center;
+  color: var(--text);
+}
+.ov .box p {
+  margin: 8px 0 0;
+  font-size: 15px;
+  color: var(--text);
+  line-height: 1.45;
+}
+.ov .box button.primary {
+  margin: 16px 0 0;
+  min-height: 44px;
+  min-width: 120px;
+  padding: 10px 22px;
+  border-radius: 22px;
+  background: var(--accent);
+  color: #121312;
+  font-size: 15px;
+  font-weight: 600;
+  transition: background 0.16s ease;
+}
+.ov .box button.primary:hover {
+  background: #efca80;
+}
+.ov .big {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text);
+}
+.ov .sub {
+  font-size: 16px;
+  color: var(--text-dim);
+  margin: 8px 0 0;
+}
+#intro .box {
+  background: none;
+  border: none;
+  backdrop-filter: none;
+  box-shadow: none;
+  max-width: min(100%, 420px);
+}
+#intro:not([data-phase="2"]) .p2,
+#intro[data-phase="2"] .p1 {
+  display: none;
+}
+.rot svg {
+  width: 120px;
+  height: 120px;
+  display: block;
+  margin: 16px auto 0;
+}
+.rot .ph {
+  transform-origin: 60px 60px;
+  animation: rot 3.2s ease-in-out infinite;
+}
+@keyframes rot {
+  0%, 15% { transform: rotate(0); }
+  55%, 100% { transform: rotate(-90deg); }
+}
+.cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.tcard {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 14px 10px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+.tcard b {
+  display: block;
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--text);
+}
+#tutd .box {
+  width: min(92vw, 560px);
+}
+#tutd .note {
+  margin: 12px 0 0;
+  font-size: 14px;
+  color: var(--text-dim);
+}
+#tutm .box {
+  width: min(94vw, 440px);
+}
+.tgrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.tgrid .tcard {
+  padding: 10px 8px;
+}
+.tgrid .tcard b {
+  margin-top: 8px;
+  font-size: 13px;
+}
+.demo {
+  width: 100%;
+  height: 92px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.demo > svg {
+  width: 100%;
+  height: 100%;
+  max-height: 92px;
+  display: block;
+}
+.kbd {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 92px;
+}
+.keys {
+  display: grid;
+  grid-template-columns: repeat(3, 32px);
+  gap: 4px;
+}
+.key {
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid rgba(255, 255, 255, 0.32);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text);
+}
+.ku { grid-column: 2; grid-row: 1; animation: ku 4s infinite; }
+.kl { grid-column: 1; grid-row: 2; animation: kl 4s infinite; }
+.kd { grid-column: 2; grid-row: 2; animation: kd 4s infinite; }
+.kr { grid-column: 3; grid-row: 2; animation: kr 4s infinite; }
+@keyframes ku { 0%, 22% { background: var(--accent); color: #121312; border-color: var(--accent); } 25%, 100% { background: rgba(255, 255, 255, 0.08); color: var(--text); border-color: rgba(255, 255, 255, 0.32); } }
+@keyframes kl { 0%, 25% { background: rgba(255, 255, 255, 0.08); color: var(--text); border-color: rgba(255, 255, 255, 0.32); } 26%, 47% { background: var(--accent); color: #121312; border-color: var(--accent); } 50%, 100% { background: rgba(255, 255, 255, 0.08); color: var(--text); border-color: rgba(255, 255, 255, 0.32); } }
+@keyframes kd { 0%, 50% { background: rgba(255, 255, 255, 0.08); color: var(--text); border-color: rgba(255, 255, 255, 0.32); } 51%, 72% { background: var(--accent); color: #121312; border-color: var(--accent); } 75%, 100% { background: rgba(255, 255, 255, 0.08); color: var(--text); border-color: rgba(255, 255, 255, 0.32); } }
+@keyframes kr { 0%, 75% { background: rgba(255, 255, 255, 0.08); color: var(--text); border-color: rgba(255, 255, 255, 0.32); } 76%, 97% { background: var(--accent); color: #121312; border-color: var(--accent); } 100% { background: rgba(255, 255, 255, 0.08); color: var(--text); border-color: rgba(255, 255, 255, 0.32); } }
+.arrow {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.arrow svg {
+  width: 20px;
+  height: 20px;
+  fill: var(--accent);
+  animation: mv 4s infinite;
+}
+@keyframes mv {
+  0%, 22% { transform: translate(0, -4px) rotate(0); }
+  25%, 47% { transform: translate(-4px, 0) rotate(-90deg); }
+  50%, 72% { transform: translate(0, 4px) rotate(180deg); }
+  75%, 97% { transform: translate(4px, 0) rotate(90deg); }
+  100% { transform: translate(0, -4px) rotate(0); }
+}
+.mscene {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 92px;
+}
+.mouse {
+  animation: mm 3s ease-in-out infinite alternate;
+}
+.mouse svg {
+  width: 36px;
+  height: 56px;
+  display: block;
+}
+.mwheel {
+  animation: mw 1.6s ease-in-out infinite;
+}
+.cone svg {
+  width: 56px;
+  height: 56px;
+  display: block;
+  animation: cr 3s ease-in-out infinite alternate;
+}
+@keyframes mm { from { transform: translate(-10px, 3px); } to { transform: translate(10px, -3px); } }
+@keyframes mw { 0%, 100% { transform: translateY(-2px); } 50% { transform: translateY(3px); } }
+@keyframes cr { from { transform: rotate(-36deg); } to { transform: rotate(36deg); } }
+.fg {
+  fill: #f2c9a0;
+  stroke: #8a6a4a;
+  stroke-width: 1.5;
+}
+.tp {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.d-look { animation: dlook 3.2s ease-in-out infinite; }
+@keyframes dlook { 0%, 10% { transform: translate(-28px, 0); } 50% { transform: translate(28px, 0); } 90%, 100% { transform: translate(-28px, 0); } }
+.p-f1 { animation: pf1 3.2s ease-in-out infinite; }
+.p-f2 { animation: pf2 3.2s ease-in-out infinite; }
+.p-box { animation: pbox 3.2s ease-in-out infinite; }
+@keyframes pf1 { 0%, 15% { transform: translate(0, 0); } 50%, 65% { transform: translate(-16px, 12px); } 90%, 100% { transform: translate(0, 0); } }
+@keyframes pf2 { 0%, 15% { transform: translate(0, 0); } 50%, 65% { transform: translate(16px, -12px); } 90%, 100% { transform: translate(0, 0); } }
+@keyframes pbox { 0%, 15% { transform: scale(0.84); } 50%, 65% { transform: scale(1.12); } 90%, 100% { transform: scale(0.84); } }
+@media (max-width: 640px) {
+  .cards {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-height: 460px) {
+  #tutm .box {
+    width: min(96vw, 660px);
+    padding: 12px 14px;
+  }
+  .tgrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .demo {
+    height: 62px;
+  }
+  .demo > svg {
+    max-height: 62px;
+  }
+  #tutm .box button.primary {
+    margin-top: 10px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ov *, .ov *::before, .ov *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  .ku {
+    background: var(--accent);
+    color: #121312;
+    border-color: var(--accent);
+  }
+  .rot .ph {
+    transform: rotate(-90deg);
+  }
+}
+</style>
+</head>
+<body>
+<div id="loadingBar" class="loading-bar" aria-hidden="true"></div>
+<canvas id="view" aria-label="Interactive 360 degree panorama viewer"></canvas>
+<div id="shade"></div>
+
+<header class="top-bar">
+  <div class="heading-wrap">
+    <h1 class="tour-title">Living room</h1>
+  </div>
+  <div class="top-actions">
+    <button id="fullscreen" class="action-btn icon-only" aria-label="Toggle fullscreen" title="Fullscreen"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <button id="helpBtn" class="action-btn icon-only" aria-label="Controls help" title="Controls help">?</button>
+  </div>
+</header>
+
+<a class="home-pill" href="https://thunda10.github.io/walkthrough/">Home</a>
+
+<div id="error" class="error-view" role="alert">
+  <div>WebGL is required to view the interactive panorama tour. Please check browser settings or hardware acceleration.</div>
+</div>
+
+<div id="intro" class="ov modal" role="dialog" aria-modal="true" aria-label="Best on a laptop" hidden>
+  <div class="box">
+    <div class="p1">
+      <p class="big">Best on a laptop</p>
+      <p class="sub">The 360 tour works on a phone, but a bigger screen shows more.</p>
+    </div>
+    <div class="rot p2">
+      <svg viewBox="0 0 120 120" aria-hidden="true">
+        <g class="ph">
+          <rect x="38" y="16" width="44" height="88" rx="8" fill="#1e211f" stroke="#e5b967" stroke-width="4"/>
+          <rect x="44" y="26" width="32" height="62" rx="2" fill="#2d322e"/>
+          <circle cx="60" cy="96" r="3" fill="#e5b967"/>
+        </g>
+      </svg>
+      <p class="sub">Turn your phone sideways for the best view</p>
+    </div>
+    <button id="introgo" class="primary">Continue</button>
+  </div>
+</div>
+
+<div id="tutm" class="ov" role="dialog" aria-label="Tour controls" hidden>
+  <div class="box">
+    <div class="tgrid">
+      <div class="tcard"><div class="demo" data-demo="drag"></div><b>Drag to look around</b></div>
+      <div class="tcard"><div class="demo" data-demo="pinch"></div><b>Pinch to zoom</b></div>
+    </div>
+    <button class="primary" data-close>Got it</button>
+  </div>
+</div>
+
+<div id="tutd" class="ov" role="dialog" aria-label="Tour controls" hidden>
+  <div class="box">
+    <div class="cards">
+      <div class="tcard"><div class="demo" data-demo="mouse"></div><b>Drag to look around, scroll to zoom</b></div>
+      <div class="tcard"><div class="demo" data-demo="arrows"></div><b>Use the arrow keys to look around</b></div>
+    </div>
+    <p class="note">Press Esc to close.</p>
+    <button class="primary" data-close>Got it</button>
+  </div>
+</div>
+
+<script>
+(()=>{
+const isPreview = false;
+const canvas = document.getElementById('view');
+let gl = canvas.getContext('webgl2', { alpha: false, antialias: true, powerPreference: 'high-performance' });
+const gl2 = !!gl;
+if (!gl) {
+  gl = canvas.getContext('webgl', { alpha: false, antialias: true, powerPreference: 'high-performance' }) ||
+       canvas.getContext('experimental-webgl', { alpha: false, antialias: true });
+}
+if (!gl) {
+  document.getElementById('error').classList.add('show');
+  return;
+}
+
+const maxTexture = gl.getParameter(gl.MAX_TEXTURE_SIZE);
+const use6144 = maxTexture >= 8192;
+
+const vs = 'attribute vec2 p;varying vec2 uv;void main(){uv=p*0.5+0.5;gl_Position=vec4(p,0.0,1.0);}';
+const fs = 'precision highp float;' +
+  'varying vec2 uv;' +
+  'uniform sampler2D pano;' +
+  'uniform vec2 resolution;' +
+  'uniform float yaw;' +
+  'uniform float pitch;' +
+  'uniform float fov;' +
+  'uniform float pd;' +
+  'const float PI = 3.141592653589793;' +
+  'void main(){' +
+    'float aspect = resolution.x / resolution.y;' +
+    'float vs = tan(radians(fov) * 0.5);' +
+    'float hh = atan(vs * aspect);' +
+    'float xm = (pd + 1.0) * sin(hh) / (pd + cos(hh));' +
+    'vec2 q = uv * 2.0 - 1.0;' +
+    'float x = q.x * xm;' +
+    'float y = q.y * xm / aspect;' +
+    'float k = x * x / ((pd + 1.0) * (pd + 1.0));' +
+    'float dc = k * k * pd * pd - (k + 1.0) * (k * pd * pd - 1.0);' +
+    'float cl = (-k * pd + sqrt(max(dc, 0.0))) / (k + 1.0);' +
+    'float S = (pd + 1.0) / (pd + cl);' +
+    'float l0 = atan(x, S * cl);' +
+    'vec3 d = normalize(vec3(sin(l0), y / S, -cos(l0)));' +
+    'float cp = cos(pitch), sp = sin(pitch);' +
+    'float cy = cos(yaw), sy = sin(yaw);' +
+    'd = vec3(d.x, cp * d.y - sp * d.z, sp * d.y + cp * d.z);' +
+    'd = vec3(cy * d.x - sy * d.z, d.y, sy * d.x + cy * d.z);' +
+    'float lon = atan(d.x, -d.z);' +
+    'float lat = asin(clamp(d.y, -1.0, 1.0));' +
+    'vec2 t = vec2(fract(0.5 + lon / (2.0 * PI)), clamp(0.5 - lat / PI, 0.001, 0.999));' +
+    'gl_FragColor = texture2D(pano, t);' +
+  '}';
+
+function createShader(type, src) {
+  const s = gl.createShader(type);
+  gl.shaderSource(s, src);
+  gl.compileShader(s);
+  if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s));
+  return s;
+}
+
+let program;
+try {
+  program = gl.createProgram();
+  gl.attachShader(program, createShader(gl.VERTEX_SHADER, vs));
+  gl.attachShader(program, createShader(gl.FRAGMENT_SHADER, fs));
+  gl.linkProgram(program);
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(program));
+} catch (err) {
+  document.getElementById('error').classList.add('show');
+  return;
+}
+
+gl.useProgram(program);
+const buf = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, -1,1, 1,-1, 1,1]), gl.STATIC_DRAW);
+const posLoc = gl.getAttribLocation(program, 'p');
+gl.enableVertexAttribArray(posLoc);
+gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
+
+const uniforms = {
+  pano: gl.getUniformLocation(program, 'pano'),
+  resolution: gl.getUniformLocation(program, 'resolution'),
+  yaw: gl.getUniformLocation(program, 'yaw'),
+  pitch: gl.getUniformLocation(program, 'pitch'),
+  fov: gl.getUniformLocation(program, 'fov'),
+  pd: gl.getUniformLocation(program, 'pd')
+};
+
+function initTexture() {
+  const tex = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, tex);
+  const wrapS = gl2 ? gl.REPEAT : gl.CLAMP_TO_EDGE;
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, wrapS);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([18, 19, 18, 255]));
+  return tex;
+}
+
+const panoTex = initTexture();
+
+let yaw = 0;
+let pitch = 0;
+let fov = 85;
+let zoom = 1;
+
+function panniniD() {
+  const a = canvas.width / Math.max(1, canvas.height);
+  const h = 2 * Math.atan(Math.tan(fov * Math.PI / 360) * a) * 180 / Math.PI;
+  return Math.max(0, Math.min(1, (h - 60) / 40));
+}
+function setFov() {
+  const a = window.innerWidth / Math.max(1, window.innerHeight);
+  const vh = h => 2 * Math.atan(Math.tan(h * Math.PI / 360) / a) * 180 / Math.PI;
+  const vmax = Math.min(90, vh(100));
+  fov = 2 * Math.atan(Math.tan(vmax * Math.PI / 360) * zoom) * 180 / Math.PI;
+}
+const clampZoom = z => Math.max(0.35, Math.min(1, z));
+setFov();
+
+let drag = null;
+let pinching = false;
+
+function draw() {
+  if (!canvas.width || !canvas.height) return;
+  gl.uniform2f(uniforms.resolution, canvas.width, canvas.height);
+  gl.uniform1f(uniforms.yaw, yaw);
+  gl.uniform1f(uniforms.pitch, pitch);
+  gl.uniform1f(uniforms.fov, fov);
+  gl.uniform1f(uniforms.pd, panniniD());
+
+  gl.activeTexture(gl.TEXTURE0);
+  gl.bindTexture(gl.TEXTURE_2D, panoTex);
+  gl.uniform1i(uniforms.pano, 0);
+
+  gl.drawArrays(gl.TRIANGLES, 0, 6);
+}
+
+function resize() {
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const w = Math.round(window.innerWidth * dpr);
+  const h = Math.round(window.innerHeight * dpr);
+  if (canvas.width !== w || canvas.height !== h) {
+    canvas.width = w;
+    canvas.height = h;
+    gl.viewport(0, 0, w, h);
+  }
+  setFov();
+  draw();
+}
+
+function getPreferredUrl() {
+  const highRes = !isPreview && use6144 && window.innerWidth > 1024;
+  return 'img/living-room-360' + (highRes ? '-6144.jpg' : '-4096.jpg');
+}
+
+function loadPanoImage() {
+  const bar = document.getElementById('loadingBar');
+  bar.classList.add('active');
+
+  function applyImage(img) {
+    gl.bindTexture(gl.TEXTURE_2D, panoTex);
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, img);
+    bar.classList.remove('active');
+    draw();
+  }
+
+  const preferredUrl = getPreferredUrl();
+  const fallbackUrl = 'img/living-room-360-4096.jpg';
+
+  const img = new Image();
+  img.onload = () => applyImage(img);
+  img.onerror = () => {
+    if (preferredUrl !== fallbackUrl) {
+      const fbImg = new Image();
+      fbImg.onload = () => applyImage(fbImg);
+      fbImg.onerror = () => {
+        bar.classList.remove('active');
+        document.getElementById('error').classList.add('show');
+      };
+      fbImg.src = fallbackUrl;
+    } else {
+      bar.classList.remove('active');
+      document.getElementById('error').classList.add('show');
+    }
+  };
+  img.src = preferredUrl;
+}
+
+canvas.addEventListener('pointerdown', e => {
+  if (e.target !== canvas) return;
+  if (drag && e.pointerType === 'touch') {
+    drag = null;
+    pinching = true;
+    return;
+  }
+  try { canvas.setPointerCapture(e.pointerId); } catch (_) {}
+  drag = { x: e.clientX, y: e.clientY, pointer: e.pointerId };
+  canvas.style.cursor = 'grabbing';
+});
+
+canvas.addEventListener('pointermove', e => {
+  if (!drag || pinching || drag.pointer !== e.pointerId) return;
+  const dx = e.clientX - drag.x;
+  const dy = e.clientY - drag.y;
+  drag.x = e.clientX;
+  drag.y = e.clientY;
+
+  const k = fov * Math.PI / 180 / Math.max(1, window.innerHeight);
+  yaw -= dx * k;
+  pitch = Math.max(-89 * Math.PI / 180, Math.min(89 * Math.PI / 180, pitch + dy * k));
+  draw();
+});
+
+function endDrag(e) {
+  if (drag && drag.pointer === e.pointerId) {
+    drag = null;
+    canvas.style.cursor = 'grab';
+  }
+}
+canvas.addEventListener('pointerup', endDrag);
+canvas.addEventListener('pointercancel', endDrag);
+canvas.style.cursor = 'grab';
+
+canvas.addEventListener('wheel', e => {
+  e.preventDefault();
+  zoom = clampZoom(zoom * (e.deltaY > 0 ? 1.06 : 1 / 1.06));
+  setFov();
+  draw();
+}, { passive: false });
+
+let pinchDist = 0;
+canvas.addEventListener('touchstart', e => {
+  if (e.touches.length === 2) {
+    pinching = true;
+    drag = null;
+    pinchDist = Math.hypot(
+      e.touches[0].clientX - e.touches[1].clientX,
+      e.touches[0].clientY - e.touches[1].clientY
+    );
+  }
+}, { passive: false });
+
+canvas.addEventListener('touchmove', e => {
+  if (e.touches.length === 2) {
+    e.preventDefault();
+    const curDist = Math.hypot(
+      e.touches[0].clientX - e.touches[1].clientX,
+      e.touches[0].clientY - e.touches[1].clientY
+    );
+    if (pinchDist > 0) {
+      if (curDist > 0) zoom = clampZoom(zoom * pinchDist / curDist);
+      setFov();
+      draw();
+    }
+    pinchDist = curDist;
+  }
+}, { passive: false });
+
+function endPinch(e) {
+  pinchDist = 0;
+  if (!e.touches || e.touches.length === 0) pinching = false;
+}
+canvas.addEventListener('touchend', endPinch);
+canvas.addEventListener('touchcancel', endPinch);
+
+window.addEventListener('keydown', e => {
+  const step = 0.06;
+  if (e.key === 'ArrowLeft') {
+    yaw -= step;
+  } else if (e.key === 'ArrowRight') {
+    yaw += step;
+  } else if (e.key === 'ArrowUp') {
+    pitch = Math.min(89 * Math.PI / 180, pitch + step);
+  } else if (e.key === 'ArrowDown') {
+    pitch = Math.max(-89 * Math.PI / 180, pitch - step);
+  } else {
+    return;
+  }
+  draw();
+});
+
+const fsBtn = document.getElementById('fullscreen');
+fsBtn.addEventListener('click', () => {
+  try {
+    if (!document.fullscreenElement) {
+      if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      }
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen().catch(() => {});
+      }
+    }
+  } catch (err) {}
+});
+
+window.addEventListener('resize', resize);
+resize();
+loadPanoImage();
+
+// onboarding, rotate prompt, and tutorials
+(() => {
+  const $ = id => document.getElementById(id);
+  const intro = $('intro');
+  const tutm = $('tutm');
+  const tutd = $('tutd');
+  const helpBtn = $('helpBtn');
+  const isTouch = matchMedia('(pointer: coarse)').matches || (navigator.maxTouchPoints > 0 && Math.min(innerWidth, innerHeight) < 600);
+  const land = () => innerWidth > innerHeight;
+
+  const DEMO = {
+    drag: '<svg viewBox="0 0 160 92" aria-hidden="true"><rect width="160" height="92" rx="8" fill="#1e2220"/><path d="M36 42H124L160 92H0z" fill="#322d26"/><path d="M44 34h72M44 34l8-6M44 34l8 6M116 34l-8-6M116 34l-8 6" stroke="#e5b967" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><g class="d-look"><circle class="fg" cx="80" cy="60" r="9"/></g></svg>',
+    pinch: '<svg viewBox="0 0 160 92" aria-hidden="true"><rect width="160" height="92" rx="8" fill="#1e2220"/><rect class="tp p-box" x="48" y="20" width="64" height="52" rx="6" fill="rgba(229,185,103,0.12)" stroke="#e5b967" stroke-width="2" stroke-dasharray="5 3"/><g class="p-f1"><circle class="fg" cx="68" cy="54" r="8"/></g><g class="p-f2"><circle class="fg" cx="92" cy="38" r="8"/></g></svg>',
+    mouse: '<div class="mscene"><div class="mouse"><svg viewBox="0 0 40 60" aria-hidden="true"><rect x="3" y="3" width="34" height="54" rx="17" fill="#1e211f" stroke="#e5b967" stroke-width="3"/><path d="M20 4v20M3 24h34" stroke="#e5b967" stroke-width="2.5" fill="none"/><rect class="mwheel" x="17" y="9" width="6" height="10" rx="3" fill="#e5b967"/></svg></div><div class="cone"><svg viewBox="0 0 60 60" aria-hidden="true"><path d="M30 34L10 6a38 38 0 0 1 40 0z" fill="rgba(229,185,103,0.28)" stroke="#e5b967" stroke-width="2"/><circle cx="30" cy="40" r="8" fill="#e5b967"/><circle cx="30" cy="40" r="3" fill="#121312"/></svg></div></div>',
+    arrows: '<div class="kbd"><div class="keys"><span class="key ku" aria-hidden="true">&#8593;</span><span class="key kl" aria-hidden="true">&#8592;</span><span class="key kd" aria-hidden="true">&#8595;</span><span class="key kr" aria-hidden="true">&#8594;</span></div><div class="arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 9h-4.5v9h-5v-9H5z"/></svg></div></div>'
+  };
+
+  let cur = null;
+  let introTimer = 0;
+  let tutShown = false;
+
+  function open(el, auto, opener) {
+    close();
+    cur = { el, at: performance.now(), t: auto ? setTimeout(close, auto) : 0, opener: opener || null };
+    el.querySelectorAll('[data-demo]').forEach(n => {
+      n.innerHTML = DEMO[n.dataset.demo] || '';
+    });
+    el.hidden = false;
+    const b = el.querySelector('[data-close], button');
+    if (b) b.focus({ preventScroll: true });
+  }
+
+  function close() {
+    if (!cur) return;
+    const c = cur;
+    cur = null;
+    clearTimeout(c.t);
+    clearTimeout(introTimer);
+    c.el.hidden = true;
+    c.el.querySelectorAll('[data-demo]').forEach(n => {
+      n.textContent = '';
+    });
+    if (c.opener) c.opener.focus({ preventScroll: true });
+  }
+
+  function openTutorial(auto, opener) {
+    tutShown = true;
+    open(isTouch ? tutm : tutd, auto || 0, opener);
+  }
+
+  function finishIntro() {
+    if (!cur || cur.el !== intro) return;
+    close();
+    if (!tutShown) openTutorial(8000);
+  }
+
+  function introCheck() {
+    if (cur && cur.el === intro && intro.dataset.phase === '2' && land()) {
+      finishIntro();
+    }
+  }
+
+  $('introgo').addEventListener('click', finishIntro);
+  document.querySelectorAll('[data-close]').forEach(b => {
+    b.addEventListener('click', close);
+  });
+  helpBtn.addEventListener('click', () => {
+    openTutorial(0, helpBtn);
+  });
+
+  window.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && cur) {
+      if (cur.el === intro) finishIntro();
+      else close();
+    } else if (cur && cur.el === tutd && /^Arrow(Up|Down|Left|Right)$/.test(e.key) && performance.now() - cur.at > 1500) {
+      close();
+    }
+  });
+  window.addEventListener('resize', introCheck);
+  window.addEventListener('orientationchange', () => { setTimeout(introCheck, 200); });
+
+  if (isTouch) {
+    intro.dataset.phase = '1';
+    open(intro);
+    introTimer = setTimeout(() => {
+      if (!cur || cur.el !== intro) return;
+      if (land()) finishIntro();
+      else intro.dataset.phase = '2';
+    }, 2000);
+  } else {
+    openTutorial(8000);
+  }
+})();
+
+})();
+</script>
+</body>
+</html>
