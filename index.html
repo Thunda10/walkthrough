@@ -34,16 +34,10 @@
   <section class="hero">
     <div class="wrap">
       <h1>3D models from architectural plans</h1>
-      <figure class="hero-figure">
-        <div class="hero-pano" id="heroPano" data-pano="images/farmhouse-living-pano-2048.jpg">
-          <img class="hero-poster" src="images/farmhouse-living-1200.jpg" width="1200" height="675" alt="Farmhouse living room with fireplace, patio doors and breakfast nook" decoding="async" fetchpriority="high">
-          <canvas class="hero-canvas" id="heroCanvas" aria-hidden="true"></canvas>
-          <button type="button" class="hero-toggle" id="heroToggle" aria-pressed="false" aria-label="Pause hero panorama" hidden>Pause</button>
-        </div>
-        <figcaption class="hero-caption">
-          <a href="tours/farmhouse/">Open the farmhouse 360 tour</a>
-        </figcaption>
-      </figure>
+      <a class="hero-shot" href="tours/farmhouse/">
+        <img src="images/farmhouse-tour-start-2400.jpg" srcset="images/farmhouse-tour-start-1600.jpg 1600w, images/farmhouse-tour-start-2400.jpg 2400w, images/farmhouse-tour-start-3200.jpg 3200w" sizes="(min-width: 1028px) 980px, (min-width: 441px) calc(100vw - 48px), calc(100vw - 32px)" width="3200" height="1800" alt="Farmhouse foyer looking into the living room, the first view of the 360 tour" decoding="async" fetchpriority="high">
+        <span class="hero-label">Open the 360 tour</span>
+      </a>
     </div>
   </section>
 
@@ -168,6 +162,5 @@
 </footer>
 
 <script src="assets/nav.js" defer></script>
-<script src="assets/hero-pano.js" defer></script>
 </body>
 </html>

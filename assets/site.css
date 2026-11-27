@@ -41,7 +41,6 @@ figure { margin: 0; }
 a { color: var(--accent); text-decoration: none; }
 /* deslop-ignore-next-line 09: real link underline on hover */
 a:hover { text-decoration: underline; text-underline-offset: 0.2em; }
-.hero-caption a,
 .plan-also a,
 .doc-section .note a,
 .lb-orig,
@@ -346,76 +345,51 @@ figcaption {
 .hero h1 {
   max-width: 48rem;
 }
-.hero-figure {
-  margin: 1.75rem 0 0;
-}
-.hero-pano {
+.hero-shot {
   position: relative;
-  width: 100%;
-  height: clamp(14rem, 46vh, 32.5rem);
+  display: block;
+  margin: 1.75rem 0 0;
   border-radius: var(--radius);
   border: 1px solid var(--hairline);
   overflow: hidden;
   background: var(--surface);
+  color: var(--text);
+  text-decoration: none;
+  transition: border-color 0.16s ease;
 }
-.hero-poster {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 72%;
-}
-.hero-canvas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+.hero-shot img {
   display: block;
-  opacity: 0;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
 }
-.hero-canvas.ready {
-  opacity: 1;
-}
-.hero-pano:has(.hero-canvas.ready) .hero-poster {
-  visibility: hidden;
-}
-.hero-toggle {
+.hero-label {
   position: absolute;
   right: 0.75rem;
   bottom: 0.75rem;
-  z-index: 2;
-  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   min-height: 44px;
   padding: 0 0.875rem;
   border-radius: var(--radius);
-  border: 1px solid var(--hairline-strong);
-  background: var(--bg);
+  border: 1px solid var(--hairline);
+  background: var(--surface);
   color: var(--text);
-  font-family: var(--font);
   font-size: 0.875rem;
   font-weight: 600;
   line-height: 1;
-  cursor: pointer;
   transition: border-color 0.16s ease, background-color 0.16s ease;
 }
-.hero-toggle:hover {
+.hero-shot:hover,
+.hero-shot:focus-visible {
   border-color: var(--accent);
-  background: var(--surface);
+  text-decoration: none;
 }
-.hero-toggle[hidden] { display: none; }
-.hero-caption {
-  margin-top: 0.5rem;
-}
-.hero-caption a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  font-size: 0.9375rem;
-  color: var(--accent);
-}
-.hero-caption a:hover {
-  color: var(--accent-hover);
+.hero-shot:hover .hero-label,
+.hero-shot:focus-visible .hero-label {
+  border-color: var(--accent);
+  background: var(--surface-hover);
 }
 
 /* Home sections */
@@ -723,8 +697,7 @@ dialog.lightbox[open] { display: flex; flex-direction: column; gap: 0.875rem; }
 @media (max-width: 44.9375em) {
   :root { --section-pad: 3rem; }
   .hero { padding: 2rem 0 2.5rem; }
-  .hero-figure { margin-top: 1.25rem; }
-  .hero-pano { height: clamp(12.5rem, 46vh, 17.5rem); }
+  .hero-shot { margin-top: 1.25rem; }
   .work-grid, .work-grid.weighted, .gallery-grid { grid-template-columns: 1fr; margin-top: 1.5rem; gap: 1.25rem; }
   .work-grid.weighted .work-media { height: auto; }
   .work-grid.weighted .work-media img { height: auto; aspect-ratio: 3 / 2; }
@@ -739,14 +712,26 @@ dialog.lightbox[open] { display: flex; flex-direction: column; gap: 0.875rem; }
   .lb-img { max-height: 56vh; }
 }
 
+@media (max-width: 36em) {
+  .hero-shot {
+    display: flex;
+    flex-direction: column;
+    background: var(--surface-alt);
+  }
+  .hero-label {
+    position: static;
+    align-self: flex-end;
+    margin: 0.625rem 0.75rem;
+  }
+}
+
 @media (max-height: 31.25em) {
-  .hero-pano { height: clamp(11rem, 46vh, 15rem); }
   dialog.lightbox { padding: 0.75rem; gap: 0.5rem; }
   .lb-img { max-height: 50vh; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .home-btn, .menu, .btn, .work-card, .gallery-media, .gallery-tile h3, .hero-canvas, .hero-toggle, .lb-close, .lb-btn, .site-nav .links a {
+  .home-btn, .menu, .btn, .work-card, .gallery-media, .gallery-tile h3, .hero-shot, .hero-label, .lb-close, .lb-btn, .site-nav .links a {
     transition: none;
   }
 }
