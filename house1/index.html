@@ -55,7 +55,7 @@
   .ov .box { pointer-events: auto; background: rgba(255,255,255,.96); border-radius: 16px; box-shadow: 0 8px 32px rgba(30,35,40,.25); padding: 16px; max-width: min(100%, 640px); text-align: center; }
   .ov .box p { margin: 8px 0 0; font-size: 0.9375rem; color: var(--ink); }
   .ov .box button { margin: 16px 0 0; min-height: 44px; min-width: 120px; font-size: 1.0rem; }
-  .ov .box button.primary, .half button { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+  .ov .box button.primary, .half button.primary { background: var(--accent); border-color: var(--accent); color: var(--bg); }
   .ov .big { font-size: 1.5rem; font-weight: 600; margin: 0; }
   .ov .sub { font-size: 1.0rem; color: var(--sub); margin: 8px 0 0; }
   .cards { display: flex; gap: 16px; justify-content: center; }
@@ -146,8 +146,8 @@
   summary, body.mobile summary { min-height: 44px; box-sizing: border-box; padding: 12px 0; margin: 0; }
   button { min-width: 44px; min-height: 44px; border-radius: 9999px; border-color: var(--line); background: transparent; color: var(--ink); padding: 10px 14px; font-size: .875rem; line-height: 1.45; }
   button:hover { background: var(--accent-soft); border-color: var(--accent); }
-  button.on, .ov .box button.primary, .half button, .stair-pill { background: var(--accent); border-color: var(--accent); color: var(--bg); }
-  button.on:hover, .primary:hover, .half button:hover, .stair-pill:hover { background: var(--accent); color: var(--bg); filter: brightness(1.06); }
+  button.on, .ov .box button.primary, .half button.primary, .stair-pill { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+  button.on:hover, .primary:hover, .half button.primary:hover, .stair-pill:hover { background: var(--accent); color: var(--bg); filter: brightness(1.06); }
   :is(button,a,summary,input,#view):focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; box-shadow: 0 0 0 6px var(--bg); }
   #view:focus-visible { outline-offset: -6px; box-shadow: inset 0 0 0 8px var(--bg); }
   .row { gap: 8px; margin-bottom: 8px; }
@@ -175,6 +175,7 @@
   .tcard { background: rgba(255,255,255,.04); border: 1px solid var(--line); border-radius: 12px; }
   .key, .arrow { background: var(--surface); border-color: var(--sub); }
   .half { border-radius: 18px; box-sizing: border-box; padding: 12px; overflow-y: auto; }
+  .half.on { border-color: var(--accent); }
   .half p { font-size: .875rem; }
   .half h3 { font-size: 1.125rem; }
   .fg { fill: var(--accent); stroke: var(--bg); }
@@ -4826,12 +4827,20 @@ bool _bvhIntersectFirstHit(
 (function () {
   var hp = window.__hp, st = hp.st, B = document.body, cv = document.getElementById('view');
   var $ = function (id) { return document.getElementById(id); };
-  var KEY = 'housepipeWalkScheme', scheme = 'joy', chosen = false;
-  try { var s0 = localStorage.getItem(KEY); if (s0 === 'joy' || s0 === 'tap') { scheme = s0; chosen = true; } } catch (e) {}
-  function save(v) { scheme = v; chosen = true; try { localStorage.setItem(KEY, v); } catch (e) {} applyScheme(); }
+  var KEY = 'housepipeWalkScheme', scheme = 'joy', saved = false, prompted = false;
+  try { var s0 = localStorage.getItem(KEY); if (s0 === 'joy' || s0 === 'tap') { scheme = s0; saved = true; } } catch (e) {}
+  function save(v) { scheme = v; saved = true; try { localStorage.setItem(KEY, v); } catch (e) {} applyScheme(); }
   function applyScheme() {
     B.classList.toggle('scheme-tap', scheme === 'tap');
-    ['joy', 'tap'].forEach(function (k) { var b = $('sch-' + k); b.classList.toggle('on', scheme === k); b.setAttribute('aria-pressed', scheme === k ? 'true' : 'false'); });
+    ['joy', 'tap'].forEach(function (k) {
+      var b = $('sch-' + k); b.classList.toggle('on', scheme === k); b.setAttribute('aria-pressed', scheme === k ? 'true' : 'false');
+      var p = document.querySelector('[data-pick="' + k + '"]'), cur0 = saved && scheme === k;
+      p.textContent = cur0 ? 'Using this' : 'Use this';
+      p.classList.toggle('on', cur0);
+      p.classList.toggle('primary', !saved);
+      p.setAttribute('aria-pressed', cur0 ? 'true' : 'false');
+      p.parentNode.classList.toggle('on', cur0);
+    });
   }
 
   // animated demos, shared by the choice screen and the tutorial (built on open, emptied on close)
@@ -4882,7 +4891,7 @@ bool _bvhIntersectFirstHit(
     if (!w) { cancelAnimationFrame(glide); if (cur && cur.el.id !== 'intro') close(); return; }
     if (st.mobile) {
       if (st.panel) $('hide').click();
-      if (chosen) help(); else open($('choice'));
+      if (prompted) help(); else { prompted = true; open($('choice')); }
     } else open($('tutd'), 8000);
   }).observe(B, { attributes: true, attributeFilter: ['class'] });
 
