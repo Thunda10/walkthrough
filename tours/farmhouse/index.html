@@ -1016,12 +1016,22 @@ const fs = 'precision highp float;' +
   'uniform float yaw;' +
   'uniform float pitch;' +
   'uniform float fov;' +
+  'uniform float pd;' +
   'const float PI = 3.141592653589793;' +
   'void main(){' +
     'float aspect = resolution.x / resolution.y;' +
-    'float scale = tan(radians(fov) * 0.5);' +
-    'vec2 q = (uv * 2.0 - 1.0) * vec2(aspect, 1.0) * scale;' +
-    'vec3 d = normalize(vec3(q.x, q.y, -1.0));' +
+    'float vs = tan(radians(fov) * 0.5);' +
+    'float hh = atan(vs * aspect);' +
+    'float xm = (pd + 1.0) * sin(hh) / (pd + cos(hh));' +
+    'vec2 q = uv * 2.0 - 1.0;' +
+    'float x = q.x * xm;' +
+    'float y = q.y * xm / aspect;' +
+    'float k = x * x / ((pd + 1.0) * (pd + 1.0));' +
+    'float dc = k * k * pd * pd - (k + 1.0) * (k * pd * pd - 1.0);' +
+    'float cl = (-k * pd + sqrt(max(dc, 0.0))) / (k + 1.0);' +
+    'float S = (pd + 1.0) / (pd + cl);' +
+    'float l0 = atan(x, S * cl);' +
+    'vec3 d = normalize(vec3(sin(l0), y / S, -cos(l0)));' +
     'float cp = cos(pitch), sp = sin(pitch);' +
     'float cy = cos(yaw), sy = sin(yaw);' +
     'd = vec3(d.x, cp * d.y - sp * d.z, sp * d.y + cp * d.z);' +
@@ -1069,7 +1079,8 @@ const uniforms = {
   resolution: gl.getUniformLocation(program, 'resolution'),
   yaw: gl.getUniformLocation(program, 'yaw'),
   pitch: gl.getUniformLocation(program, 'pitch'),
-  fov: gl.getUniformLocation(program, 'fov')
+  fov: gl.getUniformLocation(program, 'fov'),
+  pd: gl.getUniformLocation(program, 'pd')
 };
 
 function initTexture() {
@@ -1092,6 +1103,11 @@ let pitch = 0;
 let fov = 85;
 let zoom = 1;
 // Widest view: 100 deg horizontal, 90 deg vertical. Zoom (0.35 to 1) narrows it. fov is vertical degrees.
+function panniniD() {
+  const a = canvas.width / Math.max(1, canvas.height);
+  const h = 2 * Math.atan(Math.tan(fov * Math.PI / 360) * a) * 180 / Math.PI;
+  return Math.max(0, Math.min(1, (h - 60) / 40));
+}
 function setFov() {
   const a = window.innerWidth / Math.max(1, window.innerHeight);
   const vh = h => 2 * Math.atan(Math.tan(h * Math.PI / 360) / a) * 180 / Math.PI;
@@ -1146,6 +1162,7 @@ function draw() {
   gl.uniform1f(uniforms.yaw, yaw);
   gl.uniform1f(uniforms.pitch, pitch);
   gl.uniform1f(uniforms.fov, fov);
+  gl.uniform1f(uniforms.pd, panniniD());
   gl.uniform1f(uniforms.blend, blendVal);
 
   gl.activeTexture(gl.TEXTURE0);
@@ -1205,8 +1222,13 @@ function project(targetYaw, targetPitch) {
   const scale = Math.tan(fov * Math.PI / 360);
   const aspect = window.innerWidth / window.innerHeight;
 
-  const nx = (d_x / z_cam) / (aspect * scale);
-  const ny = (d_y / z_cam) / scale;
+  const pdv = panniniD();
+  const hh = Math.atan(scale * aspect);
+  const xm = (pdv + 1) * Math.sin(hh) / (pdv + Math.cos(hh));
+  const lonP = Math.atan2(d_x, z_cam);
+  const SP = (pdv + 1) / (pdv + Math.cos(lonP));
+  const nx = SP * Math.sin(lonP) / xm;
+  const ny = SP * d_y / Math.hypot(d_x, z_cam) * aspect / xm;
 
   if (Math.abs(nx) > 1.25 || Math.abs(ny) > 1.25) return null;
 
